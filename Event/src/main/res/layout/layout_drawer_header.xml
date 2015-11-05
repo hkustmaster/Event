@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center|top"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="275dp"
+        android:gravity="center|bottom"
+        android:background="@color/theme_primary">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/drawer_header_text_spacing"
+            android:text="@string/userName"
+            android:textColor="@color/text_white_87"
+            android:textSize="@dimen/drawer_header_textsize"
+            android:id="@+id/username_textview" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="abc@example.com"
+            android:textColor="@color/text_white_87"
+            android:textSize="@dimen/drawer_header_textsize"
+            android:id="@+id/email_textview" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="99857435"
+            android:textColor="@color/text_white_87"
+            android:textSize="@dimen/drawer_header_textsize"
+            android:id="@+id/phone_textview" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|top">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Password"
+            android:id="@+id/change_password_btn"
+            android:background="@drawable/abc_btn_borderless_material" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:id="@+id/edit_profile_btn"
+            android:background="@drawable/abc_btn_borderless_material" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign Out"
+            android:id="@+id/sign_out_btn"
+            android:background="@drawable/abc_btn_borderless_material" />
+    </LinearLayout>
+
+</LinearLayout>
