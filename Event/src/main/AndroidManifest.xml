@@ -27,11 +27,7 @@
             android:name=".SignUpActivity"
             android:label="@string/title_activity_sign_up" >
         </activity>
-
-        <activity
-            android:name=".EventDetailActivity"
-            android:label="@string/title_activity_event_detail"
-            android:theme="@style/Theme.MaterialSheetFab" >
+        <activity android:name=".EventDetailActivity" >
         </activity>
     </application>
 

@@ -3,4 +3,6 @@
     android:id="@+id/notes_list"
     style="@style/Widget.MaterialSheetFab.Note.List"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingBottom="@dimen/note_spacing" />
+    android:paddingBottom="@dimen/note_spacing"
+    android:clickable="false"
+    android:focusable="false" />

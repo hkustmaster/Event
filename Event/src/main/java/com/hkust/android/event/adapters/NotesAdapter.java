@@ -1,14 +1,18 @@
 package com.hkust.android.event.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.hkust.android.event.EventDetailActivity;
 import com.hkust.android.event.R;
 import com.hkust.android.event.models.Note;
 
@@ -20,7 +24,8 @@ import com.hkust.android.event.models.Note;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
 
 	private Note[] notes;
-
+    private Context context;
+    private ClickListener clickListener;
 	public NotesAdapter(Context context, int numNotes) {
 		notes = generateNotes(context, numNotes);
 	}
@@ -65,7 +70,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 				: holder.itemView.getContext().getResources()
 						.getDimensionPixelSize(R.dimen.note_content_spacing);
 		holder.noteTextView.setPadding(holder.noteTextView.getPaddingLeft(), paddingTop,
-				holder.noteTextView.getPaddingRight(), holder.noteTextView.getPaddingBottom());
+                holder.noteTextView.getPaddingRight(), holder.noteTextView.getPaddingBottom());
 
 		// Set background color
 		((CardView) holder.itemView).setCardBackgroundColor(color);
@@ -84,7 +89,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 		return notes;
 	}
 
-	public static class ViewHolder extends RecyclerView.ViewHolder {
+	class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		public TextView titleTextView;
 		public TextView noteTextView;
@@ -105,7 +110,27 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 			infoLocationLayout = (LinearLayout) itemView.findViewById(R.id.note_info_location_layout);
 			infoLocationTextView = (TextView) itemView.findViewById(R.id.note_info_location);
 			infoLocationImageView = (ImageView) itemView.findViewById(R.id.note_info_location_image);
-		}
-	}
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+           // context.startActivity(new Intent(context, EventDetailActivity.class));
+            if(clickListener !=null){
+                clickListener.itemClicked(v, getAdapterPosition());
+                Log.i("sdfsfadfa","sdfasdfasfasfda");
+            }
+        }
+    }
+
+    public interface  ClickListener{
+        public void itemClicked(View view, int position);
+
+    }
+
+    public void setClickListener(ClickListener clickListener){
+        this.clickListener = clickListener;
+    }
 
 }
