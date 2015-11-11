@@ -28,6 +28,19 @@
             android:label="@string/title_activity_sign_up" >
         </activity>
         <activity android:name=".EventDetailActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hkust.android.event.MainActivity" />
+        </activity>
+        <activity
+            android:name=".NewEventActivity"
+            android:label="@string/title_activity_new_event"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hkust.android.event.MainActivity" />
+        </activity>
+        <activity android:name=".DateVotingActivity" >
         </activity>
     </application>
 

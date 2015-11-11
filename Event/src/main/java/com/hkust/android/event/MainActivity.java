@@ -139,6 +139,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		// Set material sheet item click listeners
 		findViewById(R.id.fab_sheet_item_note).setOnClickListener(this);
 		findViewById(R.id.sign_out_btn).setOnClickListener(this);
+        findViewById(R.id.change_password_btn).setOnClickListener(this);
+        findViewById(R.id.edit_profile_btn).setOnClickListener(this);
         findViewById(R.id.notes_list);
 	}
 
@@ -214,7 +216,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivityForResult(intent, 100);
                 break;
-
+			case R.id.fab_sheet_item_note:
+                Intent intent2 = new Intent(getApplicationContext(), NewEventActivity.class);
+                startActivityForResult(intent2, 100);
+                break;
             default:
                 Toast.makeText(this, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
                 materialSheetFab.hideSheet();
