@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivityForResult(intent, 100);
                 break;
-			case R.id.fab_sheet_item_note:
+			case R.id.create_event_item:
                 Intent intent2 = new Intent(getApplicationContext(), NewEventActivity.class);
                 startActivityForResult(intent2, 100);
                 break;

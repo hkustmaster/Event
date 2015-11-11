@@ -79,7 +79,7 @@
                         android:background="@color/theme_accent">
 
                         <TextView
-                            android:id="@+id/fab_sheet_item_note"
+                            android:id="@+id/create_event_item"
                             style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
                             android:drawableLeft="@drawable/ic_create_grey600_24dp"
                             android:drawableStart="@drawable/ic_create_grey600_24dp"
