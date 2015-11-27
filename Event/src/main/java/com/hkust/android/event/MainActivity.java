@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.gordonwong.materialsheetfab.MaterialSheetFab;
-import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
 import com.hkust.android.event.adapters.MainPagerAdapter;
 
 
@@ -25,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	private ActionBarDrawerToggle drawerToggle;
 	private DrawerLayout drawerLayout;
-	private MaterialSheetFab materialSheetFab;
 	private int statusBarColor;
 
 	@Override
@@ -35,8 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		setContentView(R.layout.activity_main);
 		setupActionBar();
 		setupDrawer();
-		setupFab();
 		setupTabs();
+
+		findViewById(R.id.sign_out_btn).setOnClickListener(this);
+		findViewById(R.id.change_password_btn).setOnClickListener(this);
+		findViewById(R.id.edit_profile_btn).setOnClickListener(this);
+		findViewById(R.id.notes_list);
 	}
 
 	@Override
@@ -45,14 +46,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		drawerToggle.syncState();
 	}
 
-	@Override
-	public void onBackPressed() {
-		if (materialSheetFab.isSheetVisible()) {
-			materialSheetFab.hideSheet();
-		} else {
-			super.onBackPressed();
-		}
-	}
 
 	/**
 	 * Sets up the action bar.
@@ -80,118 +73,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
 		viewpager.setAdapter(new MainPagerAdapter(this, getSupportFragmentManager()));
 		viewpager.setOffscreenPageLimit(MainPagerAdapter.NUM_ITEMS);
-		updatePage(viewpager.getCurrentItem());
 
 		// Setup tab layout
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(viewpager);
 		viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                updatePage(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-            }
-        });
-	}
-
-	/**
-	 * Sets up the Floating action button.
-	 */
-	private void setupFab() {
-
-		Fab fab = (Fab) findViewById(R.id.fab);
-		View sheetView = findViewById(R.id.fab_sheet);
-		View overlay = findViewById(R.id.overlay);
-		int sheetColor = getResources().getColor(R.color.background_card);
-		int fabColor = getResources().getColor(R.color.theme_accent);
-
-		// Create material sheet FAB
-		materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay, sheetColor, fabColor);
-
-		// Set material sheet event listener
-		materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
 			@Override
-			public void onShowSheet() {
-				// Save current status bar color
-				statusBarColor = getStatusBarColor();
-				// Set darker status bar color to match the dim overlay
-				setStatusBarColor(getResources().getColor(R.color.theme_primary_dark2));
+			public void onPageScrolled(int i, float v, int i1) {
 			}
 
 			@Override
-			public void onHideSheet() {
-				// Restore status bar color
-				setStatusBarColor(statusBarColor);
+			public void onPageSelected(int i) {
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int i) {
 			}
 		});
-
-		// Set material sheet item click listeners
-		findViewById(R.id.create_event_item).setOnClickListener(this);
-		findViewById(R.id.sign_out_btn).setOnClickListener(this);
-        findViewById(R.id.change_password_btn).setOnClickListener(this);
-        findViewById(R.id.edit_profile_btn).setOnClickListener(this);
-        findViewById(R.id.notes_list);
-	}
-
-	/**
-	 * Called when the selected page changes.
-	 *
-	 * @param selectedPage selected page
-	 */
-	private void updatePage(int selectedPage) {
-		updateFab(selectedPage);
-		updateSnackbar(selectedPage);
-	}
-
-	/**
-	 * Updates the FAB based on the selected page
-	 * 
-	 * @param selectedPage selected page
-	 */
-	private void updateFab(int selectedPage) {
-		switch (selectedPage) {
-
-		case MainPagerAdapter.MYEVENT_POS:
-			View snackbar = findViewById(R.id.snackbar);
-			if(snackbar.getVisibility() == View.VISIBLE){
-				materialSheetFab.showFab(0, -getResources().getDimensionPixelSize(R.dimen.snackbar_height));
-			}else {
-				materialSheetFab.showFab(0, 0);
-
-			}
-			break;
-		case MainPagerAdapter.PENDING_POS:
-		case MainPagerAdapter.EXPLORE_POS:
-		default:
-			materialSheetFab.hideSheetThenFab();
-			break;
-		}
-	}
-
-	/**
-	 * Updates the snackbar based on the selected page
-	 *
-	 * @param selectedPage selected page
-	 */
-	private void updateSnackbar(int selectedPage) {
-		View snackbar = findViewById(R.id.snackbar);
-		switch (selectedPage) {
-		case MainPagerAdapter.MYEVENT_POS:
-			//snackbar.setVisibility(View.VISIBLE);
-			//break;
-		case MainPagerAdapter.EXPLORE_POS:
-		case MainPagerAdapter.PENDING_POS:
-		default:
-			snackbar.setVisibility(View.GONE);
-			break;
-		}
 	}
 
 	/**
@@ -212,10 +111,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivityForResult(intent, 100);
                 break;
-			case R.id.create_event_item:
-                Intent intent2 = new Intent(getApplicationContext(), NewEventActivity.class);
-                startActivityForResult(intent2, 100);
-                break;
+//			case R.id.create_event_item:
+//                Intent intent2 = new Intent(getApplicationContext(), NewEventActivity.class);
+//                startActivityForResult(intent2, 100);
+//                break;
 			case R.id.change_password_btn:
 				Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
 				startActivityForResult(intent3, 100);
@@ -223,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             default:
                 Toast.makeText(this, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
-                materialSheetFab.hideSheet();
+
         }
 
 	}

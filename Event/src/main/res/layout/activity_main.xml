@@ -40,72 +40,7 @@
 
         </android.support.design.widget.CoordinatorLayout>
 
-        <!-- Your FAB implementation -->
-        <com.hkust.android.event.Fab
-            android:id="@+id/fab"
-            style="@style/Widget.MaterialSheetFab.Fab"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true" />
 
-        <!-- Overlay that dims the screen -->
-        <com.gordonwong.materialsheetfab.DimOverlayFrameLayout
-            android:id="@+id/overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <!-- Circular reveal container for the sheet -->
-        <io.codetail.widget.RevealLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="end|bottom"
-            android:orientation="vertical">
-
-            <!-- Sheet that contains your items -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/fab_sheet"
-                style="@style/Widget.MaterialSheetFab.Sheet">
-
-                <!-- Sheet items -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Note -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/theme_accent">
-
-                        <TextView
-                            android:id="@+id/create_event_item"
-                            style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
-                            android:drawableLeft="@drawable/ic_create_grey600_24dp"
-                            android:drawableStart="@drawable/ic_create_grey600_24dp"
-                            android:text="@string/createEvent" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-        </io.codetail.widget.RevealLinearLayout>
-
-        <!-- Snackbar -->
-        <LinearLayout
-            android:id="@+id/snackbar"
-            style="@style/Widget.MaterialSheetFab.Snackbar"
-            android:layout_alignParentBottom="true">
-
-            <TextView
-                style="@style/TextAppearance.MaterialSheetFab.Snackbar.Message"
-                android:text="@string/snackbar_shared_msg" />
-
-            <TextView
-                style="@style/TextAppearance.MaterialSheetFab.Snackbar.Action"
-                android:text="@string/view" />
-        </LinearLayout>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
