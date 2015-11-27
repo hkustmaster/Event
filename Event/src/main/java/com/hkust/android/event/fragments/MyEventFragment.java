@@ -1,12 +1,9 @@
 package com.hkust.android.event.fragments;
 
 import com.hkust.android.event.R;
+import com.hkust.android.event.models.Constants;
 
-/**
- * Created by Gordon Wong on 7/17/2015.
- *
- * Shared items fragment.
- */
+
 public class MyEventFragment extends NotesListFragment {
 
     public static MyEventFragment newInstance() {
@@ -25,6 +22,11 @@ public class MyEventFragment extends NotesListFragment {
 
     @Override
     protected int getNumItems() {
-        return 10;
+        return 1;
+    }
+
+    @Override
+    protected String getTagName() {
+        return Constants.MYEVENT_FRAGMENT;
     }
 }

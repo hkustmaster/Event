@@ -1,0 +1,39 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.MaterialSheetFab.Note"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:gravity="center|left"
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/pariticipant_icon_imageView"
+                android:src="@drawable/ic_account_circle_black_48dp"
+                android:layout_marginLeft="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/participant_name_textView"
+                android:textSize="@dimen/abc_text_size_headline_material" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

@@ -32,15 +32,15 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="239dp"
+                    android:layout_width="367dp"
+                    android:layout_height="244dp"
                     android:id="@+id/event_pic"
-                    android:src="@drawable/saikung" />
+                    android:src="@drawable/orchestra" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tour to Sai Kung"
+                    android:text="Music Alive!"
                     android:id="@+id/event_title_textView"
                     android:textSize="@dimen/abc_text_size_display_1_material"
                     android:layout_margin="10dp" />
@@ -48,7 +48,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sam"
+                    android:text="hkust-ic-musicalive"
                     android:id="@+id/event_holder_textView"
                     android:layout_marginLeft="10dp" />
 
@@ -69,7 +69,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Vote for available dates"
+                        android:text="31 Oct 2015"
                         android:id="@+id/date_textView"
                         android:layout_marginLeft="10dp" />
 
@@ -112,7 +112,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sai Kung"
+                        android:text="Multipurpose Hall, Cheng Yu Tung Building, HKUST"
                         android:id="@+id/location_textView"
                         android:layout_marginLeft="10dp" />
 
@@ -130,37 +130,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/view_participant_layout_btn">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="View Participants"
-                    android:id="@+id/textView2"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:textSize="@dimen/abc_text_size_large_material" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/view_message_layout_btn">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="View Message"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:textSize="@dimen/abc_text_size_large_material" />
-            </LinearLayout>
-
 
         </LinearLayout>
     </ScrollView>
@@ -175,8 +144,8 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="quit"
-            android:id="@+id/leave_btn"
+            android:text="JOIN"
+            android:id="@+id/join_btn"
             android:background="@color/theme_primary" />
     </LinearLayout>
 

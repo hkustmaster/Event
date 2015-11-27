@@ -1,12 +1,9 @@
 package com.hkust.android.event.fragments;
 
 import com.hkust.android.event.R;
+import com.hkust.android.event.models.Constants;
 
-/**
- * Created by Gordon Wong on 7/17/2015.
- *
- * Favorite items fragment.
- */
+
 public class PendingFragment extends NotesListFragment {
 
     public static PendingFragment newInstance() {
@@ -25,6 +22,11 @@ public class PendingFragment extends NotesListFragment {
 
     @Override
     protected int getNumItems() {
-        return 7;
+        return 1;
+    }
+
+    @Override
+    protected String getTagName() {
+        return Constants.PENDING_FRAGMENT;
     }
 }

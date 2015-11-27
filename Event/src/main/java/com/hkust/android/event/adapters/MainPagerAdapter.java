@@ -10,11 +10,7 @@ import com.hkust.android.event.fragments.MyEventFragment;
 import com.hkust.android.event.R;
 import com.hkust.android.event.fragments.PendingFragment;
 
-/**
- * Created by Gordon Wong on 7/17/2015.
- *
- * Pager adapter for main activity.
- */
+
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
 	public static final int NUM_ITEMS = 3;

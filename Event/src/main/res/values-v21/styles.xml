@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.MaterialSheetFab" parent="Theme.MaterialSheetFab.Base">
+    <style name="Theme.Event" parent="Theme.MaterialSheetFab.Base">
         <item name="android:statusBarColor">?colorPrimaryDark</item>
     </style>
 

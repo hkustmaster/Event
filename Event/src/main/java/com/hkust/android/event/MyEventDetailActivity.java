@@ -5,13 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class EventDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class MyEventDetailActivity extends AppCompatActivity implements View.OnClickListener{
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_detail);
+        setContentView(R.layout.activity_my_event_detail);
         setTitle("Event Detail");
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -26,6 +28,8 @@ public class EventDetailActivity extends AppCompatActivity implements View.OnCli
         LinearLayout dateLayout = (LinearLayout)findViewById(R.id.date_layout);
         dateLayout.setOnClickListener(this);
 
+        Button closeDiscussionBtn = (Button)findViewById(R.id.close_discussion_btn);
+        closeDiscussionBtn.setOnClickListener(this);
     }
 
     @Override
@@ -34,7 +38,6 @@ public class EventDetailActivity extends AppCompatActivity implements View.OnCli
             case R.id.view_participant_layout_btn:
                 Intent intent = new Intent(getApplicationContext(), DetailParticipantListActivity.class);
                 startActivityForResult(intent, 100);
-
                 break;
             case  R.id.view_message_layout_btn:
                 Intent intent2 = new Intent(getApplicationContext(), DetailMessageListActivity.class);
@@ -44,8 +47,11 @@ public class EventDetailActivity extends AppCompatActivity implements View.OnCli
                 Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
                 startActivityForResult(intent3, 100);
                 break;
-            default:
+            case R.id.close_discussion_btn:
+                Intent intent4 = new Intent(getApplicationContext(), CloseDiscussionActivity.class);
+                startActivityForResult(intent4, 100);
                 break;
+            default:
         }
     }
 }

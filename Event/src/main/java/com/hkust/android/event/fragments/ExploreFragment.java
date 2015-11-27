@@ -1,11 +1,9 @@
 package com.hkust.android.event.fragments;
 
 import com.hkust.android.event.R;
-/**
- * Created by Gordon Wong on 7/17/2015.
- *
- * All items fragment.
- */
+import com.hkust.android.event.models.Constants;
+
+
 public class ExploreFragment extends NotesListFragment {
 
     public static ExploreFragment newInstance() {
@@ -24,6 +22,11 @@ public class ExploreFragment extends NotesListFragment {
 
     @Override
     protected int getNumItems() {
-        return 20;
+        return 5;
+    }
+
+    @Override
+    protected String getTagName() {
+        return Constants.EXPLORE_FRAGMENT;
     }
 }

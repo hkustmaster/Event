@@ -9,7 +9,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.animation.ScaleAnimation;
 import com.gordonwong.materialsheetfab.AnimatedFab;
-import com.hkust.android.event.R;
 
 /**
  * Created by Gordon Wong on 7/17/2015.

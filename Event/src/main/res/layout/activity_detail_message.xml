@@ -11,13 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Date"
+        android:text="Message"
         android:id="@+id/textView3"
         android:textSize="@dimen/abc_text_size_display_1_material" />
 
     <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/date_list"
+        android:id="@+id/message_list"
         android:layout_below="@+id/textView3"
         android:layout_above="@+id/belowButton">
 
@@ -42,8 +42,8 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Give a Suggestion"
-                android:id="@+id/suggestion_btn" />
+                android:text="Leave a Message"
+                android:id="@+id/leave_message_btn" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,8 +55,8 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Vote"
-                android:id="@+id/vote_btn"
+                android:text="Back"
+                android:id="@+id/button"
                 android:layout_alignParentBottom="true" />
         </LinearLayout>
     </LinearLayout>

@@ -10,13 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="275dp"
         android:gravity="center|bottom"
-        android:background="@color/theme_primary">
+        android:background="@color/theme_primary"
+        android:weightSum="1">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="135dp"
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
-            android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
+            android:src="@drawable/ic_account_circle_black_48dp"
+            android:layout_weight="0.53" />
 
         <TextView
             android:layout_width="wrap_content"

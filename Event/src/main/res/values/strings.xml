@@ -22,6 +22,7 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email, use to sign in</string>
+    <string name="prompt_email_sign_in">Email</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_re_password">Confirm Password</string>
     <string name="prompt_name">Your Name: Sam Wong</string>

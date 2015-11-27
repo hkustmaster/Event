@@ -1,6 +1,5 @@
 package com.hkust.android.event.fragments;
 
-import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -12,51 +11,64 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.hkust.android.event.EventDetailActivity;
+import com.hkust.android.event.ExploreEventDetailActivity;
+import com.hkust.android.event.MyEventDetailActivity;
 import com.hkust.android.event.R;
 import com.hkust.android.event.adapters.NotesAdapter;
+import com.hkust.android.event.models.Constants;
 
-/**
- * Created by Gordon Wong on 7/18/2015.
- *
- * Generic fragment displaying a list of notes.
- */
-public abstract class NotesListFragment extends Fragment implements NotesAdapter.ClickListener{
 
-	@LayoutRes
-	protected abstract int getLayoutResId();
+public abstract class NotesListFragment extends Fragment implements NotesAdapter.ClickListener {
 
-	protected abstract int getNumColumns();
+    @LayoutRes
+    protected abstract int getLayoutResId();
 
-	protected abstract int getNumItems();
+    protected abstract int getNumColumns();
 
-	@Nullable
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(getLayoutResId(), container, false);
+    protected abstract int getNumItems();
 
-		// Setup list
-		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.notes_list);
-		recyclerView.setLayoutManager(new StaggeredGridLayoutManager(getNumColumns(),
+    protected abstract String getTagName();
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(getLayoutResId(), container, false);
+
+        // Setup list
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.notes_list);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(getNumColumns(),
                 StaggeredGridLayoutManager.VERTICAL));
 
-        NotesAdapter notesAdapter = new NotesAdapter(getActivity(), getNumItems());
-		notesAdapter.setClickListener(this);
+        NotesAdapter notesAdapter = new NotesAdapter(getActivity(), getTagName(), getNumItems());
+        notesAdapter.setClickListener(this);
 
         recyclerView.setAdapter(notesAdapter);
 
-		return view;
-	}
+        return view;
+    }
 
 
     @Override
     public void itemClicked(View view, int position) {
-        startActivity(new Intent(getActivity(), EventDetailActivity.class));
-        Integer pos = new Integer(position);
+        if (getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
+            Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
+            intent.setAction(getTagName());
+            startActivity(intent);
 
+        } else if(getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)){
+            Intent intent = new Intent(getActivity(), ExploreEventDetailActivity.class);
+            intent.setAction(getTagName());
+            startActivity(intent);
+        }
+        else if(getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)){
+            Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+            intent.setAction(getTagName());
+            startActivity(intent);
+        }
+        Integer pos = new Integer(position);
+        //action when a item clicked
         Log.i("position=========", pos.toString());
     }
 }

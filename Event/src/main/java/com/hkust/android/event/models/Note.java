@@ -6,11 +6,6 @@ import android.text.TextUtils;
 
 import com.hkust.android.event.R;
 
-/**
- * Created by Gordon Wong on 7/18/2015.
- * 
- * Note model.
- */
 public class Note {
 	private String title;
 	private String note;
@@ -77,18 +72,28 @@ public class Note {
 		String note = "Music live show ";
 
 		NoteInfo info = new NoteInfo("31 Oct Sat", R.drawable.ic_event_white_24dp, "HKUST", R.drawable.ic_place_white_24dp);
-		int color = getRandomColor(context);
+		int color = getColor(context);
 		return new Note(capitalize(title), note, info, color);
 	}
 
-	private static int getRandomColor(Context context) {
-		int[] colors;
-		if (Math.random() >= 0.6) {
-			colors = context.getResources().getIntArray(R.array.note_accent_colors);
-		} else {
-			colors = context.getResources().getIntArray(R.array.note_neutral_colors);
-		}
-		return colors[((int) (Math.random() * colors.length))];
+	public static Note randomOwnNote(Context context) {
+		String title = "Tour to Sai Kung";
+		String note = "Sea food, BBQ";
+
+		NoteInfo info = new NoteInfo("To be determine", R.drawable.ic_event_white_24dp, "Sai Kong", R.drawable.ic_place_white_24dp);
+		int color = getColor(context);
+		return new Note(capitalize(title), note, info, color);
+	}
+
+
+
+	private static int getColor(Context context) {
+		//0  3橙
+		int[] colorsAccent = context.getResources().getIntArray(R.array.note_accent_colors);
+		int[] colorsNeutral = context.getResources().getIntArray(R.array.note_neutral_colors);
+		//2
+
+		return colorsNeutral[2];
 	}
 
 	private static String capitalize(String str) {

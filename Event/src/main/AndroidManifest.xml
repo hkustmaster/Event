@@ -13,6 +13,10 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.MaterialSheetFab" >
         <activity android:name=".MainActivity" >
+        </activity>
+        <activity
+            android:name=".SignInActivity"
+            android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,13 +24,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignInActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
-        <activity
             android:name=".SignUpActivity"
-            android:label="@string/title_activity_sign_up" >
-        </activity>
+            android:label="@string/title_activity_sign_up" />
         <activity android:name=".EventDetailActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -40,7 +39,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hkust.android.event.MainActivity" />
         </activity>
-        <activity android:name=".DateVotingActivity" >
+        <activity android:name=".DateVotingActivity" />
+        <activity android:name=".DetailMessageListActivity" />
+        <activity android:name=".DetailParticipantListActivity" />
+        <activity android:name=".MyEventDetailActivity" />
+        <activity android:name=".CloseDiscussionActivity" />
+        <activity android:name=".ExploreEventDetailActivity" >
         </activity>
     </application>
 

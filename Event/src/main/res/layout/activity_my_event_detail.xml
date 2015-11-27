@@ -32,10 +32,11 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="239dp"
+                    android:layout_width="367dp"
+                    android:layout_height="244dp"
                     android:id="@+id/event_pic"
-                    android:src="@drawable/saikung" />
+                    android:src="@drawable/saikung"
+                    android:adjustViewBounds="false" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,7 +70,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Vote for available dates"
+                        android:text="To be determined"
                         android:id="@+id/date_textView"
                         android:layout_marginLeft="10dp" />
 
@@ -175,9 +176,10 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="quit"
-            android:id="@+id/leave_btn"
+            android:text="Close Discussion"
+            android:id="@+id/close_discussion_btn"
             android:background="@color/theme_primary" />
+
     </LinearLayout>
 
 </RelativeLayout>

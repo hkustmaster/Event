@@ -20,11 +20,7 @@ import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
 import com.hkust.android.event.adapters.MainPagerAdapter;
 
-/**
- * Created by Gordon Wong on 7/17/2015.
- *
- * Main activity for material sheet fab sample.
- */
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 	private ActionBarDrawerToggle drawerToggle;
@@ -137,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		});
 
 		// Set material sheet item click listeners
-		findViewById(R.id.fab_sheet_item_note).setOnClickListener(this);
+		findViewById(R.id.create_event_item).setOnClickListener(this);
 		findViewById(R.id.sign_out_btn).setOnClickListener(this);
         findViewById(R.id.change_password_btn).setOnClickListener(this);
         findViewById(R.id.edit_profile_btn).setOnClickListener(this);
@@ -220,6 +216,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent2 = new Intent(getApplicationContext(), NewEventActivity.class);
                 startActivityForResult(intent2, 100);
                 break;
+			case R.id.change_password_btn:
+				Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
+				startActivityForResult(intent3, 100);
+				break;
+
             default:
                 Toast.makeText(this, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
                 materialSheetFab.hideSheet();
