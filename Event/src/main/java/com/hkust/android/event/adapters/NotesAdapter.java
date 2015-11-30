@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hkust.android.event.R;
-import com.hkust.android.event.activity.Constants;
-import com.hkust.android.event.activity.Note;
+import com.hkust.android.event.model.Constants;
+import com.hkust.android.event.model.Note;
 
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
