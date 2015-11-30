@@ -17,7 +17,7 @@ import com.hkust.android.event.ExploreEventDetailActivity;
 import com.hkust.android.event.MyEventDetailActivity;
 import com.hkust.android.event.R;
 import com.hkust.android.event.adapters.NotesAdapter;
-import com.hkust.android.event.models.Constants;
+import com.hkust.android.event.activity.Constants;
 
 
 public abstract class NotesListFragment extends Fragment implements NotesAdapter.ClickListener {

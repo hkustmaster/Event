@@ -1,7 +1,7 @@
 package com.hkust.android.event.fragments;
 
 import com.hkust.android.event.R;
-import com.hkust.android.event.models.Constants;
+import com.hkust.android.event.activity.Constants;
 
 
 public class PendingFragment extends NotesListFragment {

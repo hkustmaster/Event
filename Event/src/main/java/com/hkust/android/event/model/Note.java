@@ -1,4 +1,4 @@
-package com.hkust.android.event.models;
+package com.hkust.android.event.model;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;

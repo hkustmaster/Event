@@ -1,10 +1,8 @@
 package com.hkust.android.event.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hkust.android.event.EventDetailActivity;
 import com.hkust.android.event.R;
-import com.hkust.android.event.models.Constants;
-import com.hkust.android.event.models.Note;
+import com.hkust.android.event.activity.Constants;
+import com.hkust.android.event.activity.Note;
 
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
