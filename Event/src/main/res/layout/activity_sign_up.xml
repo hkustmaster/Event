@@ -22,7 +22,7 @@
             <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView android:id="@+id/email" android:layout_width="match_parent"
+                <AutoCompleteTextView android:id="@+id/sign_up_email" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress" android:maxLines="1"
                     android:singleLine="true" />
@@ -32,7 +32,7 @@
             <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/password" android:layout_width="match_parent"
+                <EditText android:id="@+id/sign_up_password" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:hint="@string/prompt_password"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
@@ -44,7 +44,7 @@
             <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/re_password" android:layout_width="match_parent"
+                <EditText android:id="@+id/sign_up_re_password" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:hint="@string/prompt_re_password"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
@@ -55,7 +55,7 @@
 
             <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <EditText android:id="@+id/name" android:layout_width="match_parent"
+                <EditText android:id="@+id/sign_up_name" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:hint="@string/prompt_name"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
@@ -70,7 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:id="@+id/gender">
+                    android:id="@+id/sign_up_gender">
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
             <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/phone" android:layout_width="match_parent"
+                <EditText android:id="@+id/sign_up_phone" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:hint="@string/prompt_phone"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
