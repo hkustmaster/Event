@@ -11,8 +11,17 @@ public class Event {
     private String status;
     private String time;
     private ArrayList<String> tbdTime;
+    private ArrayList<Participant> participants;
     private String location;
     private String description;
+
+    public ArrayList<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(ArrayList<Participant> participants) {
+        this.participants = participants;
+    }
 
     public String getDescription() {
         return description;

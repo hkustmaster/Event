@@ -1,7 +1,7 @@
 package com.hkust.android.event.fragments;
 
 import com.hkust.android.event.R;
-import com.hkust.android.event.activity.Constants;
+import com.hkust.android.event.model.Constants;
 
 
 public class ExploreFragment extends NotesListFragment {
@@ -12,7 +12,7 @@ public class ExploreFragment extends NotesListFragment {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.fragment_all;
+        return R.layout.fragment_explore;
     }
 
     @Override

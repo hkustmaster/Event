@@ -112,7 +112,6 @@ public class Note {
 		private NoteInfo(String info_date, int info_date_Image, String info_location, int info_location_Image) {
 			this.info_date = info_date;
 			this.info_date_Image = info_date_Image;
-
             this.info_location = info_location;
             this.info_location_Image = info_location_Image;
 		}
