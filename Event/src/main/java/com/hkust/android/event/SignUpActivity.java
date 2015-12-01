@@ -16,10 +16,9 @@ import android.widget.Toast;
 
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.User;
-import com.hkust.android.event.tools.ValidTools;
+import com.hkust.android.event.tools.ValidFormTools;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
@@ -144,7 +143,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     * validate Register info
     * */
     private boolean checkRegInfo(User user, String re_password) {
-        ValidTools validTools = new ValidTools();
+        ValidFormTools validTools = new ValidFormTools();
         /*
         * 1. check email
         * */
