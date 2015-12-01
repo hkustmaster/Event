@@ -29,4 +29,6 @@ public class MyEventFragment extends NotesListFragment {
     protected String getTagName() {
         return Constants.MYEVENT_FRAGMENT;
     }
+
+
 }

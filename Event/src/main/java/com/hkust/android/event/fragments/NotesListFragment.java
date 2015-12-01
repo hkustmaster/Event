@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hkust.android.event.EventDetailActivity;
 import com.hkust.android.event.ExploreEventDetailActivity;
@@ -32,7 +33,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
 
     protected abstract String getTagName();
 
-    private SwipeRefreshLayout exploreRefreshLayout, myEventRefreshLayout, pendingRefreshLayout;
+    private SwipeRefreshLayout refreshLayout;
 
 
     @Nullable
@@ -40,14 +41,8 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutResId(), container, false);
 
-//        exploreRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.explore_refresh_layout);
-//        exploreRefreshLayout.setOnRefreshListener(this);
-//
-//        myEventRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.my_event_refresh_layout);
-//        myEventRefreshLayout.setOnRefreshListener(this);
-//
-//        pendingRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pending_refresh_layout);
-//        pendingRefreshLayout.setOnRefreshListener(this);
+        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
+        refreshLayout.setOnRefreshListener(this);
 
         // Setup list
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.notes_list);
@@ -86,6 +81,9 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
 
     @Override
     public void onRefresh() {
-
+        if(refreshLayout.isRefreshing()){
+            Toast.makeText(getActivity(),"refreshed", Toast.LENGTH_SHORT).show();
+            refreshLayout.setRefreshing(false);
+        }
     }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Event {
     private String id;
-    private User eventHolder;
+    private User host;
     private String status;
     private String time;
     private ArrayList<String> tbdTime;
@@ -29,14 +29,6 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public User getEventHolder() {
-        return eventHolder;
-    }
-
-    public void setEventHolder(User eventHolder) {
-        this.eventHolder = eventHolder;
     }
 
     public String getId() {
