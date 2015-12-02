@@ -4,15 +4,16 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class EventDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class PendingEventDetailActivity extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_detail);
-        setTitle("Event Detail");
+        setContentView(R.layout.activity_pending_event_detail);
+        setTitle("Pending Event Detail");
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -47,5 +48,17 @@ public class EventDetailActivity extends AppCompatActivity implements View.OnCli
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

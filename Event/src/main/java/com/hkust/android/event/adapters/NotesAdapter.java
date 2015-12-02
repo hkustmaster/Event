@@ -109,7 +109,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
 		@Override
 		public void onClick(View v) {
-			// context.startActivity(new Intent(context, EventDetailActivity.class));
+			// context.startActivity(new Intent(context, PendingEventDetailActivity.class));
 			if (clickListener != null) {
 				clickListener.itemClicked(v, getAdapterPosition());
 			}

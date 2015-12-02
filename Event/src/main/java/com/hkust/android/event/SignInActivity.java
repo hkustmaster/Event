@@ -351,14 +351,16 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.sign_in_btn:
-                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(intent1, 100);
-                Log.i("HERE", "SING UP");
+                Intent intent1 = new Intent(SignInActivity.this, MainActivity.class);
+                startActivity(intent1);
+                Log.i("HERE", "SING IP");
+                finish();
                 break;
             case R.id.sign_up_btn:
-                Intent intent2 = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivityForResult(intent2, 100);
+                Intent intent2 = new Intent(SignInActivity.this, SignUpActivity.class);
+                startActivity(intent2);
                 Log.i("HERE", "SING UP");
+                finish();
                 break;
             default:
 

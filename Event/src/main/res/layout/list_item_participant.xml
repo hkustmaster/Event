@@ -32,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/participant_name_textView"
-                android:textSize="@dimen/abc_text_size_headline_material" />
+                android:textSize="@dimen/abc_text_size_headline_material"
+                android:layout_marginLeft="10dp" />
         </LinearLayout>
     </RelativeLayout>
 

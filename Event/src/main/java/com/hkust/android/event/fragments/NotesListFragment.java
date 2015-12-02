@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.hkust.android.event.EventDetailActivity;
+import com.hkust.android.event.PendingEventDetailActivity;
 import com.hkust.android.event.ExploreEventDetailActivity;
 import com.hkust.android.event.MyEventDetailActivity;
 import com.hkust.android.event.R;
@@ -70,7 +70,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
             intent.setAction(getTagName());
             startActivity(intent);
         } else if (getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
-            Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+            Intent intent = new Intent(getActivity(), PendingEventDetailActivity.class);
             intent.setAction(getTagName());
             startActivity(intent);
         }

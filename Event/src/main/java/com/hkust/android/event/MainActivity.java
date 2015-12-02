@@ -113,10 +113,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(intent, 100);
                 break;
             case R.id.change_password_btn:
-                Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
-                startActivityForResult(intent3, 100);
+                Intent intent2 = new Intent(MainActivity.this, ChangePasswordActivity.class);
+                startActivity(intent2);
                 break;
-
+            case R.id.edit_profile_btn:
+                Intent intent3 = new Intent(MainActivity.this, ChangeProfileActivity.class);
+                startActivity(intent3);
             default:
                 Toast.makeText(this, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
 
