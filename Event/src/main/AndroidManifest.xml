@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hkust.android.event">
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -25,13 +21,9 @@
         </activity>
         <activity
             android:name=".SignUpActivity"
-            android:label="@string/title_activity_sign_up" />
+            android:label="@string/title_activity_sign_up"></activity>
 
-        <activity android:name=".PendingEventDetailActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hkust.android.event.MainActivity" />
-        </activity>
+        <activity android:name=".PendingEventDetailActivity"></activity>
 
         <activity
             android:name=".NewEventActivity"
@@ -42,23 +34,17 @@
                 android:value="com.hkust.android.event.MainActivity" />
         </activity>
 
-        <activity android:name=".DateVotingActivity">
+        <activity android:name=".DateVotingActivity"></activity>
 
-        </activity>
+        <activity android:name=".DetailMessageListActivity"></activity>
 
-        <activity android:name=".DetailMessageListActivity" />
+        <activity android:name=".DetailParticipantListActivity"></activity>
 
-        <activity android:name=".DetailParticipantListActivity" />
+        <activity android:name=".MyEventDetailActivity"></activity>
 
-        <activity android:name=".MyEventDetailActivity">
+        <activity android:name=".CloseDiscussionActivity"></activity>
 
-        </activity>
-
-        <activity android:name=".CloseDiscussionActivity" />
-
-        <activity android:name=".ExploreEventDetailActivity">
-
-        </activity>
+        <activity android:name=".ExploreEventDetailActivity"></activity>
 
         <activity android:name=".ChangeProfileActivity">
             <meta-data

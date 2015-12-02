@@ -7,20 +7,24 @@ import java.util.ArrayList;
  */
 public class Event {
     private String id;
+    private String title;
     private User host;
     private String status;
     private String time;
-    private ArrayList<String> tbdTime;
-    private ArrayList<Participant> participants;
+    private String beginAt;
+    private String endAt;
     private String location;
     private String description;
+    private ArrayList<Participant> participants;
+    private int quota;
+    private int maxNumOfParticipant;
 
-    public ArrayList<Participant> getParticipants() {
-        return participants;
+    public String getBeginAt() {
+        return beginAt;
     }
 
-    public void setParticipants(ArrayList<Participant> participants) {
-        this.participants = participants;
+    public void setBeginAt(String beginAt) {
+        this.beginAt = beginAt;
     }
 
     public String getDescription() {
@@ -29,6 +33,22 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getEndAt() {
+        return endAt;
+    }
+
+    public void setEndAt(String endAt) {
+        this.endAt = endAt;
+    }
+
+    public User getHost() {
+        return host;
+    }
+
+    public void setHost(User host) {
+        this.host = host;
     }
 
     public String getId() {
@@ -47,6 +67,30 @@ public class Event {
         this.location = location;
     }
 
+    public int getMaxNumOfParticipant() {
+        return maxNumOfParticipant;
+    }
+
+    public void setMaxNumOfParticipant(int maxNumOfParticipant) {
+        this.maxNumOfParticipant = maxNumOfParticipant;
+    }
+
+    public ArrayList<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(ArrayList<Participant> participants) {
+        this.participants = participants;
+    }
+
+    public int getQuota() {
+        return quota;
+    }
+
+    public void setQuota(int quota) {
+        this.quota = quota;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -55,19 +99,19 @@ public class Event {
         this.status = status;
     }
 
-    public ArrayList<String> getTbdTime() {
-        return tbdTime;
-    }
-
-    public void setTbdTime(ArrayList<String> tbdTime) {
-        this.tbdTime = tbdTime;
-    }
-
     public String getTime() {
         return time;
     }
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
