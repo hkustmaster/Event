@@ -17,7 +17,7 @@ public class Event {
     private String description;
     private ArrayList<Participant> participants;
     private int quota;
-    private int maxNumOfParticipant;
+    private int size;
 
     public String getBeginAt() {
         return beginAt;
@@ -67,12 +67,12 @@ public class Event {
         this.location = location;
     }
 
-    public int getMaxNumOfParticipant() {
-        return maxNumOfParticipant;
+    public int getSize() {
+        return size;
     }
 
-    public void setMaxNumOfParticipant(int maxNumOfParticipant) {
-        this.maxNumOfParticipant = maxNumOfParticipant;
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public ArrayList<Participant> getParticipants() {
