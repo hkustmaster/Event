@@ -14,12 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hkust.android.event.model.Constants;
+import com.hkust.android.event.tools.ValidFormTools;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -111,7 +117,7 @@ public class SignInActivity extends AppCompatActivity {
                             //2、让setting处于编辑状态
                             SharedPreferences.Editor editor = settings.edit();
                             //3、存放数据
-                            editor.putString("token",token);
+                            editor.putString("token", token);
                             //4、完成提交
                             editor.commit();
                             //Toast.makeText(SignInActivity.this, token, Toast.LENGTH_LONG).show();
@@ -124,6 +130,7 @@ public class SignInActivity extends AppCompatActivity {
                                             progressDialog.dismiss();
                                         }
                                     }, 2000);
+                            _loginButton.setEnabled(true);
                         } else {
                             new android.os.Handler().postDelayed(
                                     new Runnable() {
@@ -134,6 +141,7 @@ public class SignInActivity extends AppCompatActivity {
                                             progressDialog.dismiss();
                                         }
                                     }, 2000);
+                            _loginButton.setEnabled(true);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
