@@ -39,6 +39,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
+
 public class SignInActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> , OnClickListener{
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -353,7 +354,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
             case R.id.sign_in_btn:
                 Intent intent1 = new Intent(SignInActivity.this, MainActivity.class);
                 startActivity(intent1);
-                Log.i("HERE", "SING IP");
+                Log.i("HERE", "SING IN");
                 finish();
                 break;
             case R.id.sign_up_btn:
