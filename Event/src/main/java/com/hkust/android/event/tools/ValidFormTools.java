@@ -27,7 +27,7 @@ public class ValidFormTools {
     }
 
     public boolean isValidatePassword(String password, String re_password){
-        if(password.equals(re_password))
+        if(password.equals(re_password)&&password.length()>=6&&password.length()<=18)
             return true;
         return false;
     }

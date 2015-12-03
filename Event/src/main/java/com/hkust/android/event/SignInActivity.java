@@ -12,8 +12,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hkust.android.event.model.Constants;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cz.msebera.android.httpclient.Header;
 
 public class SignInActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
@@ -69,16 +78,61 @@ public class SignInActivity extends AppCompatActivity{
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
+        // send request to server
+        AsyncHttpClient client = new AsyncHttpClient();
+        String url = Constants.SERVER_URL+Constants.SIGN_IN;
+        // set up the parameters
+        RequestParams params = new RequestParams();
+        params.put("email", email);
+        params.put("password", password);
+        // execute post method
+        client.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if (statusCode == 200) {
+                    String response = new String(responseBody);
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response);
+                        String message = jsonObject.getString("message");
+                        String t = new String(responseBody);
+                        Toast.makeText(SignInActivity.this, t, Toast.LENGTH_LONG).show();
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        //onLoginFailed();
-                        progressDialog.dismiss();
+                        if (message.equalsIgnoreCase("succeed")) {
+                            new android.os.Handler().postDelayed(
+                                    new Runnable() {
+                                        public void run() {
+                                            // On complete call either onLoginSuccess or onLoginFailed
+                                            onLoginSuccess();
+                                            //onLoginFailed();
+                                            progressDialog.dismiss();
+                                        }
+                                    }, 2000);
+                        } else {
+                            new android.os.Handler().postDelayed(
+                                    new Runnable() {
+                                        public void run() {
+                                            // On complete call either onLoginSuccess or onLoginFailed
+                                            //onLoginSuccess();
+                                            onLoginFailed();
+                                            progressDialog.dismiss();
+                                        }
+                                    }, 2000);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, 3000);
+
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                // print errors
+                error.printStackTrace();
+
+            }
+        });
     }
 
 
@@ -102,12 +156,14 @@ public class SignInActivity extends AppCompatActivity{
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
 
+        //Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
     }
 
@@ -124,8 +180,8 @@ public class SignInActivity extends AppCompatActivity{
             _emailText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty() || password.length() < 6 || password.length() > 18) {
+            _passwordText.setError("between 6 and 18 alphanumeric characters");
             valid = false;
         } else {
             _passwordText.setError(null);
