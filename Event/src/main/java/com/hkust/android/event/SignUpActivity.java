@@ -39,10 +39,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
 
         Button signUpBtn = (Button) findViewById(R.id.sign_up_btn);
-        Button cancelBtn = (Button) findViewById(R.id.cancel_btn);
+        TextView signinLink = (TextView)findViewById(R.id.link_signin);
 
         signUpBtn.setOnClickListener(this);
-        cancelBtn.setOnClickListener(this);
+        signinLink.setOnClickListener(this);
     }
 
     @Override
@@ -116,7 +116,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                                 }
                             }
-
                             @Override
                             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                                 Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_LONG).show();
@@ -126,13 +125,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     } else {
                         Toast.makeText(SignUpActivity.this, "Error: please check your information!", Toast.LENGTH_SHORT).show();
                     }
-
                 }
-
                 break;
-            case R.id.cancel_btn:
+            case R.id.link_signin:
                 this.finish();
-
                 break;
             default:
         }
@@ -153,22 +149,29 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         TextView sign_up_name = (TextView) findViewById(R.id.sign_up_name);
         TextView sign_up_re_password = (TextView) findViewById(R.id.sign_up_re_password);
         TextView sign_up_phone = (TextView) findViewById(R.id.sign_up_phone);
+        TextView sign_up_password = (TextView) findViewById(R.id.sign_up_password);
 
-        if (validTools.isValidEmailAddress(user.getEmail())) {
+        if (!validTools.isValidEmailAddress(user.getEmail())) {
             sign_up_email.setError("invalid email address");
             flag = false;
         }
 
-        if (validTools.isValidateName(user.getName())) {
+        if(!validTools.isValidatePasswordLength(user.getPassword())){
+            sign_up_password.setError("between 6 and 18 alphanumeric characters");
+            flag =false;
+        }
+
+        if (!validTools.isValidateName(user.getName())) {
             sign_up_name.setError("invalid name");
             flag = false;
         }
 
-        if (validTools.isValidatePassword(user.getPassword(), re_password)) {
-            sign_up_re_password.setError("passwords do not match");
+        if (!validTools.isValidatePassword(user.getPassword(), re_password)) {
+            sign_up_re_password.setError("passwords do not match.");
             flag = false;
         }
-        if (validTools.isValidCellPhone(user.getPhone())) {
+
+        if (!validTools.isValidCellPhone(user.getPhone())) {
             sign_up_phone.setError("invalid phone");
             flag = false;
         }

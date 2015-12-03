@@ -1,6 +1,8 @@
 package com.hkust.android.event.tools;
 
+import android.util.Log;
 import android.util.Patterns;
+import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,11 +29,18 @@ public class ValidFormTools {
     }
 
     public boolean isValidatePassword(String password, String re_password){
-        if(password.equals(re_password)&&password.length()>=6&&password.length()<=18)
+        if(password.equals(re_password))
             return true;
         return false;
     }
 
+    public boolean isValidatePasswordLength(String password){
+        if(password.length()>=6&&password.length()<=18){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public boolean isValidCellPhone(String number)
     {
         return android.util.Patterns.PHONE.matcher(number).matches();
