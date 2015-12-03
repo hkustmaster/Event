@@ -144,7 +144,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 		String token = settings.getString("token","default");
 		Log.i("PPPP", token);
 
-		client.get(Constants.SERVER_URL + Constants.GET_ALL_EVENT+"?token="+token, new AsyncHttpResponseHandler() {
+		RequestParams params = new RequestParams();
+		params.put("token",token);
+
+		client.post(Constants.SERVER_URL + Constants.GET_ALL_EVENT, params, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 				String message = new String(responseBody);
@@ -158,7 +161,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-				Log.i("PPPPPP", statusCode+"");
+				Log.i("PPPPPP", statusCode + "");
 				Log.i("PPPPPP", "ON FAILURE");
 			}
 		});
