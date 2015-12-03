@@ -3,6 +3,7 @@ package com.hkust.android.event;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,14 +25,18 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cz.msebera.android.httpclient.Header;
 
-public class SignInActivity extends AppCompatActivity{
+public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    @InjectView(R.id.input_email) EditText _emailText;
-    @InjectView(R.id.input_password) EditText _passwordText;
-    @InjectView(R.id.btn_login) Button _loginButton;
-    @InjectView(R.id.link_signup) TextView _signupLink;
+    @InjectView(R.id.input_email)
+    EditText _emailText;
+    @InjectView(R.id.input_password)
+    EditText _passwordText;
+    @InjectView(R.id.btn_login)
+    Button _loginButton;
+    @InjectView(R.id.link_signup)
+    TextView _signupLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +85,7 @@ public class SignInActivity extends AppCompatActivity{
         // TODO: Implement your own authentication logic here.
         // send request to server
         AsyncHttpClient client = new AsyncHttpClient();
-        String url = Constants.SERVER_URL+Constants.SIGN_IN;
+        String url = Constants.SERVER_URL + Constants.SIGN_IN;
         // set up the parameters
         RequestParams params = new RequestParams();
         params.put("email", email);
@@ -96,9 +101,20 @@ public class SignInActivity extends AppCompatActivity{
                         jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
                         String t = new String(responseBody);
-                        Toast.makeText(SignInActivity.this, t, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(SignInActivity.this, t, Toast.LENGTH_LONG).show();
 
                         if (message.equalsIgnoreCase("succeed")) {
+                            String token = jsonObject.getString("token");
+                            //store token and username
+                            //1、打开Preferences，名称为setting，如果存在则打开它，否则创建新的Preferences
+                            SharedPreferences settings = getSharedPreferences("setting", 0);
+                            //2、让setting处于编辑状态
+                            SharedPreferences.Editor editor = settings.edit();
+                            //3、存放数据
+                            editor.putString("token",token);
+                            //4、完成提交
+                            editor.commit();
+                            //Toast.makeText(SignInActivity.this, token, Toast.LENGTH_LONG).show();
                             new android.os.Handler().postDelayed(
                                     new Runnable() {
                                         public void run() {

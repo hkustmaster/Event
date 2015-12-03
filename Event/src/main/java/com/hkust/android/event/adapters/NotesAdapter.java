@@ -1,18 +1,26 @@
 package com.hkust.android.event.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hkust.android.event.R;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Note;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
@@ -126,6 +134,35 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 	}
 
 	private Note[] getExploreEvents(Context context, int numNotes) {
+
+		// send request to server
+		AsyncHttpClient client = new AsyncHttpClient();
+
+		//1、获取Preferences
+		SharedPreferences settings = context.getSharedPreferences("setting", 0);
+		//2、取出数据
+		String token = settings.getString("token","default");
+		Log.i("PPPP", token);
+
+		client.get(Constants.SERVER_URL + Constants.GET_ALL_EVENT+"?token="+token, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				String message = new String(responseBody);
+				Log.i("PPPPPP", message);
+				if (statusCode == 200) {
+
+				} else {
+
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				Log.i("PPPPPP", statusCode+"");
+				Log.i("PPPPPP", "ON FAILURE");
+			}
+		});
+
 		Note[] notes = new Note[numNotes];
 		for (int i = 0; i < notes.length; i++) {
 			notes[i] = Note.randomNote(context);

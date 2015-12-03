@@ -145,7 +145,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private boolean checkRegInfo(User user, String re_password) {
         ValidFormTools validTools = new ValidFormTools();
         /*
-        * 1. check email
+        * 1. check
         * */
         if(validTools.isValidEmailAddress(user.getEmail())&&
                 validTools.isValidateName(user.getName())&&

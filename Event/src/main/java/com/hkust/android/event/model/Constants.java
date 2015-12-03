@@ -11,6 +11,7 @@ public class Constants {
     public final static String SERVER_URL="http://www.sigmoid.xyz:3000";
     public final static String SIGN_IN="/signin";
     public final static String SIGN_UP="/signup";
+    public final static String GET_ALL_EVENT="/activity/all";
     public final static String EVENT_TABLE="";
 
 
