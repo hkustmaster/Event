@@ -39,10 +39,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
 
         Button signUpBtn = (Button) findViewById(R.id.sign_up_btn);
-        Button cancelBtn = (Button) findViewById(R.id.cancel_btn);
+        TextView signinLink = (TextView)findViewById(R.id.link_signin);
 
         signUpBtn.setOnClickListener(this);
-        cancelBtn.setOnClickListener(this);
+        signinLink.setOnClickListener(this);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String password = sign_up_password.getText().toString();
                 String re_password = sign_up_re_password.getText().toString();
                 String gender = new String();
-                if(sign_up_gender.getCheckedRadioButtonId()!=-1) {
+                if (sign_up_gender.getCheckedRadioButtonId() != -1) {
                     RadioButton gender_button = (RadioButton) findViewById(sign_up_gender.getCheckedRadioButtonId());
                     gender = gender_button.getText().toString();
                 }
@@ -83,9 +83,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         "".equalsIgnoreCase(re_password) ||
                         "".equalsIgnoreCase(gender)) {
                     Toast.makeText(SignUpActivity.this, "All Fields Required.", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
 
-                    if(checkRegInfo(user,re_password)){
+                    if (checkRegInfo(user, re_password)) {
                         params.put("name", user.getName());
                         params.put("email", user.getEmail());
                         params.put("password", user.getPassword());
@@ -105,7 +105,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         String message = jsonObject.getString("message");
                                         Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_LONG).show();
 
-                                        if(message.equalsIgnoreCase("succeed")){
+                                        if (message.equalsIgnoreCase("succeed")) {
                                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                                             startActivity(intent);
                                             finish();
@@ -116,23 +116,19 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                                 }
                             }
-
                             @Override
                             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                                 Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                                 error.printStackTrace();
                             }
                         });
-                    }else{
+                    } else {
                         Toast.makeText(SignUpActivity.this, "Error: please check your information!", Toast.LENGTH_SHORT).show();
                     }
-
                 }
-
                 break;
-            case R.id.cancel_btn:
+            case R.id.link_signin:
                 this.finish();
-
                 break;
             default:
         }
@@ -144,17 +140,43 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     * */
     private boolean checkRegInfo(User user, String re_password) {
         ValidFormTools validTools = new ValidFormTools();
+        boolean flag = true;
         /*
         * 1. check
         * */
-        if(validTools.isValidEmailAddress(user.getEmail())&&
-                validTools.isValidateName(user.getName())&&
-                validTools.isValidatePassword(user.getPassword(),re_password)&&
-                validTools.isValidCellPhone(user.getPhone())
-                )
-            return true;
-        else
-            return false;
+
+        TextView sign_up_email = (TextView) findViewById(R.id.sign_up_email);
+        TextView sign_up_name = (TextView) findViewById(R.id.sign_up_name);
+        TextView sign_up_re_password = (TextView) findViewById(R.id.sign_up_re_password);
+        TextView sign_up_phone = (TextView) findViewById(R.id.sign_up_phone);
+        TextView sign_up_password = (TextView) findViewById(R.id.sign_up_password);
+
+        if (!validTools.isValidEmailAddress(user.getEmail())) {
+            sign_up_email.setError("invalid email address");
+            flag = false;
+        }
+
+        if(!validTools.isValidatePasswordLength(user.getPassword())){
+            sign_up_password.setError("between 6 and 18 alphanumeric characters");
+            flag =false;
+        }
+
+        if (!validTools.isValidateName(user.getName())) {
+            sign_up_name.setError("invalid name");
+            flag = false;
+        }
+
+        if (!validTools.isValidatePassword(user.getPassword(), re_password)) {
+            sign_up_re_password.setError("passwords do not match.");
+            flag = false;
+        }
+
+        if (!validTools.isValidCellPhone(user.getPhone())) {
+            sign_up_phone.setError("invalid phone");
+            flag = false;
+        }
+
+        return flag;
     }
 }
 
