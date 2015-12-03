@@ -4,6 +4,11 @@ import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,5 +49,26 @@ public class ValidFormTools {
     public boolean isValidCellPhone(String number)
     {
         return android.util.Patterns.PHONE.matcher(number).matches();
+    }
+
+    public boolean isValidEndDate(String startDate, String endDate){
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTime startDateTime = DateTime.parse(startDate, format);
+        DateTime endDateTime = DateTime.parse(endDate, format);
+        return startDateTime.isBefore(endDateTime);
+    }
+
+    public ArrayList<String> getDateList(String startDate, String endDate){
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTime startDateTime = DateTime.parse(startDate, format);
+        DateTime endDateTime = DateTime.parse(endDate, format);
+        ArrayList<String> dates = new ArrayList<String>();
+        while(startDateTime.isBefore(endDateTime)){
+            dates.add(startDateTime.toString(format));
+            startDateTime = startDateTime.plusDays(1);
+        }
+        dates.add(endDate);
+        return dates;
+
     }
 }
