@@ -139,7 +139,21 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                             ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
                             }.getType());
                             Log.i("ppppp", arrayEventList.get(1).getTitle());
-                            separateEventList(arrayEventList,user.get_id());
+
+                            for(Event e: arrayEventList){
+                                if(e.getHost().get_id().equalsIgnoreCase(user.get_id())){
+                                    myEvents.add(e);
+                                }else{
+                                    pendingEvents.add(e);
+                                }
+                            }
+                            if (getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
+                                notesAdapter.setEventsList(myEvents);
+                                notesAdapter.notifyDataSetChanged();
+                            } else if (getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
+                                notesAdapter.setEventsList(pendingEvents);
+                                notesAdapter.notifyDataSetChanged();
+                            }
                         } else {
                             Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                         }
@@ -155,13 +169,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                 }
             });
             Log.i("pppp","herherherhehrehr1111111111");
-            if(getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)){
-                notesAdapter.setEventsList(myEvents);
-                notesAdapter.notifyDataSetChanged();
-            }else if(getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)){
-                notesAdapter.setEventsList(pendingEvents);
-                notesAdapter.notifyDataSetChanged();
-            }
+
 
         }
         return view;
@@ -178,26 +186,26 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         if (getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
             Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
             intent.setAction(getTagName());
-            intent.putExtra("eventId", exploreEvents.get(position).get_id());
+            intent.putExtra("eventId", exploreEvents.get(position).getId());
             startActivity(intent);
 
         } else if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
             if(user.get_id().equalsIgnoreCase(exploreEvents.get(position).getHost().get_id())){
                 Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
-                intent.putExtra("eventId",exploreEvents.get(position).get_id());
+                intent.putExtra("eventId",exploreEvents.get(position).getId());
                 intent.setAction(getTagName());
                 startActivity(intent);
 
             }else{
                 Intent intent = new Intent(getActivity(), ExploreEventDetailActivity.class);
                 intent.setAction(getTagName());
-                intent.putExtra("eventId",exploreEvents.get(position).get_id());
+                intent.putExtra("eventId",exploreEvents.get(position).getId());
                 startActivity(intent);
             }
         } else if (getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
             Intent intent = new Intent(getActivity(), PendingEventDetailActivity.class);
             intent.setAction(getTagName());
-            intent.putExtra("eventId",exploreEvents.get(position).get_id());
+            intent.putExtra("eventId",exploreEvents.get(position).getId());
             startActivity(intent);
         }
         Integer pos = new Integer(position);
