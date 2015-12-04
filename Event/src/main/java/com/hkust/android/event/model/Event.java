@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by hozdanny on 15/11/30.
  */
 public class Event {
+    private String picture;
     private String id;
     private String title;
     private User host;

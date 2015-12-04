@@ -12,6 +12,7 @@ public class Constants {
     public final static String SIGN_IN="/signin";
     public final static String SIGN_UP="/signup";
     public final static String GET_ALL_EVENT="/activity/all";
+    public final static String ADD_EVENT="/activity/new";
     public final static String EVENT_TABLE="";
 
 

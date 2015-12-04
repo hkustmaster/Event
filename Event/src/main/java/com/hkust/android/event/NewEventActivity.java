@@ -3,10 +3,12 @@ package com.hkust.android.event;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -18,13 +20,23 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
 import com.hkust.android.event.model.User;
+import com.hkust.android.event.tools.ValidFormTools;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.Calendar;
+
+import cz.msebera.android.httpclient.Header;
 
 public class NewEventActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -186,6 +198,9 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
                 String time = time_Text.getText().toString();
                 String number = number_Text.getText().toString();
+
+                Log.i("pppp",number);
+
                 String desc = desc_Text.getText().toString();
 
                 if ("".equalsIgnoreCase(title) ||
@@ -199,44 +214,78 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
                 } else {
 
-                    if (endTime) {
-                        if ("".equalsIgnoreCase(endDate))
-                            Toast.makeText(getApplicationContext(), "End date field required!", Toast.LENGTH_LONG).show();
-                    } else {
-                        endDate = "";
+                    Event event = new Event();
+                    event.setTitle(title);
+                    event.setLocation(location);
+                    event.setBeginAt(startDate);
+                    event.setEndAt(endDate);
+                    event.setTime(time);
+                    event.setQuota(Integer.parseInt(number));
 
-                        Event event = new Event();
-                        event.setTitle(title);
-                        event.setLocation(location);
-                        event.setBeginAt(startDate);
-                        event.setEndAt(endDate);
-                        event.setTime(time);
-                        event.setQuota(Integer.getInteger(number));
-                        event.setDescription(desc);
+                    event.setDescription(desc);
 
-                        User user = new User();
+                    User user = new User();
 
 
-                        if (checkEventInfo(event)) {
-                            RequestParams params = new RequestParams();
+                    if (checkEventInfo(event)) {
+                        RequestParams params = new RequestParams();
 
-                            params.put("title", event.getTitle());
-                            params.put("host", user);
-                            params.put("location", event.getLocation());
-                            params.put("description",event.getDescription());
-                            params.put("quota",event.getQuota());
+                        params.put("name", event.getTitle());
+                        params.put("host", user);
+                        params.put("location", event.getLocation());
+                        params.put("description", event.getDescription());
+                        params.put("quota", event.getQuota() - 1);
+                        params.put("size", event.getQuota());
 
-                            if(endTime)
+                        params.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1NjVmZmFlNTMxYTliMTVhMDg0NzVjYTgiLCJleHAiOjE0NDk3NDMwMDY1NTh9.Gi_jucW6XlV0R5Ev_HdJ_FFqC3XjyLFmtpk00o-70GM");
 
-
+                        if (endTime) {
                             params.put("time", event.getTime());
-
-
-
+                            ValidFormTools tool = new ValidFormTools();
+                            ArrayList<String> dateList = tool.getDateList(event.getBeginAt(), event.getEndAt());
+                            params.put("tbdtime", dateList);
+                        } else {
+                            params.put("time", event.getBeginAt() + " " + event.getTime());
                         }
+                        Log.i("pppp", "create");
+                        AsyncHttpClient client = new AsyncHttpClient();
+                        client.post(Constants.SERVER_URL + Constants.ADD_EVENT, params, new AsyncHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                                String response = new String(responseBody);
+                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                                Log.i("pppp", "create  " + response);
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonObject = new JSONObject(response);
+                                    String message = jsonObject.getString("message");
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                                    if (message.equalsIgnoreCase("succeed")) {
+                                        Log.i("pppp", "create  success");
+
+                                    } else {
+                                        Log.i("pppp", "create  fail");
+
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
+                                error.printStackTrace();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Error: please check all fields!", Toast.LENGTH_SHORT).show();
                     }
 
                 }
+
 
                 break;
             default:
