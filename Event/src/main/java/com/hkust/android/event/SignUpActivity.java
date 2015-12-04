@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.User;
 import com.hkust.android.event.tools.ValidFormTools;
@@ -25,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
@@ -39,7 +42,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
 
         Button signUpBtn = (Button) findViewById(R.id.sign_up_btn);
-        TextView signinLink = (TextView)findViewById(R.id.link_signin);
+        TextView signinLink = (TextView) findViewById(R.id.link_signin);
 
         signUpBtn.setOnClickListener(this);
         signinLink.setOnClickListener(this);
@@ -69,12 +72,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     gender = gender_button.getText().toString();
                 }
 
-                User user = new User();
-                user.setEmail(email);
-                user.setGender(gender);
-                user.setPassword(password);
-                user.setName(name);
-                user.setPhone(phone);
 
                 if ("".equalsIgnoreCase(email) ||
                         "".equalsIgnoreCase(name) ||
@@ -84,27 +81,27 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         "".equalsIgnoreCase(gender)) {
                     Toast.makeText(SignUpActivity.this, "All Fields Required.", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    User user = new User();
+                    user.setEmail(email);
+                    user.setGender(gender);
+                    user.setPassword(password);
+                    user.setName(name);
+                    user.setPhone(phone);
                     if (checkRegInfo(user, re_password)) {
-                        params.put("name", user.getName());
-                        params.put("email", user.getEmail());
-                        params.put("password", user.getPassword());
-                        params.put("phone", user.getPhone());
-                        params.put("gender", user.getGender());
-
-                        AsyncHttpClient client = new AsyncHttpClient();
-                        client.post(Constants.SERVER_URL + Constants.SIGN_UP, params, new AsyncHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                                if (statusCode == 200) {
+                        try {
+                            AsyncHttpClient client = new AsyncHttpClient();
+                            Gson gson = new Gson();
+                            StringEntity entity = new StringEntity(gson.toJson(user));
+                            Log.i("pppp",gson.toJson(user));
+                            client.post(this.getApplicationContext(), Constants.SERVER_URL+Constants.SIGN_UP, entity, "application/json", new AsyncHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                                     String response = new String(responseBody);
-//                                    Toast.makeText(SignUpActivity.this, response, Toast.LENGTH_LONG).show();
                                     JSONObject jsonObject = null;
                                     try {
                                         jsonObject = new JSONObject(response);
                                         String message = jsonObject.getString("message");
                                         Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_LONG).show();
-
                                         if (message.equalsIgnoreCase("succeed")) {
                                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                                             startActivity(intent);
@@ -115,13 +112,53 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                     }
 
                                 }
-                            }
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                                Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                                error.printStackTrace();
-                            }
-                        });
+
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+//                        params.put("name", user.getName());
+//                        params.put("email", user.getEmail());
+//                        params.put("password", user.getPassword());
+//                        params.put("phone", user.getPhone());
+//                        params.put("gender", user.getGender());
+//
+//                        AsyncHttpClient client = new AsyncHttpClient();
+//                        client.post(Constants.SERVER_URL + Constants.SIGN_UP, params, new AsyncHttpResponseHandler() {
+//                            @Override
+//                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                                if (statusCode == 200) {
+//                                    String response = new String(responseBody);
+//
+//                                    JSONObject jsonObject = null;
+//                                    try {
+//                                        jsonObject = new JSONObject(response);
+//                                        String message = jsonObject.getString("message");
+//                                        Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_LONG).show();
+//
+//                                        if (message.equalsIgnoreCase("succeed")) {
+//                                            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+//                                            startActivity(intent);
+//                                            finish();
+//                                        }
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                }
+//                            }
+//                            @Override
+//                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                                Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+//                                error.printStackTrace();
+//                            }
+//                        });
                     } else {
                         Toast.makeText(SignUpActivity.this, "Error: please check your information!", Toast.LENGTH_SHORT).show();
                     }
@@ -156,9 +193,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             flag = false;
         }
 
-        if(!validTools.isValidatePasswordLength(user.getPassword())){
+        if (!validTools.isValidatePasswordLength(user.getPassword())) {
             sign_up_password.setError("between 6 and 18 alphanumeric characters");
-            flag =false;
+            flag = false;
         }
 
         if (!validTools.isValidateName(user.getName())) {

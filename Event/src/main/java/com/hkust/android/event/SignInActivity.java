@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hkust.android.event.model.Constants;
+import com.hkust.android.event.model.User;
 import com.hkust.android.event.tools.ValidFormTools;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -91,36 +94,29 @@ public class SignInActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
         // send request to server
         AsyncHttpClient client = new AsyncHttpClient();
-        String url = Constants.SERVER_URL + Constants.SIGN_IN;
         // set up the parameters
         RequestParams params = new RequestParams();
         params.put("email", email);
         params.put("password", password);
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        Gson gson = new Gson();
+
         // execute post method
-        client.post(url, params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                if (statusCode == 200) {
+        try {
+            StringEntity entity = new StringEntity(gson.toJson(user));
+            client.post(this.getApplicationContext(), Constants.SERVER_URL + Constants.SIGN_IN, entity, "application/json", new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     String response = new String(responseBody);
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject(response);
                         String message = jsonObject.getString("message");
-                        String t = new String(responseBody);
-                        //Toast.makeText(SignInActivity.this, t, Toast.LENGTH_LONG).show();
-
+                        Toast.makeText(SignInActivity.this, message, Toast.LENGTH_LONG).show();
                         if (message.equalsIgnoreCase("succeed")) {
-                            String token = jsonObject.getString("token");
-                            //store token and username
-                            //1、打开Preferences，名称为setting，如果存在则打开它，否则创建新的Preferences
-                            SharedPreferences settings = getSharedPreferences("setting", 0);
-                            //2、让setting处于编辑状态
-                            SharedPreferences.Editor editor = settings.edit();
-                            //3、存放数据
-                            editor.putString("token", token);
-                            //4、完成提交
-                            editor.commit();
-                            //Toast.makeText(SignInActivity.this, token, Toast.LENGTH_LONG).show();
                             new android.os.Handler().postDelayed(
                                     new Runnable() {
                                         public void run() {
@@ -131,7 +127,7 @@ public class SignInActivity extends AppCompatActivity {
                                         }
                                     }, 2000);
                             _loginButton.setEnabled(true);
-                        } else {
+                        }else{
                             new android.os.Handler().postDelayed(
                                     new Runnable() {
                                         public void run() {
@@ -148,15 +144,70 @@ public class SignInActivity extends AppCompatActivity {
                     }
 
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                // print errors
-                error.printStackTrace();
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-            }
-        });
+                }
+            });
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        client.post(url, params, new AsyncHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                if (statusCode == 200) {
+//                    String response = new String(responseBody);
+//                    JSONObject jsonObject = null;
+//                    try {
+//                        jsonObject = new JSONObject(response);
+//                        String message = jsonObject.getString("message");
+//                        String t = new String(responseBody);
+//                        //Toast.makeText(SignInActivity.this, t, Toast.LENGTH_LONG).show();
+//
+//                        if (message.equalsIgnoreCase("succeed")) {
+//                            String token = jsonObject.getString("token");
+//                            //store token and username
+//                            //1、打开Preferences，名称为setting，如果存在则打开它，否则创建新的Preferences
+//                            SharedPreferences settings = getSharedPreferences("setting", 0);
+//                            //2、让setting处于编辑状态
+//                            SharedPreferences.Editor editor = settings.edit();
+//                            //3、存放数据
+//                            editor.putString("token", token);
+//                            //4、完成提交
+//                            editor.commit();
+//                            //Toast.makeText(SignInActivity.this, token, Toast.LENGTH_LONG).show();
+//                            new android.os.Handler().postDelayed(
+//                                    new Runnable() {
+//                                        public void run() {
+//                                            // On complete call either onLoginSuccess or onLoginFailed
+//                                            onLoginSuccess();
+//                                            //onLoginFailed();
+//                                            progressDialog.dismiss();
+//                                        }
+//                                    }, 2000);
+//                            _loginButton.setEnabled(true);
+//                        } else {
+//                            new android.os.Handler().postDelayed(
+//                                    new Runnable() {
+//                                        public void run() {
+//                                            // On complete call either onLoginSuccess or onLoginFailed
+//                                            //onLoginSuccess();
+//                                            onLoginFailed();
+//                                            progressDialog.dismiss();
+//                                        }
+//                                    }, 2000);
+//                            _loginButton.setEnabled(true);
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+
     }
 
 
