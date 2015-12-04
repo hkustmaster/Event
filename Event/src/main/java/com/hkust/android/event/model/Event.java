@@ -8,12 +8,22 @@ import java.util.ArrayList;
 public class Event {
     private String picture;
     private String _id;
+    private String id;
     private String title;
     private User host;
     private String status;
     private String time;
     private String startAt;
     private String endAt;
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
     private ArrayList<String> location;
     private String description;
     private ArrayList<Participant> participants;
@@ -69,13 +79,12 @@ public class Event {
         this.host = host;
     }
 
-
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public ArrayList<String> getLocation() {

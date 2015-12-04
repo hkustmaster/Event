@@ -16,6 +16,7 @@ public class Constants {
     public final static String CHANGE_USER_INFO = "/user/edit";
     public final static String EVENT_TABLE="";
     public final static String EVENT_DETAIL="/activity/detail";
+    public final static String EVENT_SHOWMINE = "/activity/showmine";
 
     public final static String STATUS_EVENT_PRE="PRE";//to be determined
     public final static String STATUS_EVENT_ING="ING";
