@@ -19,6 +19,23 @@ public class Event {
     private ArrayList<Participant> participants;
     private int quota;
     private int size;
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 
     public String getBeginAt() {
         return beginAt;
