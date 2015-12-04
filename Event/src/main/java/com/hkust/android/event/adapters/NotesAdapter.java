@@ -56,8 +56,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         String title = eventModel.getTitle();
         String holderName = eventModel.getHost().getName();
         String startDate = eventModel.getStartAt();
-        String location = eventModel.getLocation().get(0);
-        //String location = "location";
+        //String location = eventModel.getLocation().get(0);
+        String location = "location";
         // Set text
         holder.titleTextView.setText(title);
         holder.eventLocationTextView.setText(location);
