@@ -13,12 +13,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hkust.android.event.R;
 import com.hkust.android.event.model.Constants;
+import com.hkust.android.event.model.Event;
 import com.hkust.android.event.model.Note;
+import com.hkust.android.event.model.User;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -27,6 +36,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
 	private Note[] notes;
 	private ClickListener clickListener;
+	private SharedPreferences sp;
 
 	public NotesAdapter(Context context, String TagName, int numNotes) {
 		if (TagName.equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
@@ -133,15 +143,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 		this.clickListener = clickListener;
 	}
 
-	private Note[] getExploreEvents(Context context, int numNotes) {
+	private Note[] getExploreEvents(final Context context, int numNotes) {
 
 		// send request to server
 		AsyncHttpClient client = new AsyncHttpClient();
 
-		//1、获取Preferences
-		SharedPreferences settings = context.getSharedPreferences("setting", 0);
-		//2、取出数据
-		String token = settings.getString("token","default");
+		sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+		String token = sp.getString("token","");
+
 		Log.i("PPPP", token);
 
 		RequestParams params = new RequestParams();
@@ -150,19 +159,33 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 		client.post(Constants.SERVER_URL + Constants.GET_ALL_EVENT, params, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-				String message = new String(responseBody);
-				Log.i("PPPPPP", message);
-				if (statusCode == 200) {
+				String response = new String(responseBody);
 
-				} else {
+				JSONObject jsonObject = null;
+				try {
+					jsonObject = new JSONObject(response);
+					String message = jsonObject.getString("message");
 
+					if(message.equalsIgnoreCase("succeed")){
+						String eventString = jsonObject.getString("act");
+						Gson gson = new Gson();
+						Log.i("ppppp",eventString);
+						//ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>(){}.getType());
+						//Log.i("ppppp",arrayEventList.toString());
+
+					}else{
+						Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_LONG).show();
+					}
+
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
-			}
 
+
+			}
 			@Override
 			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-				Log.i("PPPPPP", statusCode + "");
-				Log.i("PPPPPP", "ON FAILURE");
+				Toast.makeText(context.getApplicationContext(), "Connection Failed", Toast.LENGTH_LONG).show();
 			}
 		});
 

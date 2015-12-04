@@ -71,4 +71,11 @@ public class ValidFormTools {
         return dates;
 
     }
+
+    public boolean isValidStartDateTime(String startDate, String time){
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd-hh:mm");
+        DateTime startDateTime = DateTime.parse(startDate + "-" + time, format);
+        return !startDateTime.isBeforeNow();
+
+    }
 }

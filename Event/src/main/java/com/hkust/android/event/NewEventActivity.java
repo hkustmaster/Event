@@ -3,7 +3,9 @@ package com.hkust.android.event;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
 import com.hkust.android.event.model.User;
@@ -31,17 +34,20 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.Calendar;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class NewEventActivity extends AppCompatActivity implements View.OnClickListener {
 
     int year_x, month_x, day_x, hour_x, minute_x;
     static final int START_DATE_DIALOG_ID = 0, END_DATE_DIALOG_ID = 2, TIME_DIALOG_ID = 3;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,9 +204,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
                 String time = time_Text.getText().toString();
                 String number = number_Text.getText().toString();
-
-                Log.i("pppp",number);
-
                 String desc = desc_Text.getText().toString();
 
                 if ("".equalsIgnoreCase(title) ||
@@ -214,74 +217,64 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
                 } else {
 
-                    Event event = new Event();
-                    event.setTitle(title);
-                    event.setLocation(location);
-                    event.setBeginAt(startDate);
-                    event.setEndAt(endDate);
-                    event.setTime(time);
-                    event.setQuota(Integer.parseInt(number));
-
-                    event.setDescription(desc);
-
-                    User user = new User();
-
-
-                    if (checkEventInfo(event)) {
-                        RequestParams params = new RequestParams();
-
-                        params.put("name", event.getTitle());
-                        params.put("host", user);
-                        params.put("location", event.getLocation());
-                        params.put("description", event.getDescription());
-                        params.put("quota", event.getQuota() - 1);
-                        params.put("size", event.getQuota());
-
-                        params.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1NjVmZmFlNTMxYTliMTVhMDg0NzVjYTgiLCJleHAiOjE0NDk3NDMwMDY1NTh9.Gi_jucW6XlV0R5Ev_HdJ_FFqC3XjyLFmtpk00o-70GM");
-
-                        if (endTime) {
-                            params.put("time", event.getTime());
-                            ValidFormTools tool = new ValidFormTools();
-                            ArrayList<String> dateList = tool.getDateList(event.getBeginAt(), event.getEndAt());
-                            params.put("tbdtime", dateList);
-                        } else {
-                            params.put("time", event.getBeginAt() + " " + event.getTime());
-                        }
-                        Log.i("pppp", "create");
-                        AsyncHttpClient client = new AsyncHttpClient();
-                        client.post(Constants.SERVER_URL + Constants.ADD_EVENT, params, new AsyncHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                                String response = new String(responseBody);
-                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                                Log.i("pppp", "create  " + response);
-                                JSONObject jsonObject = null;
-                                try {
-                                    jsonObject = new JSONObject(response);
-                                    String message = jsonObject.getString("message");
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-                                    if (message.equalsIgnoreCase("succeed")) {
-                                        Log.i("pppp", "create  success");
-
-                                    } else {
-                                        Log.i("pppp", "create  fail");
-
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
-                                error.printStackTrace();
-                            }
-                        });
+                    if (endTime && "".equalsIgnoreCase(endDate)) {
+                        Toast.makeText(getApplicationContext(), "End data field required.", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Error: please check all fields!", Toast.LENGTH_SHORT).show();
+                        Event event = new Event();
+                        event.setTitle(title);
+                        event.setLocation(location);
+                        event.setBeginAt(startDate);
+
+                        event.setEndAt(endDate);
+
+                        event.setTime(time);
+                        event.setSize(Integer.parseInt(number));
+
+                        event.setDescription(desc);
+
+                        event.setStatus(Constants.STATUS_EVENT_PRE);
+
+                        sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                        String token = sp.getString("token", "");
+                        event.setToken(token);
+                        Log.i("pppp", "111111111111111");
+                        if (checkEventInfo(event)) {
+                            Log.i("pppp", "Valid event, Create Event...");
+                            AsyncHttpClient client = new AsyncHttpClient();
+                            Gson gson = new Gson();
+
+                            try {
+                                StringEntity entity = new StringEntity(gson.toJson(event));
+                                client.post(this.getApplicationContext(), Constants.SERVER_URL + Constants.ADD_EVENT, entity, "application/json", new AsyncHttpResponseHandler() {
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                        String response = new String(responseBody);
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response);
+                                            String message = jsonObject.getString("message");
+                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                            if (message.equalsIgnoreCase("succeed")) {
+                                                finish();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                        Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error: please check all fields!", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                 }
@@ -294,6 +287,18 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
     private boolean checkEventInfo(Event event) {
 
+       /* ValidFormTools validFormTools = new ValidFormTools();
+
+        if(!validFormTools.isValidStartDateTime(event.getBeginAt(),event.getTime())){
+            Toast.makeText(getApplicationContext(), "Invalid start date or time!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else{
+            if(!"".equalsIgnoreCase(event.getEndAt())&&!validFormTools.isValidEndDate(event.getBeginAt(), event.getEndAt())){
+                Toast.makeText(getApplicationContext(), "Invalid start or end date!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }*/
+        //Toast.makeText(getApplicationContext(), "Invalid start or end date222!", Toast.LENGTH_SHORT).show();
         return true;
     }
 

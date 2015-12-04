@@ -1,6 +1,8 @@
 package com.hkust.android.event;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,15 +16,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hkust.android.event.adapters.MainPagerAdapter;
+import com.hkust.android.event.model.User;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
+    private SharedPreferences sp;
 
 
     @Override
@@ -38,6 +44,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.change_password_btn).setOnClickListener(this);
         findViewById(R.id.edit_profile_btn).setOnClickListener(this);
         findViewById(R.id.notes_list);
+
+        //get user info
+        sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String userString=sp.getString("userString", "");
+        Gson gson = new Gson();
+        User user = gson.fromJson(userString, User.class);
+
+        TextView userName = (TextView) findViewById(R.id.username_textview);
+        TextView userEmail = (TextView) findViewById(R.id.email_textview);
+        TextView userPhone = (TextView) findViewById(R.id.phone_textview);
+        userName.setText(user.getName());
+        userEmail.setText(user.getEmail());
+        userPhone.setText(user.getPhone());
+
     }
 
     @Override
@@ -109,6 +129,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_out_btn:
+                sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor =sp.edit();
+                editor.putString("autoLogin","false");
+                editor.putString("userString","");
+                editor.putString("token", "");
+                editor.commit();
+
                 Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivityForResult(intent, 100);
                 break;

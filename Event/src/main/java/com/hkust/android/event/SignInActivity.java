@@ -2,6 +2,7 @@ package com.hkust.android.event;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    private SharedPreferences sp;
 
     @InjectView(R.id.input_email)
     EditText _emailText;
@@ -54,7 +56,6 @@ public class SignInActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 login();
@@ -70,6 +71,18 @@ public class SignInActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
+
+        sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String autoLogin = sp.getString("autoLogin","");
+        String email=sp.getString("email", "");
+        String password =sp.getString("password", "");
+
+        _emailText.setText(email);
+        _passwordText.setText(password);
+
+        if(autoLogin.equalsIgnoreCase("true")){
+            login();
+        }
     }
 
     public void login() {
@@ -88,21 +101,21 @@ public class SignInActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        final String email = _emailText.getText().toString();
+        final String password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
         // send request to server
         AsyncHttpClient client = new AsyncHttpClient();
         // set up the parameters
-        RequestParams params = new RequestParams();
-        params.put("email", email);
-        params.put("password", password);
+//        RequestParams params = new RequestParams();
+//        params.put("email", email);
+//        params.put("password", password);
 
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
-        Gson gson = new Gson();
+        final Gson gson = new Gson();
 
         // execute post method
         try {
@@ -117,6 +130,42 @@ public class SignInActivity extends AppCompatActivity {
                         String message = jsonObject.getString("message");
                         Toast.makeText(SignInActivity.this, message, Toast.LENGTH_LONG).show();
                         if (message.equalsIgnoreCase("succeed")) {
+
+                            //get user json
+                            String userString = jsonObject.getString("user");
+                            String token = jsonObject.getString("token");
+
+                            // re-package user
+                            User userLogined = gson.fromJson(userString, User.class);
+                            userLogined.setToken(token);
+
+
+                            //1、打开Preferences，名称为setting，如果存在则打开它，否则创建新的Preferences
+                            // 第一个参数是存储时的名称，第二个参数则是文件的打开方式
+                            /*
+                            * SharedPreferences的四种操作模式:
+                                Context.MODE_PRIVATE：为默认操作模式,代表该文件是私有数据,只能被应用本身访问,在该模式下,写入的内容会覆盖原文件的内容
+                                Context.MODE_APPEND：模式会检查文件是否存在,存在就往文件追加内容,否则就创建新文件.
+                                Context.MODE_WORLD_READABLE和Context.MODE_WORLD_WRITEABLE用来控制其他应用是否有权限读写该文件.
+                                MODE_WORLD_READABLE：表示当前文件可以被其他应用读取.
+                                MODE_WORLD_WRITEABLE：表示当前文件可以被其他应用写入.
+                            */
+                            sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                            //2、让setting处于编辑状态
+                            SharedPreferences.Editor editor = sp.edit();
+                            //3、存放数据
+//                            editor.putString("userName",user.getName());
+//                            editor.putString("userEmail",user.getEmail());
+//                            editor.putString("userPhone",user.getPhone());
+                            editor.putString("autoLogin","true");
+                            editor.putString("email",email);
+                            editor.putString("password",password);
+                            editor.putString("token", token);
+                            editor.putString("userString", userString);
+                            //4、完成提交
+                            editor.commit();
+
+//                            Toast.makeText(getApplicationContext(), user.getName(), Toast.LENGTH_LONG).show();
                             new android.os.Handler().postDelayed(
                                     new Runnable() {
                                         public void run() {
@@ -127,7 +176,7 @@ public class SignInActivity extends AppCompatActivity {
                                         }
                                     }, 2000);
                             _loginButton.setEnabled(true);
-                        }else{
+                        } else {
                             new android.os.Handler().postDelayed(
                                     new Runnable() {
                                         public void run() {
@@ -147,11 +196,12 @@ public class SignInActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_LONG).show();
 
                 }
             });
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
