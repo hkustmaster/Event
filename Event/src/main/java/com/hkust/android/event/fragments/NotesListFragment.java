@@ -140,7 +140,8 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                             ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
                             }.getType());
 
-
+                            myEvents.clear();
+                            pendingEvents.clear();
                             for (Event e : arrayEventList) {
                                 if (e.getHost().get_id().equalsIgnoreCase(user.get_id())) {
                                     myEvents.add(e);
@@ -283,9 +284,11 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                                 // Log.i("ppppp", eventString);
                                 ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
                                 }.getType());
-                                Log.i("ppppp", arrayEventList.get(1).getTitle());
-
+                                //Log.i("ppppp", arrayEventList.get(1).getTitle());
+                                myEvents.clear();
+                                pendingEvents.clear();
                                 for(Event e: arrayEventList){
+
                                     if(e.getHost().get_id().equalsIgnoreCase(user.get_id())){
                                         myEvents.add(e);
                                     }else{
