@@ -28,7 +28,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class ExploreEventDetailActivity extends AppCompatActivity {
 
-    String eventId;
+    String eventString;
     private SharedPreferences sp;
     private TextView event_title;
     private TextView event_holder;
@@ -57,24 +57,34 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
-                eventId = null;
+                eventString = null;
             } else {
-                eventId = extras.getString("eventId");
+                eventString = extras.getString("eventString");
             }
         } else {
-            eventId = (String) savedInstanceState.getSerializable("eventId");
+            eventString = (String) savedInstanceState.getSerializable("eventString");
         }
+
+        Gson gson = new Gson();
+        Event event = gson.fromJson(eventString,Event.class);
+
+        event_title.setText(event.getTitle());
+        event_holder.setText(event.getHost().getName());
+        event_time.setText(event.getTime());
+        event_location.setText(event.getLocation().get(0));
+        event_desc.setText(event.getDescription());
+        event_date.setText(event.getStartAt()+" "+event.getEndAt());
 
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String token = sp.getString("token", "");
 
-        Log.i("ppppp", eventId);
+        Log.i("ppppp", event.getId());
         Log.i("ppppp", token);
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("token", token);
-        params.put("id", eventId);
+        params.put("id", event.getId());
         client.post(Constants.SERVER_URL + Constants.EVENT_DETAIL, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
