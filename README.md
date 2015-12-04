@@ -8,3 +8,7 @@ http://blog.csdn.net/wyh09102010/article/details/38968121
 
 Login:
 https://github.com/sourcey/materiallogindemo
+
+
+
+http://stackoverflow.com/questions/5265913/how-to-use-putextra-and-getextra-for-string-data
