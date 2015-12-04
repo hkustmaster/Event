@@ -122,7 +122,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             year_x = year;
-            month_x = monthOfYear;
+            month_x = monthOfYear+1;
             day_x = dayOfMonth;
             AutoCompleteTextView dateTextField = (AutoCompleteTextView) findViewById(R.id.new_event_end_date);
             dateTextField.setText(year_x + "-" + month_x + "-" + day_x);
@@ -196,7 +196,9 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 TextView desc_Text = (TextView) findViewById(R.id.new_event_description);
 
                 String title = title_Text.getText().toString();
-                String location = location_Text.getText().toString();
+                String l = location_Text.getText().toString();
+                ArrayList<String> location = new ArrayList<String>();
+                location.add(l);
                 String startDate = startData_Text.getText().toString();
                 String endDate = "";
                 if (endTime)
@@ -207,7 +209,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 String desc = desc_Text.getText().toString();
 
                 if ("".equalsIgnoreCase(title) ||
-                        "".equalsIgnoreCase(location) ||
+                        "".equalsIgnoreCase(l) ||
                         "".equalsIgnoreCase(startDate) ||
 //                        && "".equalsIgnoreCase(endDate)||
                         "".equalsIgnoreCase(time) ||
@@ -223,7 +225,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                         Event event = new Event();
                         event.setTitle(title);
                         event.setLocation(location);
-                        event.setBeginAt(startDate);
+                        event.setStartAt(startDate);
 
                         event.setEndAt(endDate);
 

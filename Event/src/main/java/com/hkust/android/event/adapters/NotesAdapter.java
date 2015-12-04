@@ -19,8 +19,8 @@ import com.hkust.android.event.R;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
 import com.hkust.android.event.model.Note;
-import com.hkust.android.event.model.User;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpRequest;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -29,186 +29,153 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.mime.Header;
 
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
-
-	private Note[] notes;
-	private ClickListener clickListener;
-	private SharedPreferences sp;
-
-	public NotesAdapter(Context context, String TagName, int numNotes) {
-		if (TagName.equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
-			notes = getExploreEvents(context, numNotes);
-		} else if (TagName.equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
-			notes = getMyEventEvents(context, numNotes);
-		} else if (TagName.equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
-			notes = getPendingEvents(context, numNotes);
-		}
-	}
-
-	@Override
-	public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_note, parent,
-				false);
-		return new ViewHolder(v);
-	}
-
-	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
-		Note noteModel = notes[position];
-		String title = noteModel.getTitle();
-		String note = noteModel.getNote();
-		String info_date = noteModel.getInfo_date();
-		int info_date_Image = noteModel.getInfo_date_Image();
-		String info_location = noteModel.getInfo_location();
-		int info_location_Image = noteModel.getInfo_location_Image();
-		int color = noteModel.getColor();
-
-		// Set text
-		holder.titleTextView.setText(title);
-		holder.noteTextView.setText(note);
-		holder.infoDateTextView.setText(info_date);
-		holder.infoLocationTextView.setText(info_location);
+    private ArrayList<Event> events = new ArrayList<Event>();
+    private ClickListener clickListener;
+    private Context context;
 
 
-		// Set image
-		holder.infoDateImageView.setImageResource(info_date_Image);
-		holder.infoLocationImageView.setImageResource(info_location_Image);
+    public NotesAdapter(Context context, ArrayList<Event> events) {
+        this.context = context;
+        this.events = events;
+    }
 
-		int paddingTop = (holder.titleTextView.getVisibility() != View.VISIBLE) ? 0
-				: holder.itemView.getContext().getResources()
-				.getDimensionPixelSize(R.dimen.note_content_spacing);
-		holder.noteTextView.setPadding(holder.noteTextView.getPaddingLeft(), paddingTop,
-				holder.noteTextView.getPaddingRight(), holder.noteTextView.getPaddingBottom());
+    @Override
+    public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_note, parent,
+                false);
+        return new ViewHolder(v);
+    }
 
-		// Set background color
-		((CardView) holder.itemView).setCardBackgroundColor(color);
-	}
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Event eventModel = events.get(position);
+        String title = eventModel.getTitle();
+        String holderName = eventModel.getHost().getName();
+        String startDate = eventModel.getStartAt();
+        //String location = eventModel.getLocation().get(0);
+        String location = "location";
+        // Set text
+        holder.titleTextView.setText(title);
+        holder.eventLocationTextView.setText(location);
+        holder.eventStartDateTextView.setText(startDate);
+        holder.hostTextView.setText(holderName);
 
-	@Override
-	public int getItemCount() {
-		return notes.length;
-	}
+        int paddingTop = (holder.titleTextView.getVisibility() != View.VISIBLE) ? 0
+                : holder.itemView.getContext().getResources()
+                .getDimensionPixelSize(R.dimen.note_content_spacing);
+        holder.titleTextView.setPadding(holder.titleTextView.getPaddingLeft(), paddingTop,
+                holder.titleTextView.getPaddingRight(), holder.titleTextView.getPaddingBottom());
 
-	private Note[] generateNotes(Context context, int numNotes) {
-		Note[] notes = new Note[numNotes];
-		for (int i = 0; i < notes.length; i++) {
-			notes[i] = Note.randomNote(context);
-		}
-		return notes;
-	}
+        // Set background color
+        int[] colorsNeutral = context.getResources().getIntArray(R.array.note_neutral_colors);
 
-	class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ((CardView) holder.itemView).setCardBackgroundColor(colorsNeutral[2]);
+    }
 
-		private TextView titleTextView;
-		private TextView noteTextView;
-		private LinearLayout infoDateLayout;
-		private TextView infoDateTextView;
-		private ImageView infoDateImageView;
-		private LinearLayout infoLocationLayout;
-		private TextView infoLocationTextView;
-		private ImageView infoLocationImageView;
+    @Override
+    public int getItemCount() {
+        return events.size();
+    }
 
-		public ViewHolder(View itemView) {
-			super(itemView);
-			titleTextView = (TextView) itemView.findViewById(R.id.note_title);
-			noteTextView = (TextView) itemView.findViewById(R.id.note_text);
-			infoDateLayout = (LinearLayout) itemView.findViewById(R.id.note_info_date_layout);
-			infoDateTextView = (TextView) itemView.findViewById(R.id.note_info_date);
-			infoDateImageView = (ImageView) itemView.findViewById(R.id.note_info_date_image);
-			infoLocationLayout = (LinearLayout) itemView.findViewById(R.id.note_info_location_layout);
-			infoLocationTextView = (TextView) itemView.findViewById(R.id.note_info_location);
-			infoLocationImageView = (ImageView) itemView.findViewById(R.id.note_info_location_image);
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-			itemView.setOnClickListener(this);
-		}
+        private TextView titleTextView;
+        private TextView hostTextView;
+        private TextView eventStartDateTextView;
+        private TextView eventLocationTextView;
 
-		@Override
-		public void onClick(View v) {
-			// context.startActivity(new Intent(context, PendingEventDetailActivity.class));
-			if (clickListener != null) {
-				clickListener.itemClicked(v, getAdapterPosition());
-			}
-		}
-	}
+        public ViewHolder(View itemView) {
+            super(itemView);
+            titleTextView = (TextView) itemView.findViewById(R.id.event_title);
+            hostTextView = (TextView) itemView.findViewById(R.id.event_host);
+            eventStartDateTextView = (TextView) itemView.findViewById(R.id.event_start_date);
+            eventLocationTextView = (TextView) itemView.findViewById(R.id.event_location);
 
-	public interface ClickListener {
-		public void itemClicked(View view, int position);
+            itemView.setOnClickListener(this);
+        }
 
-	}
+        @Override
+        public void onClick(View v) {
+            // context.startActivity(new Intent(context, PendingEventDetailActivity.class));
+            if (clickListener != null) {
+                clickListener.itemClicked(v, getAdapterPosition());
+            }
+        }
+    }
 
-	public void setClickListener(ClickListener clickListener) {
-		this.clickListener = clickListener;
-	}
+    public interface ClickListener {
+        public void itemClicked(View view, int position);
 
-	private Note[] getExploreEvents(final Context context, int numNotes) {
+    }
 
-		// send request to server
-		AsyncHttpClient client = new AsyncHttpClient();
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
-		sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-		String token = sp.getString("token","");
+    public void setEventsList(ArrayList<Event> events) {
+        this.events = events;
+    }
+//    private void getExploreEvents(final Context context) {
+//
+//        // send request to server
+//        AsyncHttpClient client = new AsyncHttpClient();
+//        sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+//        String token = sp.getString("token", "");
+//        Log.i("PPPP", token);
+//        RequestParams params = new RequestParams();
+//        params.put("token", token);
+//
+//        client.post(Constants.SERVER_URL + Constants.GET_ALL_EVENT, params, new AsyncHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+//                String response = new String(responseBody);
+//
+//                JSONObject jsonObject = null;
+//                try {
+//                    jsonObject = new JSONObject(response);
+//                    String message = jsonObject.getString("message");
+//
+//                    if (message.equalsIgnoreCase("succeed")) {
+//                        String eventString = jsonObject.getString("act");
+//                        Gson gson = new Gson();
+//                        Log.i("ppppp", eventString);
+//                        ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
+//                        }.getType());
+//                        Log.i("ppppp", arrayEventList.get(0).getTitle());
+//                        events = arrayEventList;
+//                    } else {
+//                        Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_LONG).show();
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+//
+//            }
+//        });
+//    }
 
-		Log.i("PPPP", token);
-
-		RequestParams params = new RequestParams();
-		params.put("token",token);
-
-		client.post(Constants.SERVER_URL + Constants.GET_ALL_EVENT, params, new AsyncHttpResponseHandler() {
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-				String response = new String(responseBody);
-
-				JSONObject jsonObject = null;
-				try {
-					jsonObject = new JSONObject(response);
-					String message = jsonObject.getString("message");
-
-					if(message.equalsIgnoreCase("succeed")){
-						String eventString = jsonObject.getString("act");
-						Gson gson = new Gson();
-						Log.i("ppppp",eventString);
-						//ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>(){}.getType());
-						//Log.i("ppppp",arrayEventList.toString());
-
-					}else{
-						Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-					}
-
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-
-			}
-			@Override
-			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-				Toast.makeText(context.getApplicationContext(), "Connection Failed", Toast.LENGTH_LONG).show();
-			}
-		});
-
-		Note[] notes = new Note[numNotes];
-		for (int i = 0; i < notes.length; i++) {
-			notes[i] = Note.randomNote(context);
-		}
-		return notes;
-	}
-
-	private Note[] getPendingEvents(Context context, int numNotes) {
-		Note[] notes = new Note[numNotes];
-		for (int i = 0; i < notes.length; i++) {
-			notes[i] = Note.randomOwnNote(context);
-		}
-		return notes;
-	}
-
-	private Note[] getMyEventEvents(Context context, int numNotes) {
-		Note[] notes = new Note[numNotes];
-		for (int i = 0; i < notes.length; i++) {
-			notes[i] = Note.randomOwnNote(context);
-		}
-		return notes;
-	}
+//    private Note[] getPendingEvents(Context context, int numNotes) {
+//        Note[] notes = new Note[numNotes];
+//        for (int i = 0; i < notes.length; i++) {
+//            notes[i] = Note.randomOwnNote(context);
+//        }
+//        return notes;
+//    }
+//
+//    private Note[] getMyEventEvents(Context context, int numNotes) {
+//        Note[] notes = new Note[numNotes];
+//        for (int i = 0; i < notes.length; i++) {
+//            notes[i] = Note.randomOwnNote(context);
+//        }
+//        return notes;
+//    }
 }

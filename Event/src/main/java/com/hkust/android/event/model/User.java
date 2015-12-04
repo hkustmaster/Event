@@ -4,21 +4,22 @@ package com.hkust.android.event.model;
  * Created by hozdanny on 15/11/30.
  */
 public class User {
-    private String hid;
+    private String _id;
     private String name;
     private String email;
     private String gender;
     private String phone;
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
     private String token;
     private String password;
-
-    public String getHid() {
-        return hid;
-    }
-
-    public void setHid(String hid) {
-        this.hid = hid;
-    }
 
     public String getToken() {
         return token;

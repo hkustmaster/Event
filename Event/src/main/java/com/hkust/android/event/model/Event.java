@@ -7,14 +7,14 @@ import java.util.ArrayList;
  */
 public class Event {
     private String picture;
-    private String id;
+    private String _id;
     private String title;
     private User host;
     private String status;
     private String time;
-    private String beginAt;
+    private String startAt;
     private String endAt;
-    private String location;
+    private ArrayList<String> location;
     private String description;
     private ArrayList<Participant> participants;
     private int quota;
@@ -37,12 +37,12 @@ public class Event {
         this.size = size;
     }
 
-    public String getBeginAt() {
-        return beginAt;
+    public String getStartAt() {
+        return startAt;
     }
 
-    public void setBeginAt(String beginAt) {
-        this.beginAt = beginAt;
+    public void setStartAt(String startAt) {
+        this.startAt = startAt;
     }
 
     public String getDescription() {
@@ -69,22 +69,30 @@ public class Event {
         this.host = host;
     }
 
-    public String getId() {
-        return id;
+
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
-    public String getLocation() {
+    public ArrayList<String> getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(ArrayList<String> location) {
         this.location = location;
     }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public ArrayList<Participant> getParticipants() {
         return participants;

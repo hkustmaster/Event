@@ -12,57 +12,61 @@
         android:clickable="false">
 
         <TextView
-            android:id="@+id/note_title"
+            android:id="@+id/event_title"
             style="@style/TextAppearance.MaterialSheetFab.Note.Title"
             android:layout_alignParentTop="true" />
 
         <TextView
-            android:id="@+id/note_text"
+            android:id="@+id/event_host"
             style="@style/TextAppearance.MaterialSheetFab.Note"
-            android:layout_below="@id/note_title"
+            android:layout_below="@id/event_title"
             android:paddingTop="@dimen/note_content_spacing" />
 
         <LinearLayout
-            android:id="@+id/note_info_date_layout"
+            android:id="@+id/event_date_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/note_text"
+            android:layout_below="@id/event_host"
             android:gravity="center_vertical"
             android:paddingTop="@dimen/note_content_spacing"
-            android:layout_alignTop="@+id/note_info_location_layout">
+            android:layout_alignTop="@+id/event_location_layout">
 
             <TextView
-                android:id="@+id/note_info_date"
+                android:id="@+id/event_start_date"
                 style="@style/TextAppearance.MaterialSheetFab.Note"
                 android:layout_width="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="start date " />
 
             <ImageView
-                android:id="@+id/note_info_date_image"
+                android:id="@+id/event_date_image"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_event_white_24dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/note_info_location_layout"
+            android:id="@+id/event_location_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/note_text"
+            android:layout_below="@+id/event_host"
             android:gravity="center_vertical"
             android:paddingTop="@dimen/note_content_spacing">
 
             <TextView
-                android:id="@+id/note_info_location"
+                android:id="@+id/event_location"
                 style="@style/TextAppearance.MaterialSheetFab.Note"
                 android:layout_width="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="location" />
 
             <ImageView
-                android:id="@+id/note_info_location_image"
+                android:id="@+id/event_location_image"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_place_white_24dp" />
         </LinearLayout>
 
     </LinearLayout>
