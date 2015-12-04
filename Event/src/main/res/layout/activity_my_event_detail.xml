@@ -176,7 +176,8 @@
             android:layout_height="wrap_content"
             android:text="Close Discussion"
             android:id="@+id/close_discussion_btn"
-            android:background="@color/theme_primary" />
+            android:background="@color/theme_primary"
+            android:textColor="@color/text_white_87" />
 
     </LinearLayout>
 

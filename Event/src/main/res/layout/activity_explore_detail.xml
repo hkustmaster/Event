@@ -145,7 +145,8 @@
             android:layout_height="wrap_content"
             android:text="JOIN"
             android:id="@+id/join_btn"
-            android:background="@color/theme_primary" />
+            android:background="@color/theme_primary"
+            android:textColor="@color/text_white_87" />
     </LinearLayout>
 
 </RelativeLayout>
