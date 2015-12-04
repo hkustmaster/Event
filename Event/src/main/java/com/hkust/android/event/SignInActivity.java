@@ -73,14 +73,14 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        String autoLogin = sp.getString("autoLogin","");
-        String email=sp.getString("email", "");
-        String password =sp.getString("password", "");
+        String autoLogin = sp.getString("autoLogin", "");
+        String email = sp.getString("email", "");
+        String password = sp.getString("password", "");
 
         _emailText.setText(email);
         _passwordText.setText(password);
 
-        if(autoLogin.equalsIgnoreCase("true")){
+        if (autoLogin.equalsIgnoreCase("true")) {
             login();
         }
     }
@@ -95,8 +95,7 @@ public class SignInActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignInActivity.this,
-                R.style.Base_Theme_AppCompat_Light_Dialog);
+        final ProgressDialog progressDialog = new ProgressDialog(SignInActivity.this, R.style.Base_Theme_AppCompat_Light_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
@@ -107,6 +106,7 @@ public class SignInActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
         // send request to server
         AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(10000);// timeout 10s
         // set up the parameters
 //        RequestParams params = new RequestParams();
 //        params.put("email", email);
@@ -157,9 +157,9 @@ public class SignInActivity extends AppCompatActivity {
 //                            editor.putString("userName",user.getName());
 //                            editor.putString("userEmail",user.getEmail());
 //                            editor.putString("userPhone",user.getPhone());
-                            editor.putString("autoLogin","true");
-                            editor.putString("email",email);
-                            editor.putString("password",password);
+                            editor.putString("autoLogin", "true");
+                            editor.putString("email", email);
+                            editor.putString("password", password);
                             editor.putString("token", token);
                             editor.putString("userString", userString);
                             //4、完成提交
@@ -197,6 +197,16 @@ public class SignInActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                     Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_LONG).show();
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    //onLoginSuccess();
+                                    onLoginFailed();
+                                    progressDialog.dismiss();
+                                }
+                            }, 2000);
+                    _loginButton.setEnabled(true);
 
                 }
             });
