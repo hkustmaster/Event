@@ -21,11 +21,6 @@ public class MyEventFragment extends NotesListFragment {
     }
 
     @Override
-    protected int getNumItems() {
-        return 1;
-    }
-
-    @Override
     protected String getTagName() {
         return Constants.MYEVENT_FRAGMENT;
     }

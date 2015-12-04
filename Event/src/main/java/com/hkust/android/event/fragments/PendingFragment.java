@@ -21,11 +21,6 @@ public class PendingFragment extends NotesListFragment {
     }
 
     @Override
-    protected int getNumItems() {
-        return 1;
-    }
-
-    @Override
     protected String getTagName() {
         return Constants.PENDING_FRAGMENT;
     }

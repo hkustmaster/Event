@@ -43,8 +43,6 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
 
     protected abstract int getNumColumns();
 
-    protected abstract int getNumItems();
-
     protected abstract String getTagName();
 
     private SwipeRefreshLayout refreshLayout;

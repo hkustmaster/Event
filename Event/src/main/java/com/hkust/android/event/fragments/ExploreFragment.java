@@ -21,11 +21,6 @@ public class ExploreFragment extends NotesListFragment {
     }
 
     @Override
-    protected int getNumItems() {
-        return 5;
-    }
-
-    @Override
     protected String getTagName() {
         return Constants.EXPLORE_FRAGMENT;
     }
