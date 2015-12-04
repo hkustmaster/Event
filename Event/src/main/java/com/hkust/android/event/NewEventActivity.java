@@ -147,7 +147,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             year_x = year;
-            month_x = monthOfYear;
+            month_x = monthOfYear + 1;
             day_x = dayOfMonth;
             AutoCompleteTextView dateTextField = (AutoCompleteTextView) findViewById(R.id.new_event_date);
             dateTextField.setText(year_x + "-" + month_x + "-" + day_x);
