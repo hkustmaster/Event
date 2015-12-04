@@ -184,26 +184,30 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         if (getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
             Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
             intent.setAction(getTagName());
-            intent.putExtra("eventId", myEvents.get(position).getId());
+            String eventJson = gson.toJson(myEvents.get(position));
+            intent.putExtra("eventString", eventJson);
             startActivity(intent);
 
         } else if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
             if(user.get_id().equalsIgnoreCase(exploreEvents.get(position).getHost().get_id())){
                 Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
-                intent.putExtra("eventId",exploreEvents.get(position).getId());
+                String eventJson = gson.toJson(exploreEvents.get(position));
+                intent.putExtra("eventString", eventJson);
                 intent.setAction(getTagName());
                 startActivity(intent);
 
             }else{
                 Intent intent = new Intent(getActivity(), ExploreEventDetailActivity.class);
                 intent.setAction(getTagName());
-                intent.putExtra("eventId",exploreEvents.get(position).getId());
+                String eventJson = gson.toJson(exploreEvents.get(position));
+                intent.putExtra("eventString", eventJson);
                 startActivity(intent);
             }
         } else if (getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
             Intent intent = new Intent(getActivity(), PendingEventDetailActivity.class);
             intent.setAction(getTagName());
-            intent.putExtra("eventId", pendingEvents.get(position).getId());
+            String eventJson = gson.toJson(pendingEvents.get(position));
+            intent.putExtra("eventString", eventJson);
             startActivity(intent);
         }
         Integer pos = new Integer(position);
