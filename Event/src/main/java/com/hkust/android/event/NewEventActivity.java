@@ -360,7 +360,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 buff.append(" getRating:"+place.getRating());
                 buff.append(" getViewport:"+place.getViewport());
                 buff.append(" getWebsiteUri:"+place.getWebsiteUri());
-                Log.i("pppp ", buff.toString());
+                Log.i("pppp", buff.toString());
                 AutoCompleteTextView location = (AutoCompleteTextView)findViewById(R.id.new_event_location);
                 location.setText(place.getAddress());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
