@@ -1,5 +1,4 @@
 package com.hkust.android.event;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -17,29 +16,25 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.gson.Gson;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
-import com.hkust.android.event.model.User;
-import com.hkust.android.event.tools.ValidFormTools;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import java.util.Calendar;
-
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
@@ -49,6 +44,9 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     static final int START_DATE_DIALOG_ID = 0, END_DATE_DIALOG_ID = 2, TIME_DIALOG_ID = 3;
     private SharedPreferences sp;
 
+    private static final int PLACE_PICKER_REQUEST = 1000;
+    private GoogleApiClient mClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,14 +55,28 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .build();
+
+
+
+
+
+
         CheckBox tbdCheckBox = (CheckBox) findViewById(R.id.start_date_tbd_checkbox);
         tbdCheckBox.setOnClickListener(this);
         TextInputLayout endDateLayout = (TextInputLayout) findViewById(R.id.new_event_end_date_layout);
         endDateLayout.setVisibility(View.INVISIBLE);
-
         Button createBtn = (Button) findViewById(R.id.new_event_create_btn);
         createBtn.setOnClickListener(this);
 
+
+        AutoCompleteTextView locationTextView = (AutoCompleteTextView)findViewById(R.id.new_event_location);
+        locationTextView.setOnClickListener(this);
 
         Calendar cal = Calendar.getInstance();
         year_x = cal.get(Calendar.YEAR);
@@ -76,6 +88,8 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         showDialogOnEndDateTextFieldClick();
         showDialogOnTimeTextFieldClick();
     }
+
+
 
     public void showDialogOnStartDateTextFieldClick() {
         AutoCompleteTextView startDateTextField = (AutoCompleteTextView) findViewById(R.id.new_event_date);
@@ -122,7 +136,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             year_x = year;
-            month_x = monthOfYear+1;
+            month_x = monthOfYear + 1;
             day_x = dayOfMonth;
             AutoCompleteTextView dateTextField = (AutoCompleteTextView) findViewById(R.id.new_event_end_date);
             dateTextField.setText(year_x + "-" + month_x + "-" + day_x);
@@ -164,6 +178,19 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        mClient.disconnect();
+        super.onStop();
     }
 
     @Override
@@ -239,7 +266,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                         String token = sp.getString("token", "");
                         event.setToken(token);
-                        Log.i("pppp", "111111111111111");
                         if (checkEventInfo(event)) {
                             Log.i("pppp", "Valid event, Create Event...");
                             AsyncHttpClient client = new AsyncHttpClient();
@@ -283,6 +309,18 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
 
                 break;
+            case R.id.new_event_location:
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(NewEventActivity.this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+
+
+                break;
             default:
         }
     }
@@ -300,8 +338,33 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 return false;
             }
         }*/
-        //Toast.makeText(getApplicationContext(), "Invalid start or end date222!", Toast.LENGTH_SHORT).show();
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getAddress());
+                StringBuffer buff = new StringBuffer();
+                buff.append(" getAddress:"+place.getAddress());
+                buff.append(" getId:"+place.getId());
+                buff.append(" getLatlng:"+place.getLatLng());
+                buff.append(" getLocale:"+place.getLocale());
+                buff.append(" getName:"+place.getName());
+                buff.append(" getPhoneName:"+place.getPhoneNumber());
+                buff.append(" getPlaceType:"+place.getPlaceTypes());
+                buff.append(" getPriceLevel:"+place.getPriceLevel());
+                buff.append(" getRating:"+place.getRating());
+                buff.append(" getViewport:"+place.getViewport());
+                buff.append(" getWebsiteUri:"+place.getWebsiteUri());
+                Log.i("pppp ", buff.toString());
+                AutoCompleteTextView location = (AutoCompleteTextView)findViewById(R.id.new_event_location);
+                location.setText(toastMsg);
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
