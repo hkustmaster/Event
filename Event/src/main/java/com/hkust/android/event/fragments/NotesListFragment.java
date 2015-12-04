@@ -97,6 +97,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                             ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
                             }.getType());
                             //Log.i("ppppp", arrayEventList.get(0).getTitle());
+
                             exploreEvents = arrayEventList;
                             notesAdapter.setEventsList(arrayEventList);
                             notesAdapter.notifyDataSetChanged();
@@ -140,10 +141,10 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                             }.getType());
                             Log.i("ppppp", arrayEventList.get(1).getTitle());
 
-                            for(Event e: arrayEventList){
-                                if(e.getHost().get_id().equalsIgnoreCase(user.get_id())){
+                            for (Event e : arrayEventList) {
+                                if (e.getHost().get_id().equalsIgnoreCase(user.get_id())) {
                                     myEvents.add(e);
-                                }else{
+                                } else {
                                     pendingEvents.add(e);
                                 }
                             }
@@ -168,9 +169,6 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
 
                 }
             });
-            Log.i("pppp","herherherhehrehr1111111111");
-
-
         }
         return view;
     }
@@ -186,7 +184,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         if (getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
             Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
             intent.setAction(getTagName());
-            intent.putExtra("eventId", exploreEvents.get(position).getId());
+            intent.putExtra("eventId", myEvents.get(position).getId());
             startActivity(intent);
 
         } else if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
@@ -205,7 +203,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         } else if (getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
             Intent intent = new Intent(getActivity(), PendingEventDetailActivity.class);
             intent.setAction(getTagName());
-            intent.putExtra("eventId",exploreEvents.get(position).getId());
+            intent.putExtra("eventId", pendingEvents.get(position).getId());
             startActivity(intent);
         }
         Integer pos = new Integer(position);
@@ -216,64 +214,103 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     @Override
     public void onRefresh() {
         if (refreshLayout.isRefreshing()) {
-            Toast.makeText(getActivity(), "refreshed", Toast.LENGTH_SHORT).show();
-            AsyncHttpClient client = new AsyncHttpClient();
-            sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-            String token = sp.getString("token", "");
-            RequestParams params = new RequestParams();
-            params.put("token", token);
-            client.post(Constants.SERVER_URL + Constants.GET_ALL_EVENT, params, new AsyncHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                    String response = new String(responseBody);
+            if(getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)){
+                AsyncHttpClient client = new AsyncHttpClient();
+                sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                String token = sp.getString("token", "");
+                RequestParams params = new RequestParams();
+                params.put("token", token);
+                client.post(Constants.SERVER_URL + Constants.GET_ALL_EVENT, params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                        String response = new String(responseBody);
 
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(response);
-                        String message = jsonObject.getString("message");
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
 
-                        if (message.equalsIgnoreCase("succeed")) {
-                            String eventString = jsonObject.getString("act");
-                            Gson gson = new Gson();
-                            // Log.i("ppppp", eventString);
-                            ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
-                            }.getType());
-                            //Log.i("ppppp", arrayEventList.get(0).getTitle());
-                            exploreEvents = arrayEventList;
-                            notesAdapter.setEventsList(arrayEventList);
-                            notesAdapter.notifyDataSetChanged();
-                            refreshLayout.setRefreshing(false);
-                        } else {
-                            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                            if (message.equalsIgnoreCase("succeed")) {
+                                String eventString = jsonObject.getString("act");
+                                Gson gson = new Gson();
+                                // Log.i("ppppp", eventString);
+                                ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
+                                }.getType());
+                                //Log.i("ppppp", arrayEventList.get(0).getTitle());
+
+                                exploreEvents = arrayEventList;
+                                notesAdapter.setEventsList(arrayEventList);
+                                notesAdapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                }
 
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
 
-                }
-            });
+                    }
+                });
+            }else{
+                AsyncHttpClient client = new AsyncHttpClient();
+                sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                String token = sp.getString("token", "");
+                String userString=sp.getString("userString", "");
+                Gson gson = new Gson();
+                user = gson.fromJson(userString, User.class);
+                RequestParams params = new RequestParams();
+                params.put("token", token);
+                client.post(Constants.SERVER_URL + Constants.EVENT_SHOWMINE, params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                        String response = new String(responseBody);
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
 
+                            if (message.equalsIgnoreCase("succeed")) {
+                                String eventString = jsonObject.getString("act");
+                                Gson gson = new Gson();
+                                // Log.i("ppppp", eventString);
+                                ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
+                                }.getType());
+                                Log.i("ppppp", arrayEventList.get(1).getTitle());
 
+                                for(Event e: arrayEventList){
+                                    if(e.getHost().get_id().equalsIgnoreCase(user.get_id())){
+                                        myEvents.add(e);
+                                    }else{
+                                        pendingEvents.add(e);
+                                    }
+                                }
+                                if (getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
+                                    notesAdapter.setEventsList(myEvents);
+                                    notesAdapter.notifyDataSetChanged();
+                                } else if (getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
+                                    notesAdapter.setEventsList(pendingEvents);
+                                    notesAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
+            }
             refreshLayout.setRefreshing(false);
         }
     }
-
-    public void separateEventList(ArrayList<Event> allMyEvent, String userId){
-        myEvents.clear();
-        pendingEvents.clear();
-
-        for(Event e: allMyEvent){
-            if(e.getHost().get_id().equalsIgnoreCase(userId)){
-                myEvents.add(e);
-            }else{
-                pendingEvents.add(e);
-            }
-        }
-    }
-
 }
