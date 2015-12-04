@@ -15,6 +15,12 @@ public class Event {
     private String time;
     private String startAt;
     private String endAt;
+    private ArrayList<String> location;
+    private String description;
+    private ArrayList<Participant> participants;
+    private int quota;
+    private int size;
+    private String token;
 
     public String get_id() {
         return _id;
@@ -23,13 +29,6 @@ public class Event {
     public void set_id(String _id) {
         this._id = _id;
     }
-
-    private ArrayList<String> location;
-    private String description;
-    private ArrayList<Participant> participants;
-    private int quota;
-    private int size;
-    private String token;
 
     public String getToken() {
         return token;
