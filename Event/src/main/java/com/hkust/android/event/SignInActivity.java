@@ -106,7 +106,7 @@ public class SignInActivity extends AppCompatActivity {
         final String email = _emailText.getText().toString();
         final String password = _passwordText.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
+        // Implement your own authentication logic here.
         // send request to server
         client = new AsyncHttpClient();
         client.setTimeout(10000);// timeout 10s
@@ -224,7 +224,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                // TODO: Implement successful signup logic here
+                //  Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
                 this.finish();
             }
