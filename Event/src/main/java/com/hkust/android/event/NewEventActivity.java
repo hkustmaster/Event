@@ -137,10 +137,11 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             year_x = year;
-            month_x = monthOfYear + 1;
+            month_x = monthOfYear;
             day_x = dayOfMonth;
+            int month = month_x+1;
             AutoCompleteTextView dateTextField = (AutoCompleteTextView) findViewById(R.id.new_event_end_date);
-            dateTextField.setText(year_x + "-" + month_x + "-" + day_x);
+            dateTextField.setText(year_x + "-" + month + "-" + day_x);
         }
     };
 
@@ -148,10 +149,11 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             year_x = year;
-            month_x = monthOfYear + 1;
+            month_x = monthOfYear;
             day_x = dayOfMonth;
+            int month = month_x+1;
             AutoCompleteTextView dateTextField = (AutoCompleteTextView) findViewById(R.id.new_event_date);
-            dateTextField.setText(year_x + "-" + month_x + "-" + day_x);
+            dateTextField.setText(year_x + "-" + month + "-" + day_x);
         }
     };
 
