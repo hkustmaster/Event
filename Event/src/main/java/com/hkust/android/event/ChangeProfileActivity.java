@@ -78,17 +78,21 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                     AsyncHttpClient client = new AsyncHttpClient();
 
                     sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                    //String token = sp.getString("token", "");
+
+                    String token = sp.getString("token", "");
+                    User user_temp = new User();
+
+                    user_temp.setName(name);
+                    user_temp.setPhone(phone);
+                    user_temp.setToken(token);
 
                     user.setName(name);
                     user.setPhone(phone);
-                    //user.setToken(token);
 
                     Gson gson = new Gson();
 
-                    StringEntity entity = null;
                     try {
-                        entity = new StringEntity(gson.toJson(user));
+                        StringEntity entity = new StringEntity(gson.toJson(user_temp));
                         client.post(this.getApplicationContext(), Constants.SERVER_URL + Constants.CHANGE_USER_INFO, entity, "application/json", new AsyncHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -100,14 +104,12 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
 
                                     if (message.equalsIgnoreCase("succeed")) {
                                         Toast.makeText(getApplicationContext(), "Successfully, update profile!", Toast.LENGTH_SHORT).show();
-                                        //update password.
+                                        //update user profile.
                                         SharedPreferences.Editor editor = sp.edit();
                                         Gson gson = new Gson();
                                         String userString  = gson.toJson(user);
                                         editor.putString("userString",userString);
                                         editor.commit();
-
-
                                         finish();
                                     } else {
                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
