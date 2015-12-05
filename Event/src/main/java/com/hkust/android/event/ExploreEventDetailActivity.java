@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +25,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ExploreEventDetailActivity extends AppCompatActivity {
-
+public class ExploreEventDetailActivity extends AppCompatActivity implements View.OnClickListener{
     String eventString;
     private SharedPreferences sp;
     private TextView event_title;
@@ -33,6 +34,8 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
     private TextView event_time;
     private TextView event_location;
     private TextView event_desc;
+    private String token;
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,10 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
         myToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        Button joinBtn = (Button)findViewById(R.id.join_btn);
+        joinBtn.setOnClickListener(this);
 
         event_title = (TextView) findViewById(R.id.event_title_textView);
         event_holder = (TextView) findViewById(R.id.event_holder_textView);
@@ -63,7 +70,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
         }
 
         Gson gson = new Gson();
-        Event event = gson.fromJson(eventString, Event.class);
+        event = gson.fromJson(eventString, Event.class);
 
         event_title.setText(event.getTitle());
         event_holder.setText(event.getHost().getName());
@@ -76,10 +83,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
             event_date.setText(event.getStartAt()+" - "+event.getEndAt());
 
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        String token = sp.getString("token", "");
-
-        Log.i("ppppp", event.getId());
-        Log.i("ppppp", token);
+        token = sp.getString("token", "");
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -137,5 +141,44 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.join_btn:
+                AsyncHttpClient client = new AsyncHttpClient();
+                RequestParams params = new RequestParams();
+                params.put("token", token);
+                params.put("id",event.getId());
+                Log.i("pppp token", token);
+                Log.i("pppp id",event.getId());
+                client.post(Constants.SERVER_URL + Constants.EVENT_SHOWMINE, params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        String response = new String(responseBody);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
+                            if (message.equalsIgnoreCase("succeed")) {
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 
+                            } else {
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        String response = new String(responseBody);
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+                break;
+            default:
+        }
+    }
 }

@@ -4,9 +4,22 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.hkust.android.event.model.Constants;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class PendingEventDetailActivity extends AppCompatActivity implements View.OnClickListener{
     @Override
@@ -27,6 +40,9 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
         LinearLayout dateLayout = (LinearLayout)findViewById(R.id.date_layout);
         dateLayout.setOnClickListener(this);
 
+        Button quitBtn = (Button)findViewById(R.id.leave_btn);
+        quitBtn.setOnClickListener(this);
+
     }
 
     @Override
@@ -45,6 +61,35 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
                 Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
                 startActivityForResult(intent3, 100);
                 break;
+
+            case R.id.leave_btn:
+                AsyncHttpClient client = new AsyncHttpClient();
+                RequestParams params = new RequestParams();
+
+                //put token and id here
+                client.post(Constants.SERVER_URL + Constants.EVENT_SHOWMINE, params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        String response = new String(responseBody);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
+                            if (message.equalsIgnoreCase("succeed")) {
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
             default:
                 break;
         }
