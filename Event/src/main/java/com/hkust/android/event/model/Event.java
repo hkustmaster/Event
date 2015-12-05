@@ -16,7 +16,7 @@ public class Event {
     private String time;
     private String startAt;
     private String endAt;
-    private double[] location;
+    private Location location;
     private String description;
     private ArrayList<Participant> participants;
     private int quota;
@@ -25,6 +25,14 @@ public class Event {
 
     public String getAddress() {
         return address;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public void setAddress(String address) {
@@ -93,14 +101,6 @@ public class Event {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public double[] getLocation() {
-        return location;
-    }
-
-    public void setLocation(double[] location) {
-        this.location = location;
     }
 
     public String getPicture() {

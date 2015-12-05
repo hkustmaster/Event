@@ -95,14 +95,12 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                             ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
                             }.getType());
                             //Log.i("ppppp", arrayEventList.get(0).getTitle());
-
                             exploreEvents = arrayEventList;
                             notesAdapter.setEventsList(arrayEventList);
                             notesAdapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
