@@ -10,7 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 3
         versionName "1.0.2"
-//        multiDexEnabled true
+       // multiDexEnabled true
     }
     buildTypes {
         release {
@@ -29,5 +29,5 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.jakewharton:butterknife:5.1.1'
     compile 'joda-time:joda-time:2.9.1'
-    compile 'com.google.android.gms:play-services:8.3.0'
+    //compile 'com.google.android.gms:play-services:8.3.0'
 }
