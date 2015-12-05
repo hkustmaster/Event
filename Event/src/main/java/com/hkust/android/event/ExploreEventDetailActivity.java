@@ -66,14 +66,14 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
         }
 
         Gson gson = new Gson();
-        Event event = gson.fromJson(eventString,Event.class);
+        Event event = gson.fromJson(eventString, Event.class);
 
         event_title.setText(event.getTitle());
         event_holder.setText(event.getHost().getName());
         event_time.setText(event.getTime());
         event_location.setText(event.getAddress());
         event_desc.setText(event.getDescription());
-        event_date.setText(event.getStartAt()+" "+event.getEndAt());
+        event_date.setText(event.getStartAt() + " " + event.getEndAt());
 
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String token = sp.getString("token", "");
@@ -102,7 +102,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
                         event_time.setText(event.getTime());
                         event_location.setText(event.getAddress());
                         event_desc.setText(event.getDescription());
-                        event_date.setText(event.getStartAt()+" "+event.getEndAt());
+                        event_date.setText(event.getStartAt() + " " + event.getEndAt());
 
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

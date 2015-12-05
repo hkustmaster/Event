@@ -92,8 +92,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             AsyncHttpClient client = new AsyncHttpClient();
                             Gson gson = new Gson();
                             StringEntity entity = new StringEntity(gson.toJson(user));
-                            Log.i("pppp",gson.toJson(user));
-                            client.post(this.getApplicationContext(), Constants.SERVER_URL+Constants.SIGN_UP, entity, "application/json", new AsyncHttpResponseHandler() {
+                            Log.i("pppp", gson.toJson(user));
+                            client.post(this.getApplicationContext(), Constants.SERVER_URL + Constants.SIGN_UP, entity, "application/json", new AsyncHttpResponseHandler() {
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                                     String response = new String(responseBody);

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hkust.android.event.PendingEventDetailActivity;
@@ -28,6 +29,7 @@ import com.hkust.android.event.model.User;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,6 +57,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     private ArrayList<Event> myEvents = new ArrayList<Event>();
     private ArrayList<Event> pendingEvents = new ArrayList<Event>();
     private User user;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,7 +75,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         notesAdapter.setClickListener(this);
         recyclerView.setAdapter(notesAdapter);
 
-        if(getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)){
+        if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
             AsyncHttpClient client = new AsyncHttpClient();
             sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
             String token = sp.getString("token", "");
@@ -111,11 +114,11 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
 
                 }
             });
-        }else{
+        } else {
             AsyncHttpClient client = new AsyncHttpClient();
             sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
             String token = sp.getString("token", "");
-            String userString=sp.getString("userString", "");
+            String userString = sp.getString("userString", "");
             Gson gson = new Gson();
             user = gson.fromJson(userString, User.class);
             RequestParams params = new RequestParams();
@@ -174,7 +177,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     @Override
     public void itemClicked(View view, int position) {
         sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        String userString=sp.getString("userString", "");
+        String userString = sp.getString("userString", "");
         Gson gson = new Gson();
         User user = gson.fromJson(userString, User.class);
 
@@ -186,14 +189,14 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
             startActivity(intent);
 
         } else if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
-            if(user.get_id().equalsIgnoreCase(exploreEvents.get(position).getHost().get_id())){
+            if (user.get_id().equalsIgnoreCase(exploreEvents.get(position).getHost().get_id())) {
                 Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
                 String eventJson = gson.toJson(exploreEvents.get(position));
                 intent.putExtra("eventString", eventJson);
                 intent.setAction(getTagName());
                 startActivity(intent);
 
-            }else{
+            } else {
                 Intent intent = new Intent(getActivity(), ExploreEventDetailActivity.class);
                 intent.setAction(getTagName());
                 String eventJson = gson.toJson(exploreEvents.get(position));
@@ -215,7 +218,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     @Override
     public void onRefresh() {
         if (refreshLayout.isRefreshing()) {
-            if(getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)){
+            if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
                 AsyncHttpClient client = new AsyncHttpClient();
                 sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 String token = sp.getString("token", "");
@@ -256,11 +259,11 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
 
                     }
                 });
-            }else{
+            } else {
                 AsyncHttpClient client = new AsyncHttpClient();
                 sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 String token = sp.getString("token", "");
-                String userString=sp.getString("userString", "");
+                String userString = sp.getString("userString", "");
                 Gson gson = new Gson();
                 user = gson.fromJson(userString, User.class);
                 RequestParams params = new RequestParams();
@@ -283,11 +286,11 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                                 //Log.i("ppppp", arrayEventList.get(1).getTitle());
                                 myEvents.clear();
                                 pendingEvents.clear();
-                                for(Event e: arrayEventList){
+                                for (Event e : arrayEventList) {
 
-                                    if(e.getHost().get_id().equalsIgnoreCase(user.get_id())){
+                                    if (e.getHost().get_id().equalsIgnoreCase(user.get_id())) {
                                         myEvents.add(e);
-                                    }else{
+                                    } else {
                                         pendingEvents.add(e);
                                     }
                                 }
