@@ -184,6 +184,13 @@
                         android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:id="@+id/address_latlng_textView"
+                    android:visibility="invisible" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

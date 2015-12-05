@@ -38,6 +38,7 @@ import java.util.Calendar;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
+
 public class NewEventActivity extends AppCompatActivity implements View.OnClickListener {
 
     int year_x, month_x, day_x, hour_x, minute_x;
@@ -61,11 +62,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .build();
-
-
-
-
-
 
         CheckBox tbdCheckBox = (CheckBox) findViewById(R.id.start_date_tbd_checkbox);
         tbdCheckBox.setOnClickListener(this);
@@ -207,7 +203,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
             case R.id.new_event_create_btn:
-
                 boolean endTime = false;
                 TextView title_Text = (TextView) findViewById(R.id.new_event_title);
                 TextView location_Text = (TextView) findViewById(R.id.new_event_location);
@@ -221,11 +216,12 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 TextView time_Text = (TextView) findViewById(R.id.new_event_time);
                 TextView number_Text = (TextView) findViewById(R.id.number_of_parti);
                 TextView desc_Text = (TextView) findViewById(R.id.new_event_description);
+                TextView locationLatLng =(TextView)findViewById(R.id.address_latlng_textView);
 
                 String title = title_Text.getText().toString();
                 String l = location_Text.getText().toString();
-                ArrayList<String> location = new ArrayList<String>();
-                location.add(l);
+                double[] location = getLatitudeLongitude(locationLatLng.getText().toString());
+                String address = location_Text.getText().toString();
                 String startDate = startData_Text.getText().toString();
                 String endDate = "";
                 if (endTime)
@@ -253,19 +249,17 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                         event.setTitle(title);
                         event.setLocation(location);
                         event.setStartAt(startDate);
-
                         event.setEndAt(endDate);
-
                         event.setTime(time);
                         event.setSize(Integer.parseInt(number));
-
                         event.setDescription(desc);
-
                         event.setStatus(Constants.STATUS_EVENT_PRE);
-
+                        event.setAddress(address);
                         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                         String token = sp.getString("token", "");
                         event.setToken(token);
+
+
                         if (checkEventInfo(event)) {
                             Log.i("pppp", "Valid event, Create Event...");
                             AsyncHttpClient client = new AsyncHttpClient();
@@ -273,6 +267,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
                             try {
                                 StringEntity entity = new StringEntity(gson.toJson(event));
+                                Log.i("pppp event info json", gson.toJson(event));
                                 client.post(this.getApplicationContext(), Constants.SERVER_URL + Constants.ADD_EVENT, entity, "application/json", new AsyncHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -281,6 +276,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                                             JSONObject jsonObject = new JSONObject(response);
                                             String message = jsonObject.getString("message");
                                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
                                             if (message.equalsIgnoreCase("succeed")) {
                                                 finish();
                                             }
@@ -353,18 +349,31 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 buff.append(" getId:"+place.getId());
                 buff.append(" getLatlng:"+place.getLatLng());
                 buff.append(" getLocale:"+place.getLocale());
-                buff.append(" getName:"+place.getName());
+                buff.append(" getName:" + place.getName());
                 buff.append(" getPhoneName:"+place.getPhoneNumber());
                 buff.append(" getPlaceType:"+place.getPlaceTypes());
-                buff.append(" getPriceLevel:"+place.getPriceLevel());
-                buff.append(" getRating:"+place.getRating());
-                buff.append(" getViewport:"+place.getViewport());
-                buff.append(" getWebsiteUri:"+place.getWebsiteUri());
-                Log.i("pppp", buff.toString());
+                buff.append(" getPriceLevel:" + place.getPriceLevel());
+                buff.append(" getRating:" + place.getRating());
+                buff.append(" getViewport:" + place.getViewport());
+                buff.append(" getWebsiteUri:" + place.getWebsiteUri());
+                Log.i("pppp location info: ", buff.toString());
+
                 AutoCompleteTextView location = (AutoCompleteTextView)findViewById(R.id.new_event_location);
-                location.setText(place.getAddress());
+                location.setText(place.getName());
+                TextView locationLatLng = (TextView)findViewById(R.id.address_latlng_textView);
+                locationLatLng.setText(place.getLatLng().toString());
+                Log.i("pppp latlng",place.getLatLng().toString());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private double[] getLatitudeLongitude(String location){
+        String subString = location.substring(10,location.length()-1);
+        String[] s = subString.split(",");
+        double[] latlng = {0,0};
+        latlng[0] = Double.parseDouble(s[0]);
+        latlng[1] = Double.parseDouble(s[1]);
+        return latlng;
     }
 }

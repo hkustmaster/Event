@@ -11,16 +11,25 @@ public class Event {
     private String id;
     private String title;
     private User host;
+    private String address;
     private String status;
     private String time;
     private String startAt;
     private String endAt;
-    private ArrayList<String> location;
+    private double[] location;
     private String description;
     private ArrayList<Participant> participants;
     private int quota;
     private int size;
     private String token;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String get_id() {
         return _id;
@@ -86,11 +95,11 @@ public class Event {
         this.id = id;
     }
 
-    public ArrayList<String> getLocation() {
+    public double[] getLocation() {
         return location;
     }
 
-    public void setLocation(ArrayList<String> location) {
+    public void setLocation(double[] location) {
         this.location = location;
     }
 

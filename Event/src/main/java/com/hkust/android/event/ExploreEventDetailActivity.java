@@ -71,7 +71,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
         event_title.setText(event.getTitle());
         event_holder.setText(event.getHost().getName());
         event_time.setText(event.getTime());
-        event_location.setText(event.getLocation().get(0));
+        event_location.setText(event.getAddress());
         event_desc.setText(event.getDescription());
         event_date.setText(event.getStartAt()+" "+event.getEndAt());
 
@@ -100,7 +100,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity {
                         event_title.setText(event.getTitle());
                         event_holder.setText(event.getHost().getName());
                         event_time.setText(event.getTime());
-                        event_location.setText(event.getLocation().get(0));
+                        event_location.setText(event.getAddress());
                         event_desc.setText(event.getDescription());
                         event_date.setText(event.getStartAt()+" "+event.getEndAt());
 
