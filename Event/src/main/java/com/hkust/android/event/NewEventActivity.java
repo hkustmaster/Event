@@ -1,4 +1,5 @@
 package com.hkust.android.event;
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -19,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,13 +30,17 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.gson.Gson;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
+import com.hkust.android.event.model.Location;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Calendar;
+
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
@@ -71,7 +77,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         createBtn.setOnClickListener(this);
 
 
-        AutoCompleteTextView locationTextView = (AutoCompleteTextView)findViewById(R.id.new_event_location);
+        AutoCompleteTextView locationTextView = (AutoCompleteTextView) findViewById(R.id.new_event_location);
         locationTextView.setOnClickListener(this);
 
         Calendar cal = Calendar.getInstance();
@@ -84,7 +90,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         showDialogOnEndDateTextFieldClick();
         showDialogOnTimeTextFieldClick();
     }
-
 
 
     public void showDialogOnStartDateTextFieldClick() {
@@ -216,11 +221,14 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 TextView time_Text = (TextView) findViewById(R.id.new_event_time);
                 TextView number_Text = (TextView) findViewById(R.id.number_of_parti);
                 TextView desc_Text = (TextView) findViewById(R.id.new_event_description);
-                TextView locationLatLng =(TextView)findViewById(R.id.address_latlng_textView);
+                TextView locationLatLng = (TextView) findViewById(R.id.address_latlng_textView);
 
+                Location location = new Location();
+                location.setType("Point");
                 String title = title_Text.getText().toString();
                 String l = location_Text.getText().toString();
-                double[] location = getLatitudeLongitude(locationLatLng.getText().toString());
+
+                location.setCoordinates(getLatitudeLongitude(locationLatLng.getText().toString()));
                 String address = location_Text.getText().toString();
                 String startDate = startData_Text.getText().toString();
                 String endDate = "";
@@ -247,7 +255,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                     } else {
                         Event event = new Event();
                         event.setTitle(title);
-                        event.setLocation(location);
+                        //event.setLocation(location);
                         event.setStartAt(startDate);
                         event.setEndAt(endDate);
                         event.setTime(time);
@@ -258,16 +266,14 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                         String token = sp.getString("token", "");
                         event.setToken(token);
-
-
                         if (checkEventInfo(event)) {
-                            Log.i("pppp", "Valid event, Create Event...");
                             AsyncHttpClient client = new AsyncHttpClient();
                             Gson gson = new Gson();
-
                             try {
-                                StringEntity entity = new StringEntity(gson.toJson(event));
-                                Log.i("pppp event info json", gson.toJson(event));
+                                JSONObject jsono = new JSONObject(gson.toJson(event));
+                                jsono.accumulate("location", getLocationCor(location.getCoordinates()));
+                                StringEntity entity = new StringEntity(jsono.toString());
+                                Log.i("pppp", "Valid event, Create Event..." + jsono.toString());
                                 client.post(this.getApplicationContext(), Constants.SERVER_URL + Constants.ADD_EVENT, entity, "application/json", new AsyncHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -276,7 +282,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                                             JSONObject jsonObject = new JSONObject(response);
                                             String message = jsonObject.getString("message");
                                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
                                             if (message.equalsIgnoreCase("succeed")) {
                                                 finish();
                                             }
@@ -290,12 +295,11 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                                         Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_LONG).show();
                                     }
                                 });
-
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-
-
                         } else {
                             Toast.makeText(getApplicationContext(), "Error: please check all fields!", Toast.LENGTH_SHORT).show();
                         }
@@ -345,35 +349,44 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 Place place = PlacePicker.getPlace(data, this);
                 String toastMsg = String.format("Place: %s", place.getAddress());
                 StringBuffer buff = new StringBuffer();
-                buff.append(" getAddress:"+place.getAddress());
-                buff.append(" getId:"+place.getId());
-                buff.append(" getLatlng:"+place.getLatLng());
-                buff.append(" getLocale:"+place.getLocale());
+                buff.append(" getAddress:" + place.getAddress());
+                buff.append(" getId:" + place.getId());
+                buff.append(" getLatlng:" + place.getLatLng());
+                buff.append(" getLocale:" + place.getLocale());
                 buff.append(" getName:" + place.getName());
-                buff.append(" getPhoneName:"+place.getPhoneNumber());
-                buff.append(" getPlaceType:"+place.getPlaceTypes());
+                buff.append(" getPhoneName:" + place.getPhoneNumber());
+                buff.append(" getPlaceType:" + place.getPlaceTypes());
                 buff.append(" getPriceLevel:" + place.getPriceLevel());
                 buff.append(" getRating:" + place.getRating());
                 buff.append(" getViewport:" + place.getViewport());
                 buff.append(" getWebsiteUri:" + place.getWebsiteUri());
                 Log.i("pppp location info: ", buff.toString());
 
-                AutoCompleteTextView location = (AutoCompleteTextView)findViewById(R.id.new_event_location);
+                AutoCompleteTextView location = (AutoCompleteTextView) findViewById(R.id.new_event_location);
                 location.setText(place.getName());
-                TextView locationLatLng = (TextView)findViewById(R.id.address_latlng_textView);
+                TextView locationLatLng = (TextView) findViewById(R.id.address_latlng_textView);
                 locationLatLng.setText(place.getLatLng().toString());
-                Log.i("pppp latlng",place.getLatLng().toString());
+                Log.i("pppp latlng", place.getLatLng().toString());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private double[] getLatitudeLongitude(String location){
-        String subString = location.substring(10,location.length()-1);
+    private double[] getLatitudeLongitude(String location) {
+        String subString = location.substring(10, location.length() - 1);
         String[] s = subString.split(",");
-        double[] latlng = {0,0};
-        latlng[0] = Double.parseDouble(s[0]);
-        latlng[1] = Double.parseDouble(s[1]);
+        double[] latlng = {0, 0};
+        latlng[0] = Double.parseDouble(s[1]);
+        latlng[1] = Double.parseDouble(s[0]);
         return latlng;
+    }
+
+
+    private JSONArray getLocationCor(double[] cor) throws JSONException {
+        JSONArray ja = new JSONArray();
+        for (double d : cor) {
+            ja.put(d);
+        }
+        return ja;
     }
 }

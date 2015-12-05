@@ -18,19 +18,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.User;
-import com.hkust.android.event.tools.ValidFormTools;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cz.msebera.android.httpclient.Header;
