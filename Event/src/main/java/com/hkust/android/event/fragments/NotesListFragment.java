@@ -134,7 +134,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                         if (message.equalsIgnoreCase("succeed")) {
                             String eventString = jsonObject.getString("act");
                             Gson gson = new Gson();
-                            // Log.i("ppppp", eventString);
+                            Log.i("ppppp", eventString);
                             ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
                             }.getType());
 

@@ -372,8 +372,8 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         String subString = location.substring(10,location.length()-1);
         String[] s = subString.split(",");
         double[] latlng = {0,0};
-        latlng[0] = Double.parseDouble(s[0]);
-        latlng[1] = Double.parseDouble(s[1]);
+        latlng[0] = Double.parseDouble(s[1]);
+        latlng[1] = Double.parseDouble(s[0]);
         return latlng;
     }
 }
