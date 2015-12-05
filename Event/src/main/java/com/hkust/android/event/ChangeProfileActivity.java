@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,7 +76,7 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                     phone_view.setError("Invalid phone number");
                 }else{
 
-                    User user_temp = new User();
+                    final User user_temp = new User();
 
                     sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
@@ -87,15 +88,17 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
 
 
 
-                    user_temp.set_id(user.get_id());
-                    user_temp.setEmail(user.getEmail());
-                    user_temp.setGender(user.getGender());
+//                    user_temp.set_id(user.get_id());
+//                    user_temp.setEmail(user.getEmail());
+//                    user_temp.setGender(user.getGender());
                     user_temp.setName(name);
                     user_temp.setPhone(phone);
                     user_temp.setToken(token);
 
                     user.setName(name);
                     user.setPhone(phone);
+                    String userString_t  = gson.toJson(user_temp);
+                    Log.i("pppp", userString_t);
 
                     //Gson gson = new Gson();
 
@@ -117,8 +120,11 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                                         SharedPreferences.Editor editor = sp.edit();
                                         Gson gson = new Gson();
                                         String userString  = gson.toJson(user);
-                                        editor.putString("userString",userString);
+                                        editor.putString("userString", userString);
                                         editor.commit();
+
+
+
                                         Intent intent = new Intent(ChangeProfileActivity.this, MainActivity.class);
                                         setResult(200,intent);
                                         finish();
