@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,6 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.edit_profile_btn).setOnClickListener(this);
         findViewById(R.id.notes_list);
 
+        setProfile();
+
+    }
+
+    private void setProfile(){
         //get user info
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String userString=sp.getString("userString", "");
@@ -57,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userName.setText(user.getName());
         userEmail.setText(user.getEmail());
         userPhone.setText(user.getPhone());
-
     }
 
     @Override
@@ -146,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.edit_profile_btn:
                 Intent intent3 = new Intent(MainActivity.this, ChangeProfileActivity.class);
-                startActivity(intent3);
+                startActivityForResult(intent3, 200);
             default:
                 Toast.makeText(this, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
 
@@ -192,6 +197,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
             startActivityForResult(intent, 100);
             finish();
+        }else if(requestCode==200&&resultCode==200){
+            Log.i("ppppp", "okokokS!");
+            setProfile();
         }
     }
 }

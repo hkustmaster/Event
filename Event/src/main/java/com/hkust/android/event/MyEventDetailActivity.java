@@ -111,7 +111,10 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
                         event_time.setText(event.getTime());
                         event_location.setText(event.getAddress());
                         event_desc.setText(event.getDescription());
-                        event_date.setText(event.getStartAt()+" "+event.getEndAt());
+                        if("".equalsIgnoreCase(event.getEndAt()))
+                            event_date.setText(event.getStartAt());
+                        else
+                            event_date.setText(event.getStartAt()+" - "+event.getEndAt());
 
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

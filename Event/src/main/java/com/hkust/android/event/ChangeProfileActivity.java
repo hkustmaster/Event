@@ -1,6 +1,7 @@
 package com.hkust.android.event;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -77,11 +78,11 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                     AsyncHttpClient client = new AsyncHttpClient();
 
                     sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                    String token = sp.getString("token", "");
+                    //String token = sp.getString("token", "");
 
                     user.setName(name);
                     user.setPhone(phone);
-                    user.setToken(token);
+                    //user.setToken(token);
 
                     Gson gson = new Gson();
 
@@ -105,6 +106,8 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                                         String userString  = gson.toJson(user);
                                         editor.putString("userString",userString);
                                         editor.commit();
+
+
                                         finish();
                                     } else {
                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -124,6 +127,16 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                     }
                 }
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 200) {
+            if (resultCode == 200) {
+
+                this.finish();
+            }
         }
     }
 }
