@@ -3,6 +3,7 @@ package com.hkust.android.event;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     private SharedPreferences sp;
+    private AsyncHttpClient client;
 
     @InjectView(R.id.input_email)
     EditText _emailText;
@@ -91,12 +93,22 @@ public class SignInActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Log.i("ppppp","Login Cancel");
+                client.cancelAllRequests(true);
+                _loginButton.setEnabled(true);
+            }
+        });
+
+
         final String email = _emailText.getText().toString();
         final String password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
         // send request to server
-        AsyncHttpClient client = new AsyncHttpClient();
+        client = new AsyncHttpClient();
         client.setTimeout(10000);// timeout 10s
         // set up the parameters
 //        RequestParams params = new RequestParams();
@@ -205,60 +217,6 @@ public class SignInActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        client.post(url, params, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                if (statusCode == 200) {
-//                    String response = new String(responseBody);
-//                    JSONObject jsonObject = null;
-//                    try {
-//                        jsonObject = new JSONObject(response);
-//                        String message = jsonObject.getString("message");
-//                        String t = new String(responseBody);
-//                        //Toast.makeText(SignInActivity.this, t, Toast.LENGTH_LONG).show();
-//
-//                        if (message.equalsIgnoreCase("succeed")) {
-//                            String token = jsonObject.getString("token");
-//                            //store token and username
-//                            //1、打开Preferences，名称为setting，如果存在则打开它，否则创建新的Preferences
-//                            SharedPreferences settings = getSharedPreferences("setting", 0);
-//                            //2、让setting处于编辑状态
-//                            SharedPreferences.Editor editor = settings.edit();
-//                            //3、存放数据
-//                            editor.putString("token", token);
-//                            //4、完成提交
-//                            editor.commit();
-//                            //Toast.makeText(SignInActivity.this, token, Toast.LENGTH_LONG).show();
-//                            new android.os.Handler().postDelayed(
-//                                    new Runnable() {
-//                                        public void run() {
-//                                            // On complete call either onLoginSuccess or onLoginFailed
-//                                            onLoginSuccess();
-//                                            //onLoginFailed();
-//                                            progressDialog.dismiss();
-//                                        }
-//                                    }, 2000);
-//                            _loginButton.setEnabled(true);
-//                        } else {
-//                            new android.os.Handler().postDelayed(
-//                                    new Runnable() {
-//                                        public void run() {
-//                                            // On complete call either onLoginSuccess or onLoginFailed
-//                                            //onLoginSuccess();
-//                                            onLoginFailed();
-//                                            progressDialog.dismiss();
-//                                        }
-//                                    }, 2000);
-//                            _loginButton.setEnabled(true);
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//            }
-
     }
 
 
@@ -266,7 +224,6 @@ public class SignInActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
                 this.finish();
@@ -312,7 +269,6 @@ public class SignInActivity extends AppCompatActivity {
         } else {
             _passwordText.setError(null);
         }
-
         return valid;
     }
 }
