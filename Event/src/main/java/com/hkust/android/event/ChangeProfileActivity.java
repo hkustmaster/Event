@@ -71,9 +71,9 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                     name_view.setError("This field required");
                 } else if ("".equalsIgnoreCase(phone)) {
                     phone_view.setError("This field required");
-                }else if(!android.util.Patterns.PHONE.matcher(phone).matches()){
+                } else if (!android.util.Patterns.PHONE.matcher(phone).matches()) {
                     phone_view.setError("Invalid phone number");
-                }else{
+                } else {
 
                     AsyncHttpClient client = new AsyncHttpClient();
 
@@ -107,8 +107,8 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                                         //update user profile.
                                         SharedPreferences.Editor editor = sp.edit();
                                         Gson gson = new Gson();
-                                        String userString  = gson.toJson(user);
-                                        editor.putString("userString",userString);
+                                        String userString = gson.toJson(user);
+                                        editor.putString("userString", userString);
                                         editor.commit();
                                         finish();
                                     } else {

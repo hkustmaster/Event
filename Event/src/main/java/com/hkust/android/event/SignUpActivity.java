@@ -122,43 +122,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             e.printStackTrace();
                         }
 
-
-//                        params.put("name", user.getName());
-//                        params.put("email", user.getEmail());
-//                        params.put("password", user.getPassword());
-//                        params.put("phone", user.getPhone());
-//                        params.put("gender", user.getGender());
-//
-//                        AsyncHttpClient client = new AsyncHttpClient();
-//                        client.post(Constants.SERVER_URL + Constants.SIGN_UP, params, new AsyncHttpResponseHandler() {
-//                            @Override
-//                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                                if (statusCode == 200) {
-//                                    String response = new String(responseBody);
-//
-//                                    JSONObject jsonObject = null;
-//                                    try {
-//                                        jsonObject = new JSONObject(response);
-//                                        String message = jsonObject.getString("message");
-//                                        Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_LONG).show();
-//
-//                                        if (message.equalsIgnoreCase("succeed")) {
-//                                            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-//                                            startActivity(intent);
-//                                            finish();
-//                                        }
-//                                    } catch (JSONException e) {
-//                                        e.printStackTrace();
-//                                    }
-//
-//                                }
-//                            }
-//                            @Override
-//                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                                Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-//                                error.printStackTrace();
-//                            }
-//                        });
                     } else {
                         Toast.makeText(SignUpActivity.this, "Error: please check your information!", Toast.LENGTH_SHORT).show();
                     }

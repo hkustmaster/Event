@@ -5,15 +5,24 @@ package com.hkust.android.event.model;
  */
 public class VoteRecord {
     private String id;
-    private String eventId;
-    private String result;
+    private int voteCount;
+    private String date;
+    private boolean isVoted;
 
-    public String getEventId() {
-        return eventId;
+    public boolean isVoted() {
+        return isVoted;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public void setIsVoted(boolean isVoted) {
+        this.isVoted = isVoted;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getId() {
@@ -24,11 +33,11 @@ public class VoteRecord {
         this.id = id;
     }
 
-    public String getResult() {
-        return result;
+    public int getVoteCount() {
+        return voteCount;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
     }
 }

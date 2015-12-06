@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerToggle.syncState();
     }
 
-
     /**
      * Sets up the action bar.
      */
@@ -140,13 +139,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.putString("userString","");
                 editor.putString("token", "");
                 editor.commit();
-
                 Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivityForResult(intent, 100);
                 break;
             case R.id.change_password_btn:
                 Intent intent2 = new Intent(MainActivity.this, ChangePasswordActivity.class);
-//                startActivityForResult(intent2, 100);
                 startActivity(intent2);
                 break;
             case R.id.edit_profile_btn:
@@ -193,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.putString("token", "");
             editor.putString("password", "");
             editor.commit();
-
             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
             startActivityForResult(intent, 100);
             finish();

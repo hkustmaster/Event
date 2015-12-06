@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class ExploreEventDetailActivity extends AppCompatActivity implements View.OnClickListener{
-    String eventString;
+    private String eventString;
     private SharedPreferences sp;
     private TextView event_title;
     private TextView event_holder;
@@ -36,6 +36,8 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
     private TextView event_desc;
     private String token;
     private Event event;
+    private AsyncHttpClient client = new AsyncHttpClient();
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,6 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
         myToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         Button joinBtn = (Button)findViewById(R.id.join_btn);
         joinBtn.setOnClickListener(this);
@@ -69,9 +70,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
             eventString = (String) savedInstanceState.getSerializable("eventString");
         }
 
-        Gson gson = new Gson();
         event = gson.fromJson(eventString, Event.class);
-
         event_title.setText(event.getTitle());
         event_holder.setText(event.getHost().getName());
         event_time.setText(event.getTime());
@@ -79,10 +78,66 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
         event_desc.setText(event.getDescription());
         event_date.setText(event.getStartAt() + " " + event.getEndAt());
 
+        getEventFromServer();
+        //Toast.makeText(getApplicationContext(),eventId,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.join_btn:
+                joinEvent();
+                break;
+            default:
+        }
+    }
+
+    private void joinEvent(){
+
+        RequestParams params = new RequestParams();
+        params.put("token", token);
+        params.put("id",event.getId());
+        client.post(Constants.SERVER_URL + Constants.PARTICIPATE_EVENT, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String response = new String(responseBody);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message = jsonObject.getString("message");
+                    if (message.equalsIgnoreCase("succeed")) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                String response = new String(responseBody);
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getEventFromServer(){
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = sp.getString("token", "");
-
-        AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("token", token);
         params.put("id", event.getId());
@@ -94,10 +149,11 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
                     JSONObject jsonObject = new JSONObject(response);
                     String message = jsonObject.getString("message");
                     if (message.equalsIgnoreCase("succeed")) {
-                        String eventString = jsonObject.getString("act");
+                        JSONObject eventJson = new JSONObject(jsonObject.getString("act"));
+                        eventJson.remove("participants");
+                        String eventString = eventJson.toString();
                         Gson gson = new Gson();
-                        Event event = gson.fromJson(eventString, Event.class);
-
+                        event = gson.fromJson(eventString, Event.class);
                         event_title.setText(event.getTitle());
                         event_holder.setText(event.getHost().getName());
                         event_time.setText(event.getTime());
@@ -122,60 +178,5 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
             }
         });
 
-
-        //Toast.makeText(getApplicationContext(),eventId,Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.join_btn:
-                AsyncHttpClient client = new AsyncHttpClient();
-                RequestParams params = new RequestParams();
-                params.put("token", token);
-                params.put("id",event.getId());
-                Log.i("pppp token", token);
-                Log.i("pppp id",event.getId());
-                client.post(Constants.SERVER_URL + Constants.EVENT_SHOWMINE, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        String response = new String(responseBody);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String message = jsonObject.getString("message");
-                            if (message.equalsIgnoreCase("succeed")) {
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-                            } else {
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        String response = new String(responseBody);
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                    }
-                });
-
-
-                break;
-            default:
-        }
     }
 }
