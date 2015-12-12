@@ -12,3 +12,6 @@ https://github.com/sourcey/materiallogindemo
 
 
 http://stackoverflow.com/questions/5265913/how-to-use-putextra-and-getextra-for-string-data
+
+上传用户头像：
+http://www.2cto.com/kf/201501/371520.html
