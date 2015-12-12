@@ -19,12 +19,6 @@ public class DateListAdapter extends RecyclerView.Adapter<DateListAdapter.ViewHo
     private ArrayList<VoteRecord> voteRecords = new ArrayList<VoteRecord>();
     private boolean canVote = false;
 
-
-    public DateListAdapter(ArrayList<VoteRecord> voteRecords, boolean canVote){
-        this.voteRecords = voteRecords;
-        this.canVote = canVote;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_date, parent,
@@ -35,7 +29,10 @@ public class DateListAdapter extends RecyclerView.Adapter<DateListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.dateTextView.setText(voteRecords.get(position).getDate());
-        holder.voteCount.setText(voteRecords.get(position).getVoteCount());
+
+        StringBuffer buff = new StringBuffer();
+        buff.append(voteRecords.get(position).getVoteCount());
+        holder.voteCount.setText(buff.toString());
 
         //if is from host, he/she can not vote. canVote is false
         //if is from participant, he/ she can vote. can Vote is true
@@ -86,8 +83,11 @@ public class DateListAdapter extends RecyclerView.Adapter<DateListAdapter.ViewHo
         this.voteRecords=voteRecords;
     }
 
+    public void setCanVote(boolean canVote){
+        this.canVote = canVote;
+    }
+
     public ArrayList<VoteRecord> getVoteRecords(){
         return voteRecords;
     }
-
 }

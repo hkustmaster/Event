@@ -4,10 +4,9 @@ package com.hkust.android.event.model;
  * Created by hozdanny on 15/11/30.
  */
 public class VoteRecord {
-    private String id;
-    private int voteCount;
+    private int voteCount = 0;
     private String date;
-    private boolean isVoted;
+    private boolean isVoted=false;
 
     public boolean isVoted() {
         return isVoted;
@@ -23,14 +22,6 @@ public class VoteRecord {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public int getVoteCount() {

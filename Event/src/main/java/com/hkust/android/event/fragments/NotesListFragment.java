@@ -1,8 +1,9 @@
 package com.hkust.android.event.fragments;
-
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -15,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hkust.android.event.PendingEventDetailActivity;
@@ -34,7 +34,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
-public abstract class NotesListFragment extends Fragment implements NotesAdapter.ClickListener, SwipeRefreshLayout.OnRefreshListener {
+public abstract class NotesListFragment extends Fragment implements NotesAdapter.ClickListener, SwipeRefreshLayout.OnRefreshListener{
+        //ConnectionCallbacks, OnConnectionFailedListener
 
     @LayoutRes
     protected abstract int getLayoutResId();
@@ -60,6 +61,14 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
 
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
         refreshLayout.setOnRefreshListener(this);
+//
+//        protected synchronized void buildGoogleApiClient() {
+//            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addConnectionCallbacks(this)
+//                    .addOnConnectionFailedListener(this)
+//                    .addApi(LocationServices.API)
+//                    .build();
+//        }
 
         // Setup list
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.notes_list);
@@ -77,6 +86,8 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
             //if current fragment is myevent or pending event
             getMyEventAndPendingEvent();
         }
+
+
         return view;
     }
 
@@ -244,5 +255,11 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                 Toast.makeText(getContext(), "Connection Failed", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private boolean doesUserHavePermission()
+    {
+        int result = getContext().checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 }

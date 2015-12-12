@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class PendingEventDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class PendingEventDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private Event event;
     String eventString;
     Gson gson = new Gson();
@@ -52,17 +52,16 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
         LinearLayout viewParticipantBtn = (LinearLayout) findViewById(R.id.view_participant_layout_btn);
         viewParticipantBtn.setOnClickListener(this);
 
-        LinearLayout viewMessageBtn = (LinearLayout)findViewById(R.id.view_message_layout_btn);
+        LinearLayout viewMessageBtn = (LinearLayout) findViewById(R.id.view_message_layout_btn);
         viewMessageBtn.setOnClickListener(this);
 
-        LinearLayout dateLayout = (LinearLayout)findViewById(R.id.date_layout);
+        LinearLayout dateLayout = (LinearLayout) findViewById(R.id.date_layout);
         dateLayout.setOnClickListener(this);
 
-        Button quitBtn = (Button)findViewById(R.id.leave_btn);
+        Button quitBtn = (Button) findViewById(R.id.leave_btn);
         quitBtn.setOnClickListener(this);
 
 
@@ -85,7 +84,8 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
             eventString = (String) savedInstanceState.getSerializable("eventString");
         }
 
-        event = gson.fromJson(eventString,Event.class);
+
+        event = gson.fromJson(eventString, Event.class);
         event_title.setText(event.getTitle());
         event_holder.setText(event.getHost().getName());
         event_time.setText(event.getTime());
@@ -99,19 +99,20 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.view_participant_layout_btn:
                 Intent intent = new Intent(getApplicationContext(), DetailParticipantListActivity.class);
-                intent.putExtra("eventId",event.getId());
+                intent.putExtra("eventId", event.getId());
                 startActivity(intent);
                 break;
-            case  R.id.view_message_layout_btn:
+            case R.id.view_message_layout_btn:
                 Intent intent2 = new Intent(getApplicationContext(), DetailMessageListActivity.class);
-                intent2.putExtra("eventId",event.getId());
+                intent2.putExtra("eventId", event.getId());
                 startActivity(intent2);
                 break;
             case R.id.date_layout:
                 Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
+                intent3.putExtra("eventId", event.getId());
                 startActivity(intent3);
                 break;
             case R.id.leave_btn:
@@ -123,7 +124,7 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;
@@ -134,7 +135,7 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
     }
 
 
-    public void leaveEvent(){
+    public void leaveEvent() {
         RequestParams params = new RequestParams();
         //put token and id here
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
@@ -164,7 +165,7 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
         });
     }
 
-    public void getEventFromServer(){
+    public void getEventFromServer() {
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String token = sp.getString("token", "");
         AsyncHttpClient client = new AsyncHttpClient();
@@ -188,15 +189,12 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
                         event_time.setText(event.getTime());
                         event_location.setText(event.getAddress());
                         event_desc.setText(event.getDescription());
-                        if ("".equalsIgnoreCase(event.getEndAt()))
+                        if ("".equalsIgnoreCase(event.getEndAt())) {
                             event_date.setText(event.getStartAt());
-                        else
-                            event_date.setText(event.getStartAt() + " - " + event.getEndAt());
-
-                        if (event.getStatus().equalsIgnoreCase(Constants.STATUS_EVENT_ING)) {
                             LinearLayout dateLayout = (LinearLayout) findViewById(R.id.date_layout);
                             dateLayout.setOnClickListener(null);
-                        }
+                        } else
+                            event_date.setText(event.getStartAt() + " - " + event.getEndAt());
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
