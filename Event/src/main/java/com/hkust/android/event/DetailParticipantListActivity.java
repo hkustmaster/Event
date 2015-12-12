@@ -49,10 +49,6 @@ public class DetailParticipantListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
-        //set recycler view
-        RecyclerView messageList = (RecyclerView) findViewById(R.id.participants_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        messageList.setLayoutManager(layoutManager);
 
         //get event id from the detail activity
         String eventId = new String();
@@ -66,6 +62,11 @@ public class DetailParticipantListActivity extends AppCompatActivity {
         } else {
             eventId = (String) savedInstanceState.getSerializable("eventId");
         }
+        //set recycler view
+        RecyclerView messageList = (RecyclerView) findViewById(R.id.participants_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        messageList.setLayoutManager(layoutManager);
+
         messageList.setAdapter(participantAdapter);
         getParticipantFromServer(eventId);
     }
@@ -98,7 +99,6 @@ public class DetailParticipantListActivity extends AppCompatActivity {
                     if (message.equalsIgnoreCase("succeed")) {
                         JSONObject event = new JSONObject(jsonObject.getString("act"));
                         String participantString = event.getString("participants");
-                        Log.i("dddd",participantString);
                         participants = gson.fromJson(participantString, new TypeToken<ArrayList<Participant>>(){}.getType());
                         participantAdapter.setParticipantsList(participants);
                         participantAdapter.notifyDataSetChanged();

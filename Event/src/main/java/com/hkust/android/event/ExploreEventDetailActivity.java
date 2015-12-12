@@ -1,6 +1,7 @@
 package com.hkust.android.event;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ExploreEventDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class ExploreEventDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private String eventString;
     private SharedPreferences sp;
     private TextView event_title;
@@ -49,7 +50,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button joinBtn = (Button)findViewById(R.id.join_btn);
+        Button joinBtn = (Button) findViewById(R.id.join_btn);
         joinBtn.setOnClickListener(this);
 
         event_title = (TextView) findViewById(R.id.event_title_textView);
@@ -96,19 +97,19 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.join_btn:
                 joinEvent();
+                finish();
                 break;
             default:
         }
     }
 
-    private void joinEvent(){
-
+    public void joinEvent() {
         RequestParams params = new RequestParams();
         params.put("token", token);
-        params.put("id",event.getId());
+        params.put("id", event.getId());
         client.post(Constants.SERVER_URL + Constants.PARTICIPATE_EVENT, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -135,7 +136,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
         });
     }
 
-    private void getEventFromServer(){
+    private void getEventFromServer() {
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = sp.getString("token", "");
         RequestParams params = new RequestParams();
@@ -159,7 +160,7 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
                         event_time.setText(event.getTime());
                         event_location.setText(event.getAddress());
                         event_desc.setText(event.getDescription());
-                        if("".equalsIgnoreCase(event.getEndAt()))
+                        if ("".equalsIgnoreCase(event.getEndAt()))
                             event_date.setText(event.getStartAt());
                         else
                             event_date.setText(event.getStartAt() + " - " + event.getEndAt());
@@ -179,4 +180,5 @@ public class ExploreEventDetailActivity extends AppCompatActivity implements Vie
         });
 
     }
+
 }

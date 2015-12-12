@@ -107,7 +107,7 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
                 break;
             case R.id.view_message_layout_btn:
                 Intent intent2 = new Intent(getApplicationContext(), DetailMessageListActivity.class);
-                intent2.putExtra("eventId", event.getId());
+                intent2.putExtra("event_id", event.get_id());
                 startActivity(intent2);
                 break;
             case R.id.date_layout:
@@ -117,6 +117,7 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
                 break;
             case R.id.leave_btn:
                 leaveEvent();
+                finish();
             default:
                 break;
         }

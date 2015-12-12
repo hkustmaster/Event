@@ -175,7 +175,8 @@
             android:layout_height="wrap_content"
             android:text="quit"
             android:id="@+id/leave_btn"
-            android:background="@color/theme_primary" />
+            android:background="@color/theme_primary"
+            style='android:background="@color/theme_primary"                 style="?android:textAppearanceSmall"' />
     </LinearLayout>
 
 </RelativeLayout>

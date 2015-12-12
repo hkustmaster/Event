@@ -20,7 +20,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
+//
 //import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 //import com.google.android.gms.common.GooglePlayServicesRepairableException;
 //import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,7 +54,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     private SharedPreferences sp;
 
     private static final int PLACE_PICKER_REQUEST = 1000;
-//    private GoogleApiClient mClient;
+   // private GoogleApiClient mClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
+
 //        mClient = new GoogleApiClient
 //                .Builder(this)
 //                .addApi(Places.GEO_DATA_API)
@@ -189,12 +189,12 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStart() {
         super.onStart();
-//        mClient.connect();
+     //   mClient.connect();
     }
 
     @Override
     protected void onStop() {
-//        mClient.disconnect();
+      //  mClient.disconnect();
         super.onStop();
     }
 
@@ -253,7 +253,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(getApplicationContext(), "All Fields Required.", Toast.LENGTH_LONG).show();
 
                 } else {
-
                     if (endTime && "".equalsIgnoreCase(endDate)) {
                         Toast.makeText(getApplicationContext(), "End data field required.", Toast.LENGTH_LONG).show();
                     } else {
@@ -265,7 +264,11 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                         event.setTime(time);
                         event.setSize(Integer.parseInt(number));
                         event.setDescription(desc);
-                        event.setStatus(Constants.STATUS_EVENT_PRE);
+                        if(endTime) {
+                            event.setStatus(Constants.STATUS_EVENT_PRE);
+                        }else{
+                            event.setStatus(Constants.STATUS_EVENT_ING);
+                        }
                         event.setAddress(address);
                         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                         String token = sp.getString("token", "");

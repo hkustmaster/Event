@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent3 = new Intent(MainActivity.this, ChangeProfileActivity.class);
                 startActivityForResult(intent3, 200);
             default:
-                Toast.makeText(this, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
 
         }
 
@@ -194,7 +194,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivityForResult(intent, 100);
             finish();
         }else if(requestCode==200&&resultCode==200){
-            Log.i("ppppp", "okokokS!");
             setProfile();
         }
     }

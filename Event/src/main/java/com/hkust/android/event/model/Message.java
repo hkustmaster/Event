@@ -4,11 +4,11 @@ package com.hkust.android.event.model;
  * Created by hozdanny on 15/11/30.
  */
 public class Message {
-    private String id;
+    private String _id;
     private String activity;
     private String content;
     private String createAt;
-    private User creator;
+    private User from;
 
     public String getActivity() {
         return activity;
@@ -34,19 +34,19 @@ public class Message {
         this.createAt = createAt;
     }
 
-    public User getCreator() {
-        return creator;
+    public User getFrom() {
+        return from;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setFrom(User from) {
+        this.from = from;
     }
 
-    public String getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 }

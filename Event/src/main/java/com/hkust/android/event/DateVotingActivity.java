@@ -2,9 +2,7 @@ package com.hkust.android.event;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,12 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hkust.android.event.adapters.DateListAdapter;
@@ -31,14 +26,11 @@ import com.hkust.android.event.model.VoteRecord;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -87,7 +79,6 @@ public class DateVotingActivity extends AppCompatActivity {
 
         dateList.setAdapter(dateListAdapter);
 
-
         Button voteBtn = (Button) findViewById(R.id.vote_btn);
         voteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +88,6 @@ public class DateVotingActivity extends AppCompatActivity {
                 updateVoteRecord(dateListAdapter.getVoteRecords());
             }
         });
-
         Calendar cal = Calendar.getInstance();
         year_x = cal.get(Calendar.YEAR);
         month_x = cal.get(Calendar.MONTH);
@@ -153,6 +143,7 @@ public class DateVotingActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("token", token);
         params.put("id", eventId);
+
         client.post(Constants.SERVER_URL + Constants.EVENT_DETAIL, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -174,7 +165,6 @@ public class DateVotingActivity extends AppCompatActivity {
                         dateListAdapter.setVoteRecords(voteRecords);
                         dateListAdapter.setCanVote(true);
                         dateListAdapter.notifyDataSetChanged();
-
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
@@ -247,7 +237,6 @@ public class DateVotingActivity extends AppCompatActivity {
             }
         }
         return dateList;
-
     }
 
     public void updateVoteRecord(ArrayList<VoteRecord> voteRecords) {
