@@ -13,9 +13,11 @@
         android:background="@color/theme_primary"
         android:weightSum="1">
 
-        <ImageView
-            android:layout_width="135dp"
-            android:layout_height="wrap_content"
+        <com.hkust.android.event.tools.CircleImg
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
             android:id="@+id/imageView"
             android:src="@drawable/ic_account_circle_black_48dp"
             android:layout_weight="0.53" />

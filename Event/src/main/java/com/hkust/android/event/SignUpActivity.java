@@ -29,6 +29,7 @@ import com.hkust.android.event.adapters.CropOptionAdapter;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.CropOption;
 import com.hkust.android.event.model.User;
+import com.hkust.android.event.tools.CircleImg;
 import com.hkust.android.event.tools.ValidFormTools;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -55,7 +56,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private static final int CROP_FROM_CAMERA = 2;
     private static final int PICK_FROM_FILE = 3;
     private Uri imgUri;
-    ImageButton userImageUploadBtn;
+    CircleImg userImageUploadBtn;
 
 
     @Override
@@ -65,8 +66,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         Button signUpBtn = (Button) findViewById(R.id.sign_up_btn);
         TextView signinLink = (TextView) findViewById(R.id.link_signin);
-        userImageUploadBtn = (ImageButton)findViewById(R.id.user_image_upload_btn);
-        userImageUploadBtn.setOnClickListener(this);
+        userImageUploadBtn = (CircleImg)findViewById(R.id.user_image_upload_btn);
+        //userImageUploadBtn.setOnClickListener(this);
         signUpBtn.setOnClickListener(this);
         signinLink.setOnClickListener(this);
     }
@@ -109,6 +110,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     user.setPassword(password);
                     user.setName(name);
                     user.setPhone(phone);
+                    //user.setAvatar("default");
+
                     if (checkRegInfo(user, re_password)) {
                         try {
                             AsyncHttpClient client = new AsyncHttpClient();

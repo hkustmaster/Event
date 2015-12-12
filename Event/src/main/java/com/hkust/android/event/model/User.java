@@ -9,6 +9,7 @@ public class User {
     private String email;
     private String gender;
     private String phone;
+    private String avatar;
 
     public String get_id() {
         return _id;
@@ -67,5 +68,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
