@@ -115,20 +115,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                     .addApi(LocationServices.API)
                     .build();
         }
-        onRefresh();
         return view;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        onRefresh();
     }
 
 

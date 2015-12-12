@@ -99,12 +99,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewpager.setAdapter(new MainPagerAdapter(this, getSupportFragmentManager()));
         viewpager.setOffscreenPageLimit(MainPagerAdapter.NUM_ITEMS);
 
+
         // Setup tab layout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewpager);
+
+
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
+               
             }
 
             @Override
@@ -114,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onPageScrollStateChanged(int i) {
+
             }
         });
     }
