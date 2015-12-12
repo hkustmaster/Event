@@ -169,7 +169,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:id="@+id/linearLayout">
+        android:id="@+id/close_discussion_btn_layout">
 
         <Button
             android:layout_width="fill_parent"

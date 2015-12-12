@@ -1,23 +1,25 @@
 package com.hkust.android.event.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.hkust.android.event.R;
+import com.hkust.android.event.model.Message;
+
+import java.util.ArrayList;
 
 
 /**
  * Created by hozdanny on 15/11/13.
  */
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
-    private String[] messageDate = {"I am available on Nov 3.",
-            "Debating me breeding be answered an he. Spoil event was words her off cause any. Tears woman which no is world miles woody. Wished be do mutual except in effect answer. Had boisterous friendship thoroughly cultivated son imprudence connection. Windows because concern sex its. Law allow saved views hills day ten. ",
-            "Debating me breeding be answered an he. Spoil event was words her off cause any. Tears woman which no is world miles woody. Wished be do mutual except in effect answer. Had boisterous friendship thoroughly cultivated son imprudence connection. Windows because concern sex its. Law allow saved views hills day ten. "};
+    ArrayList<Message> messages = new ArrayList<Message>();
 
-    private String[] userData = {"Bob", "Alice","Emma"};
+    public MessageAdapter(ArrayList<Message> messages){
+        this.messages = messages;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -28,25 +30,30 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.user.setText(userData[position]);
-        holder.message.setText(messageDate[position]);
-        Log.i("this====","show message  +++++++++++++++++++");
+        holder.user.setText(messages.get(position).getFrom().getName());
+        holder.message.setText(messages.get(position).getContent());
+        holder.date.setText(messages.get(position).getCreateAt());
     }
 
     @Override
     public int getItemCount() {
-        return messageDate.length;
+        return messages.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView user;
         private TextView message;
-
+        private TextView date;
 
         public ViewHolder(View itemView) {
             super(itemView);
             user= (TextView)itemView.findViewById(R.id.message_user_textView);
             message = (TextView)itemView.findViewById(R.id.message_content_textView);
+            date= (TextView)itemView.findViewById(R.id.message_date_textView);
         }
+    }
+
+    public void setMessages(ArrayList<Message> messages) {
+        this.messages = messages;
     }
 }

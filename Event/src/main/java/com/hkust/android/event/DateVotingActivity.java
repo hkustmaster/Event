@@ -2,9 +2,7 @@ package com.hkust.android.event;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,12 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hkust.android.event.adapters.DateListAdapter;
@@ -31,22 +26,17 @@ import com.hkust.android.event.model.VoteRecord;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import cz.msebera.android.httpclient.Header;
 
 public class DateVotingActivity extends AppCompatActivity {
-    int year_x, month_x, day_x;
-    static final int DATE_DIALOG_ID = 0;
     Gson gson = new Gson();
     SharedPreferences sp;
     Event event = new Event();
@@ -87,7 +77,6 @@ public class DateVotingActivity extends AppCompatActivity {
 
         dateList.setAdapter(dateListAdapter);
 
-
         Button voteBtn = (Button) findViewById(R.id.vote_btn);
         voteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,42 +87,9 @@ public class DateVotingActivity extends AppCompatActivity {
             }
         });
 
-        Calendar cal = Calendar.getInstance();
-        year_x = cal.get(Calendar.YEAR);
-        month_x = cal.get(Calendar.MONTH);
-        day_x = cal.get(Calendar.DAY_OF_MONTH);
-        Button suggestion = (Button) findViewById(R.id.suggestion_btn);
-        suggestion.setVisibility(View.INVISIBLE);
-        showDialogOnDateTextFieldClick();
-    }
 
-    public void showDialogOnDateTextFieldClick() {
-        Button suggestionBtn = (Button) findViewById(R.id.suggestion_btn);
-        suggestionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(DATE_DIALOG_ID);
-            }
-        });
-    }
 
-    public Dialog onCreateDialog(int id) {
-        if (id == DATE_DIALOG_ID) {
-            return new DatePickerDialog(this, dpickerListener, year_x, month_x, day_x);
-        }
-        return null;
     }
-
-    private DatePickerDialog.OnDateSetListener dpickerListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            year_x = year;
-            month_x = monthOfYear;
-            day_x = dayOfMonth;
-            //AutoCompleteTextView dateTextField = (AutoCompleteTextView) findViewById(R.id.new_event_date);
-            //dateTextField.setText(year_x+"-"+month_x+"-"+day_x);
-        }
-    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -153,6 +109,7 @@ public class DateVotingActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("token", token);
         params.put("id", eventId);
+
         client.post(Constants.SERVER_URL + Constants.EVENT_DETAIL, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -174,7 +131,6 @@ public class DateVotingActivity extends AppCompatActivity {
                         dateListAdapter.setVoteRecords(voteRecords);
                         dateListAdapter.setCanVote(true);
                         dateListAdapter.notifyDataSetChanged();
-
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
@@ -247,7 +203,6 @@ public class DateVotingActivity extends AppCompatActivity {
             }
         }
         return dateList;
-
     }
 
     public void updateVoteRecord(ArrayList<VoteRecord> voteRecords) {

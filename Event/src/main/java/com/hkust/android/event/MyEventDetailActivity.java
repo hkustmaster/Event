@@ -77,11 +77,11 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
         event_time.setText(event.getTime());
         event_location.setText(event.getAddress());
         event_desc.setText(event.getDescription());
-        if("".equalsIgnoreCase(event.getEndAt()))
-            event_date.setText(event.getStartAt());
-        else
-            event_date.setText(event.getStartAt()+" - "+event.getEndAt());
-
+        event_date.setText(event.getStartAt()+" "+event.getEndAt());
+        if(event.getStatus().equalsIgnoreCase(Constants.STATUS_EVENT_ING)||event.getStatus().equalsIgnoreCase(Constants.STATUS_EVENT_PAST)){
+            LinearLayout ly = (LinearLayout)findViewById(R.id.close_discussion_btn_layout);
+            ly.setVisibility(View.INVISIBLE);
+        }
         //get the event from the web and refresh the event detail
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String token = sp.getString("token", "");
@@ -140,7 +140,7 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
                 break;
             case  R.id.view_message_layout_btn:
                 Intent intent2 = new Intent(getApplicationContext(), DetailMessageListActivity.class);
-                intent2.putExtra("eventId",event.getId());
+                intent2.putExtra("event_id",event.get_id());
                 startActivity(intent2);
                 break;
             case R.id.date_layout:
@@ -150,6 +150,7 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.close_discussion_btn:
                 Intent intent4 = new Intent(getApplicationContext(), CloseDiscussionActivity.class);
+                intent4.putExtra("eventId",event.getId());
                 startActivity(intent4);
                 break;
             default:

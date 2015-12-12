@@ -1,10 +1,22 @@
 package com.hkust.android.event.fragments;
 
+import android.location.Location;
+
+import com.google.android.gms.common.ConnectionResult;
 import com.hkust.android.event.R;
 import com.hkust.android.event.model.Constants;
 
 
 public class MyEventFragment extends NotesListFragment {
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        return;
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+return;
+    }
 
     public static MyEventFragment newInstance() {
         return new MyEventFragment();

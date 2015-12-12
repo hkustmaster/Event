@@ -49,22 +49,11 @@
                 android:id="@+id/leave_message_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Leave a Message" />
+                android:text="Leave a Message"
+                android:background="@color/theme_primary"
+                style="?android:textAppearanceSmall" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="Back" />
-        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
