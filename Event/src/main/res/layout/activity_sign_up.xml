@@ -28,7 +28,14 @@
             android:id="@+id/email_sign_up_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_image_upload_btn"
+                android:src="@drawable/tap_to_add_photo" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -165,4 +172,5 @@
 
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

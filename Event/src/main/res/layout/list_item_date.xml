@@ -18,7 +18,7 @@
             android:id="@+id/user_image_imageView"
             android:src="@drawable/ic_perm_identity_black_48dp"
             android:layout_marginLeft="10dp"
-            android:layout_alignBottom="@+id/checkBox"
+            android:layout_alignBottom="@+id/vote_checkbox"
             android:layout_alignTop="@+id/num_of_vote_textView" />
 
         <TextView
@@ -45,7 +45,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBox"
+            android:id="@+id/vote_checkbox"
             android:checked="false"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp" />

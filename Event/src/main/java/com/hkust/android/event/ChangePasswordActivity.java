@@ -42,7 +42,6 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.update_password_btn:
-
                 TextView current_password_view = (TextView) findViewById(R.id.current_password_input);
                 TextView new_Password_view = (TextView) findViewById(R.id.new_password_input);
                 TextView re_new_Password_view = (TextView) findViewById(R.id.re_new_password_input);
@@ -50,7 +49,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 final String new_password = new_Password_view.getText().toString();
                 String re_new_password = re_new_Password_view.getText().toString();
 
-
+                //validation
                 if ("".equalsIgnoreCase(c_password)) {
                     current_password_view.setError("This field required");
                 } else if ("".equalsIgnoreCase(new_password)) {
@@ -91,9 +90,6 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                                             editor.putString("autoLogin", "false");
                                             editor.putString("password", new_password);
                                             editor.commit();
-
-//                                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-//                                            setResult(100,intent);
                                             finish();
                                         } else {
                                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

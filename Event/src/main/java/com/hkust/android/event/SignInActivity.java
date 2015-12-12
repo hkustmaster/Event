@@ -96,7 +96,6 @@ public class SignInActivity extends AppCompatActivity {
         progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                Log.i("ppppp","Login Cancel");
                 client.cancelAllRequests(true);
                 _loginButton.setEnabled(true);
             }
@@ -106,14 +105,10 @@ public class SignInActivity extends AppCompatActivity {
         final String email = _emailText.getText().toString();
         final String password = _passwordText.getText().toString();
 
-        // Implement your own authentication logic here.
         // send request to server
         client = new AsyncHttpClient();
         client.setTimeout(10000);// timeout 10s
         // set up the parameters
-//        RequestParams params = new RequestParams();
-//        params.put("email", email);
-//        params.put("password", password);
 
         User user = new User();
         user.setEmail(email);
@@ -143,29 +138,16 @@ public class SignInActivity extends AppCompatActivity {
                             userLogined.setToken(token);
 
 
-                            //1、打开Preferences，名称为setting，如果存在则打开它，否则创建新的Preferences
-                            // 第一个参数是存储时的名称，第二个参数则是文件的打开方式
-                            /*
-                            * SharedPreferences的四种操作模式:
-                                Context.MODE_PRIVATE：为默认操作模式,代表该文件是私有数据,只能被应用本身访问,在该模式下,写入的内容会覆盖原文件的内容
-                                Context.MODE_APPEND：模式会检查文件是否存在,存在就往文件追加内容,否则就创建新文件.
-                                Context.MODE_WORLD_READABLE和Context.MODE_WORLD_WRITEABLE用来控制其他应用是否有权限读写该文件.
-                                MODE_WORLD_READABLE：表示当前文件可以被其他应用读取.
-                                MODE_WORLD_WRITEABLE：表示当前文件可以被其他应用写入.
-                            */
                             sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                            //2、让setting处于编辑状态
                             SharedPreferences.Editor editor = sp.edit();
-                            //3、存放数据
-//                            editor.putString("userName",user.getName());
-//                            editor.putString("userEmail",user.getEmail());
-//                            editor.putString("userPhone",user.getPhone());
+                            //store data
                             editor.putString("autoLogin", "true");
                             editor.putString("email", email);
                             editor.putString("password", password);
                             editor.putString("token", token);
                             editor.putString("userString", userString);
-                            //4、完成提交
+
+                            //4commit
                             editor.commit();
 
 //                            Toast.makeText(getApplicationContext(), user.getName(), Toast.LENGTH_LONG).show();
@@ -224,7 +206,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                //  Implement successful signup logic here
+                // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
                 this.finish();
             }

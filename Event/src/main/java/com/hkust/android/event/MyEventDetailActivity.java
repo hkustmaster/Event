@@ -1,5 +1,4 @@
 package com.hkust.android.event;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,23 +11,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import cz.msebera.android.httpclient.Header;
 
 public class MyEventDetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     String eventString;
+    private Event event;
     private SharedPreferences sp;
+    Gson gson = new Gson();
     private TextView event_title;
     private TextView event_holder;
     private TextView event_date;
@@ -44,16 +42,13 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        //set onclick listener
         LinearLayout viewParticipantBtn = (LinearLayout) findViewById(R.id.view_participant_layout_btn);
         viewParticipantBtn.setOnClickListener(this);
-
         LinearLayout viewMessageBtn = (LinearLayout)findViewById(R.id.view_message_layout_btn);
         viewMessageBtn.setOnClickListener(this);
-
         LinearLayout dateLayout = (LinearLayout)findViewById(R.id.date_layout);
         dateLayout.setOnClickListener(this);
-
         Button closeDiscussionBtn = (Button)findViewById(R.id.close_discussion_btn);
         closeDiscussionBtn.setOnClickListener(this);
 
@@ -64,7 +59,7 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
         event_location = (TextView) findViewById(R.id.location_textView);
         event_desc = (TextView) findViewById(R.id.event_discription_textView);
 
-
+        //show the event pass from the main activity
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -76,9 +71,7 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
             eventString = (String) savedInstanceState.getSerializable("eventString");
         }
 
-        Gson gson = new Gson();
-        Event event = gson.fromJson(eventString,Event.class);
-
+        event = gson.fromJson(eventString,Event.class);
         event_title.setText(event.getTitle());
         event_holder.setText(event.getHost().getName());
         event_time.setText(event.getTime());
@@ -89,10 +82,9 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
         else
             event_date.setText(event.getStartAt()+" - "+event.getEndAt());
 
-
+        //get the event from the web and refresh the event detail
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String token = sp.getString("token", "");
-
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("token", token);
@@ -105,10 +97,10 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
                     JSONObject jsonObject = new JSONObject(response);
                     String message = jsonObject.getString("message");
                     if (message.equalsIgnoreCase("succeed")) {
-                        String eventString = jsonObject.getString("act");
-                        Gson gson = new Gson();
-                        Event event = gson.fromJson(eventString, Event.class);
-
+                        //remove participant first
+                        JSONObject eventJson = new JSONObject(jsonObject.getString("act"));
+                        eventJson.remove("participants");
+                        event = gson.fromJson(eventJson.toString(), Event.class);
                         event_title.setText(event.getTitle());
                         event_holder.setText(event.getHost().getName());
                         event_time.setText(event.getTime());
@@ -119,6 +111,10 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
                         else
                             event_date.setText(event.getStartAt()+" - "+event.getEndAt());
 
+                        if(event.getStatus().equalsIgnoreCase(Constants.STATUS_EVENT_ING)){
+                            LinearLayout dateLayout = (LinearLayout)findViewById(R.id.date_layout);
+                            dateLayout.setOnClickListener(null);
+                        }
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
@@ -139,19 +135,22 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
         switch (v.getId()){
             case R.id.view_participant_layout_btn:
                 Intent intent = new Intent(getApplicationContext(), DetailParticipantListActivity.class);
-                startActivityForResult(intent, 100);
+                intent.putExtra("eventId",event.getId());
+                startActivity(intent);
                 break;
             case  R.id.view_message_layout_btn:
                 Intent intent2 = new Intent(getApplicationContext(), DetailMessageListActivity.class);
-                startActivityForResult(intent2, 100);
+                intent2.putExtra("eventId",event.getId());
+                startActivity(intent2);
                 break;
             case R.id.date_layout:
                 Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
-                startActivityForResult(intent3, 100);
+                intent3.putExtra("eventId",event.getId());
+                startActivity(intent3);
                 break;
             case R.id.close_discussion_btn:
                 Intent intent4 = new Intent(getApplicationContext(), CloseDiscussionActivity.class);
-                startActivityForResult(intent4, 100);
+                startActivity(intent4);
                 break;
             default:
         }

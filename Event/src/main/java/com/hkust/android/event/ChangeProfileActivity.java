@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,37 +71,25 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                     name_view.setError("This field required");
                 } else if ("".equalsIgnoreCase(phone)) {
                     phone_view.setError("This field required");
-                }else if(!android.util.Patterns.PHONE.matcher(phone).matches()){
+                } else if (!android.util.Patterns.PHONE.matcher(phone).matches()) {
                     phone_view.setError("Invalid phone number");
-                }else{
+                } else {
 
-                    final User user_temp = new User();
+                    AsyncHttpClient client = new AsyncHttpClient();
 
                     sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
-                    String userString = sp.getString("userString", "");
-                    Gson gson = new Gson();
-                    user = gson.fromJson(userString, User.class);
-
                     String token = sp.getString("token", "");
+                    User user_temp = new User();
 
-
-
-//                    user_temp.set_id(user.get_id());
-//                    user_temp.setEmail(user.getEmail());
-//                    user_temp.setGender(user.getGender());
                     user_temp.setName(name);
                     user_temp.setPhone(phone);
                     user_temp.setToken(token);
 
                     user.setName(name);
                     user.setPhone(phone);
-                    String userString_t  = gson.toJson(user_temp);
-                    Log.i("pppp", userString_t);
 
-                    //Gson gson = new Gson();
-
-                    AsyncHttpClient client = new AsyncHttpClient();
+                    Gson gson = new Gson();
 
                     try {
                         StringEntity entity = new StringEntity(gson.toJson(user_temp));
@@ -110,8 +97,9 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                                 String response = new String(responseBody);
+                                JSONObject jsonObject = null;
                                 try {
-                                    JSONObject jsonObject = new JSONObject(response);
+                                    jsonObject = new JSONObject(response);
                                     String message = jsonObject.getString("message");
 
                                     if (message.equalsIgnoreCase("succeed")) {
@@ -119,14 +107,9 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
                                         //update user profile.
                                         SharedPreferences.Editor editor = sp.edit();
                                         Gson gson = new Gson();
-                                        String userString  = gson.toJson(user);
+                                        String userString = gson.toJson(user);
                                         editor.putString("userString", userString);
                                         editor.commit();
-
-
-
-                                        Intent intent = new Intent(ChangeProfileActivity.this, MainActivity.class);
-                                        setResult(200,intent);
                                         finish();
                                     } else {
                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -149,4 +132,13 @@ public class ChangeProfileActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 200) {
+            if (resultCode == 200) {
+
+                this.finish();
+            }
+        }
+    }
 }

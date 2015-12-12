@@ -5,16 +5,26 @@ package com.hkust.android.event.model;
  */
 public class Participant {
     private String eventId;
-    private String id;
-    private String voteDate;
-    private User user;
+    private String _id;
+    private String availdableAt;
+    private User id;
 
-    public String getId() {
-        return id;
+
+
+    public void setId(User id) {
+        this.id = id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public User getId() {
+        return id;
     }
 
     public String getEventId() {
@@ -25,19 +35,12 @@ public class Participant {
         this.eventId = eventId;
     }
 
-    public User getUser() {
-        return user;
+
+    public String getAvaildableAt() {
+        return availdableAt;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getVoteDate() {
-        return voteDate;
-    }
-
-    public void setVoteDate(String voteDate) {
-        this.voteDate = voteDate;
+    public void setAvaildableAt(String availdableAt) {
+        this.availdableAt = availdableAt;
     }
 }

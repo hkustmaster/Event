@@ -1,36 +1,15 @@
 package com.hkust.android.event.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hkust.android.event.R;
-import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
-import com.hkust.android.event.model.Note;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpRequest;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.entity.mime.Header;
-
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
     private ArrayList<Event> events = new ArrayList<Event>();

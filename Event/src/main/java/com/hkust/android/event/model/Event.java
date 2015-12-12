@@ -18,7 +18,7 @@ public class Event {
     private String endAt;
     private Location location;
     private String description;
-    private ArrayList<Participant> participants;
+    private ArrayList<ParticipantsForAllEvent> participants;
     private int quota;
     private int size;
     private String token;
@@ -111,11 +111,11 @@ public class Event {
         this.picture = picture;
     }
 
-    public ArrayList<Participant> getParticipants() {
+    public ArrayList<ParticipantsForAllEvent> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(ArrayList<Participant> participants) {
+    public void setParticipants(ArrayList<ParticipantsForAllEvent> participants) {
         this.participants = participants;
     }
 
@@ -150,4 +150,5 @@ public class Event {
     public void setTitle(String title) {
         this.title = title;
     }
+
 }

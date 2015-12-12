@@ -54,7 +54,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     private SharedPreferences sp;
 
     private static final int PLACE_PICKER_REQUEST = 1000;
-    //private GoogleApiClient mClient;
+//    private GoogleApiClient mClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+//
 //        mClient = new GoogleApiClient
 //                .Builder(this)
 //                .addApi(Places.GEO_DATA_API)

@@ -14,11 +14,11 @@ public class Constants {
     public final static String GET_ALL_EVENT="/activity/all";
     public final static String ADD_EVENT="/activity/new";
     public final static String CHANGE_USER_INFO = "/user/edit";
-    public final static String EVENT_TABLE="";
     public final static String EVENT_DETAIL="/activity/detail";
     public final static String EVENT_SHOWMINE = "/activity/showmine";
     public final static String PARTICIPATE_EVENT = "/activity/join";
     public final static String LEAVE_EVENT = "/activity/leave";
+    public final static String VOTE_EVENT = "/activity/vote";
 
 
     public final static String STATUS_EVENT_PRE="PRE";//to be determined

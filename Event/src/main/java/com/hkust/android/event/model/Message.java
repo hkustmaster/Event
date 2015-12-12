@@ -5,25 +5,17 @@ package com.hkust.android.event.model;
  */
 public class Message {
     private String id;
-    private String eventId;
+    private String activity;
     private String content;
-    private String createDate;
+    private String createAt;
     private User creator;
 
-    public String getEventId() {
-        return eventId;
+    public String getActivity() {
+        return activity;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setActivity(String activity) {
+        this.activity = activity;
     }
 
     public String getContent() {
@@ -34,12 +26,12 @@ public class Message {
         this.content = content;
     }
 
-    public String getCreateDate() {
-        return createDate;
+    public String getCreateAt() {
+        return createAt;
     }
 
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
     }
 
     public User getCreator() {
@@ -48,5 +40,13 @@ public class Message {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

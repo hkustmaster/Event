@@ -15,41 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/my_toolbar"
-        android:orientation="vertical"
-        android:layout_above="@+id/belowButton">
+        android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/participants_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/belowButton"
             android:layout_below="@+id/textView3">
 
 
         </android.support.v7.widget.RecyclerView>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/belowButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="Back" />
-        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
