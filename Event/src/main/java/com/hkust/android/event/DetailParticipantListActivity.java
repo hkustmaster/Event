@@ -1,6 +1,7 @@
 package com.hkust.android.event;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,15 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Adapter;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hkust.android.event.adapters.MessageAdapter;
 import com.hkust.android.event.adapters.ParticipantAdapter;
+import com.hkust.android.event.dialog.ParticipantInfoCustomDialog;
 import com.hkust.android.event.model.Constants;
-import com.hkust.android.event.model.Event;
 import com.hkust.android.event.model.Participant;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -26,12 +27,11 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class DetailParticipantListActivity extends AppCompatActivity {
+public class DetailParticipantListActivity extends AppCompatActivity implements ParticipantAdapter.ClickListener {
 
     private ArrayList<Participant> participants = new ArrayList<Participant>();
     private AsyncHttpClient client = new AsyncHttpClient();
@@ -66,7 +66,7 @@ public class DetailParticipantListActivity extends AppCompatActivity {
         RecyclerView messageList = (RecyclerView) findViewById(R.id.participants_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         messageList.setLayoutManager(layoutManager);
-
+        participantAdapter.setClickListener(this);
         messageList.setAdapter(participantAdapter);
         getParticipantFromServer(eventId);
     }
@@ -102,6 +102,7 @@ public class DetailParticipantListActivity extends AppCompatActivity {
                         participants = gson.fromJson(participantString, new TypeToken<ArrayList<Participant>>(){}.getType());
                         participantAdapter.setParticipantsList(participants);
                         participantAdapter.notifyDataSetChanged();
+
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
@@ -118,5 +119,13 @@ public class DetailParticipantListActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public void itemClicked(View view, int position) {
+        String name = participants.get(position).getId().getName();
+        String email = participants.get(position).getId().getEmail();
+        String phone = participants.get(position).getId().getPhone();
+        ParticipantInfoCustomDialog dialog = new ParticipantInfoCustomDialog(this,name, email, phone);
+        dialog.show();
+        Toast.makeText(this, "dialog show"+ position,Toast.LENGTH_SHORT);
+    }
 }

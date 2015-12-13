@@ -8,6 +8,10 @@ import android.widget.TextView;
 import com.hkust.android.event.R;
 import com.hkust.android.event.model.Message;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 
 
@@ -16,6 +20,7 @@ import java.util.ArrayList;
  */
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     ArrayList<Message> messages = new ArrayList<Message>();
+    DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:MM:SS");
 
     public MessageAdapter(ArrayList<Message> messages){
         this.messages = messages;
@@ -32,7 +37,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.user.setText(messages.get(position).getFrom().getId().getName());
         holder.message.setText(messages.get(position).getContent());
-        holder.date.setText(messages.get(position).getCreateAt());
+        DateTime dateTime = DateTime.parse(messages.get(position).getCreateAt());
+        holder.date.setText(dateTime.toString(format));
     }
 
     @Override

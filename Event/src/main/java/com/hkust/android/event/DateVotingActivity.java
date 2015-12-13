@@ -43,7 +43,9 @@ public class DateVotingActivity extends AppCompatActivity {
     User user = new User();
     AsyncHttpClient client = new AsyncHttpClient();
     ArrayList<VoteRecord> voteRecords = new ArrayList<VoteRecord>();
+    ArrayList<Boolean> oldVoteRecords = new ArrayList<Boolean>();
     DateListAdapter dateListAdapter = new DateListAdapter();
+    private String isHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +62,15 @@ public class DateVotingActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
+                isHost=null;
                 eventId = null;
             } else {
                 eventId = extras.getString("eventId");
+                isHost = extras.getString("isHost");
             }
         } else {
             eventId = (String) savedInstanceState.getSerializable("eventId");
+            isHost = (String) savedInstanceState.getSerializable("isHost");
         }
 
         getParticipantListFromServer(eventId);
@@ -78,14 +83,19 @@ public class DateVotingActivity extends AppCompatActivity {
         dateList.setAdapter(dateListAdapter);
 
         Button voteBtn = (Button) findViewById(R.id.vote_btn);
-        voteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //post the vote result to server;
-                //update the participant;
-                updateVoteRecord(dateListAdapter.getVoteRecords());
-            }
-        });
+
+        if(isHost.equalsIgnoreCase("true")){
+            voteBtn.setVisibility(View.GONE);
+        }else {
+            voteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //post the vote result to server;
+                    //update the participant;
+                    updateVoteRecord(dateListAdapter.getVoteRecords());
+                }
+            });
+        }
 
 
 
@@ -102,7 +112,7 @@ public class DateVotingActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+//count vote record from server
     public void getParticipantListFromServer(final String eventId) {
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String token = sp.getString("token", "");
@@ -128,8 +138,13 @@ public class DateVotingActivity extends AppCompatActivity {
                         ArrayList<Participant> participants = gson.fromJson(participantsStirng, new TypeToken<ArrayList<Participant>>() {
                         }.getType());
                         voteRecords = getVoteRecords(participants, event.getStartAt(), event.getEndAt());
+                        setOldVoteRecords(voteRecords);
                         dateListAdapter.setVoteRecords(voteRecords);
-                        dateListAdapter.setCanVote(true);
+                        if(isHost.equalsIgnoreCase("true")){
+                            dateListAdapter.setCanVote(false);
+                        }else{
+                            dateListAdapter.setCanVote(true);
+                        }
                         dateListAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -206,13 +221,17 @@ public class DateVotingActivity extends AppCompatActivity {
     }
 
     public void updateVoteRecord(ArrayList<VoteRecord> voteRecords) {
+        //update local
+        updateLocalDateList(voteRecords);
+
+        //update webserver
         sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String token = sp.getString("token", "");
         RequestParams params = new RequestParams();
         params.put("token", token);
         params.put("actid", event.getId());
         params.put("vote", transformToString(voteRecords));
-        Log.i("pppp", params.toString());
+
         client.post(Constants.SERVER_URL + Constants.VOTE_EVENT, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -237,6 +256,15 @@ public class DateVotingActivity extends AppCompatActivity {
         });
     }
 
+    public void setOldVoteRecords(ArrayList<VoteRecord> voteRecords){
+        for(VoteRecord v: voteRecords){
+            if(v.isVoted()){
+                oldVoteRecords.add(Boolean.TRUE);
+            }else{
+                oldVoteRecords.add(Boolean.FALSE);
+            }
+        }
+    }
 
     public String transformToString(ArrayList<VoteRecord> voteRecords) {
         StringBuffer buff = new StringBuffer();
@@ -246,5 +274,27 @@ public class DateVotingActivity extends AppCompatActivity {
             }
         }
         return buff.toString();
+    }
+
+    public void updateLocalDateList(ArrayList<VoteRecord> voteRecords){
+        for(int i = 0;i<voteRecords.size();i++){
+            if(voteRecords.get(i).isVoted()){
+                if(oldVoteRecords.get(i)){
+                    //do nothing
+                }else {
+                    voteRecords.get(i).setVoteCount(voteRecords.get(i).getVoteCount()+1);
+                    oldVoteRecords.set(i,Boolean.TRUE);
+                }
+            }else{
+                if(oldVoteRecords.get(i)){
+                    voteRecords.get(i).setVoteCount(voteRecords.get(i).getVoteCount()-1);
+                    oldVoteRecords.set(i,Boolean.FALSE);
+                }else {
+                    //do nothing
+                }
+            }
+        }
+        dateListAdapter.setVoteRecords(voteRecords);
+        dateListAdapter.notifyDataSetChanged();
     }
 }

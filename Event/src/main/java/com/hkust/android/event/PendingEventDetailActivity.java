@@ -113,6 +113,7 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
             case R.id.date_layout:
                 Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
                 intent3.putExtra("eventId", event.getId());
+                intent3.putExtra("isHost","false");
                 startActivity(intent3);
                 break;
             case R.id.leave_btn:
@@ -131,7 +132,6 @@ public class PendingEventDetailActivity extends AppCompatActivity implements Vie
                 break;
             default:
         }
-
         return super.onOptionsItemSelected(item);
     }
 

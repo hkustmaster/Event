@@ -146,6 +146,7 @@ public class MyEventDetailActivity extends AppCompatActivity implements View.OnC
             case R.id.date_layout:
                 Intent intent3 = new Intent(getApplicationContext(), DateVotingActivity.class);
                 intent3.putExtra("eventId",event.getId());
+                intent3.putExtra("isHost","true");
                 startActivity(intent3);
                 break;
             case R.id.close_discussion_btn:
