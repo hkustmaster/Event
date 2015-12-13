@@ -36,11 +36,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         String holderName = eventModel.getHost().getName();
         String startDate = eventModel.getStartAt();
         String location = eventModel.getAddress();
+        String endDate = eventModel.getEndAt();
         //String location = "location";
         // Set text
         holder.titleTextView.setText(title);
         holder.eventLocationTextView.setText(location);
-        holder.eventStartDateTextView.setText(startDate);
+        if(endDate.equalsIgnoreCase("")) {
+            holder.eventStartDateTextView.setText(startDate);
+        }else{
+            holder.eventStartDateTextView.setText(startDate +" - "+endDate);
+        }
         holder.hostTextView.setText(holderName);
 
         int paddingTop = (holder.titleTextView.getVisibility() != View.VISIBLE) ? 0

@@ -1,10 +1,12 @@
 package com.hkust.android.event.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -19,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
@@ -31,7 +32,6 @@ import com.hkust.android.event.R;
 import com.hkust.android.event.adapters.NotesAdapter;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
-import com.hkust.android.event.model.Location;
 import com.hkust.android.event.model.ParticipantsForAllEvent;
 import com.hkust.android.event.model.User;
 import com.loopj.android.http.AsyncHttpClient;
@@ -47,17 +47,16 @@ import java.util.ArrayList;
 public abstract class NotesListFragment extends Fragment implements NotesAdapter.ClickListener, SwipeRefreshLayout.OnRefreshListener,
 
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "NotesListFragment";
-    private LocationRequest mLocationRequest;
+
     @LayoutRes
     protected abstract int getLayoutResId();
 
     protected abstract int getNumColumns();
 
     protected abstract String getTagName();
-
 
     private SwipeRefreshLayout refreshLayout;
     private SharedPreferences sp;
@@ -70,6 +69,23 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     private User user;
     private GoogleApiClient mGoogleApiClient;
     private android.location.Location mLastLocation;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+        //add this here:
+        mGoogleApiClient.connect();
+    }
+
 
     @Nullable
     @Override
@@ -86,12 +102,6 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         notesAdapter.setClickListener(this);
         recyclerView.setAdapter(notesAdapter);
 
-        // Create the LocationRequest object
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
-
         //if current fragment is explore fragment
         if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
             if (mLastLocation == null) {
@@ -106,18 +116,8 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
             //if current fragment is myevent or pending event
             getMyEventAndPendingEvent();
         }
-
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
         return view;
     }
-
 
 
     @Override
@@ -125,7 +125,6 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String userString = sp.getString("userString", "");
         user = gson.fromJson(userString, User.class);
-
         if (getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
             //from my event fragment
             Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
@@ -292,27 +291,29 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         });
     }
 
-    private boolean doesUserHavePermission() {
-        int result = getContext().checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        return result == PackageManager.PERMISSION_GRANTED;
-    }
 
     @Override
     public void onStart() {
-        mGoogleApiClient.connect();
         super.onStart();
+        mGoogleApiClient.connect();
+
     }
 
     @Override
     public void onStop() {
-        mGoogleApiClient.disconnect();
         super.onStop();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        Log.i(TAG, "onConnected");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
+        if (mLastLocation != null) {
+            Log.i(TAG, String.valueOf(mLastLocation.getLatitude()));
+            Log.i(TAG, String.valueOf(mLastLocation.getLongitude()));
+        }
 
     }
 

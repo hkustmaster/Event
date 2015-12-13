@@ -20,13 +20,12 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-//
-//import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-//import com.google.android.gms.common.GooglePlayServicesRepairableException;
-//import com.google.android.gms.common.api.GoogleApiClient;
-//import com.google.android.gms.location.places.Place;
-//import com.google.android.gms.location.places.Places;
-//import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 
 import com.google.gson.Gson;
@@ -54,7 +53,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     private SharedPreferences sp;
 
     private static final int PLACE_PICKER_REQUEST = 1000;
-   // private GoogleApiClient mClient;
+    private GoogleApiClient mClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +64,11 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        mClient = new GoogleApiClient
-//                .Builder(this)
-//                .addApi(Places.GEO_DATA_API)
-//                .addApi(Places.PLACE_DETECTION_API)
-//                .build();
+        mClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .build();
 
         CheckBox tbdCheckBox = (CheckBox) findViewById(R.id.start_date_tbd_checkbox);
         tbdCheckBox.setOnClickListener(this);
@@ -189,12 +188,12 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStart() {
         super.onStart();
-     //   mClient.connect();
+        mClient.connect();
     }
 
     @Override
     protected void onStop() {
-      //  mClient.disconnect();
+        mClient.disconnect();
         super.onStop();
     }
 
@@ -317,14 +316,14 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
                 break;
             case R.id.new_event_location:
-//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-//                try {
-//                    startActivityForResult(builder.build(NewEventActivity.this), PLACE_PICKER_REQUEST);
-//                } catch (GooglePlayServicesRepairableException e) {
-//                    e.printStackTrace();
-//                } catch (GooglePlayServicesNotAvailableException e) {
-//                    e.printStackTrace();
-//                }
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(NewEventActivity.this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
 
 
                 break;
@@ -353,28 +352,28 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-//                Place place = PlacePicker.getPlace(data, this);
-//                String toastMsg = String.format("Place: %s", place.getAddress());
-//                StringBuffer buff = new StringBuffer();
-//                buff.append(" getAddress:" + place.getAddress());
-//                buff.append(" getId:" + place.getId());
-//                buff.append(" getLatlng:" + place.getLatLng());
-//                buff.append(" getLocale:" + place.getLocale());
-//                buff.append(" getName:" + place.getName());
-//                buff.append(" getPhoneName:" + place.getPhoneNumber());
-//                buff.append(" getPlaceType:" + place.getPlaceTypes());
-//                buff.append(" getPriceLevel:" + place.getPriceLevel());
-//                buff.append(" getRating:" + place.getRating());
-//                buff.append(" getViewport:" + place.getViewport());
-//                buff.append(" getWebsiteUri:" + place.getWebsiteUri());
-//                Log.i("pppp location info: ", buff.toString());
-//
-//                AutoCompleteTextView location = (AutoCompleteTextView) findViewById(R.id.new_event_location);
-//                location.setText(place.getName());
-//                TextView locationLatLng = (TextView) findViewById(R.id.address_latlng_textView);
-//                locationLatLng.setText(place.getLatLng().toString());
-//                Log.i("pppp latlng", place.getLatLng().toString());
-//                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getAddress());
+                StringBuffer buff = new StringBuffer();
+                buff.append(" getAddress:" + place.getAddress());
+                buff.append(" getId:" + place.getId());
+                buff.append(" getLatlng:" + place.getLatLng());
+                buff.append(" getLocale:" + place.getLocale());
+                buff.append(" getName:" + place.getName());
+                buff.append(" getPhoneName:" + place.getPhoneNumber());
+                buff.append(" getPlaceType:" + place.getPlaceTypes());
+                buff.append(" getPriceLevel:" + place.getPriceLevel());
+                buff.append(" getRating:" + place.getRating());
+                buff.append(" getViewport:" + place.getViewport());
+                buff.append(" getWebsiteUri:" + place.getWebsiteUri());
+                Log.i("pppp location info: ", buff.toString());
+
+                AutoCompleteTextView location = (AutoCompleteTextView) findViewById(R.id.new_event_location);
+                location.setText(place.getName());
+                TextView locationLatLng = (TextView) findViewById(R.id.address_latlng_textView);
+                locationLatLng.setText(place.getLatLng().toString());
+                Log.i("pppp latlng", place.getLatLng().toString());
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
             }
         }
     }

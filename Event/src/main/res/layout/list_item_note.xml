@@ -29,7 +29,7 @@
             android:layout_alignParentBottom="true"
             android:layout_below="@id/event_host"
             android:gravity="center_vertical"
-            android:paddingTop="@dimen/note_content_spacing"
+            android:paddingTop="10dp"
             android:layout_alignTop="@+id/event_location_layout">
 
             <TextView
@@ -53,7 +53,7 @@
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/event_host"
             android:gravity="center_vertical"
-            android:paddingTop="@dimen/note_content_spacing">
+            android:paddingTop="10dp">
 
             <TextView
                 android:id="@+id/event_location"

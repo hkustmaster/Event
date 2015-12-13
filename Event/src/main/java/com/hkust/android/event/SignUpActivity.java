@@ -2,6 +2,7 @@ package com.hkust.android.event;
 
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -39,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         Button signUpBtn = (Button) findViewById(R.id.sign_up_btn);
         TextView signinLink = (TextView) findViewById(R.id.link_signin);
         userImageUploadBtn = (CircleImg)findViewById(R.id.user_image_upload_btn);
-        //userImageUploadBtn.setOnClickListener(this);
+        userImageUploadBtn.setOnClickListener(this);
         signUpBtn.setOnClickListener(this);
         signinLink.setOnClickListener(this);
     }
@@ -156,7 +158,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 this.finish();
                 break;
             case R.id.user_image_upload_btn:
-                Log.i("ppppp","image btn click");
+
                 new AlertDialog.Builder(SignUpActivity.this).setTitle("选择头像")
                         .setPositiveButton("相册", new DialogInterface.OnClickListener() {
 
@@ -178,8 +180,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(
                                 MediaStore.ACTION_IMAGE_CAPTURE);
-                        imgUri = Uri.fromFile(new File(Environment
-                                .getExternalStorageDirectory(), "avatar_"
+                        imgUri = Uri.fromFile(new File("avatar_"
                                 + String.valueOf(System.currentTimeMillis())
                                 + ".png"));
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
@@ -299,7 +300,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         if (null != bundle) {
             Bitmap mBitmap = bundle.getParcelable("data");
             userImageUploadBtn.setImageBitmap(mBitmap);
-            saveBitmap(Environment.getExternalStorageDirectory() + "/crop_"
+            saveBitmap("crop_"
                     + System.currentTimeMillis() + ".png", mBitmap);
         }
     }
@@ -311,22 +312,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
      * @param mBitmap
      */
     public void saveBitmap(String fileName, Bitmap mBitmap) {
-        File f = new File(fileName);
-        FileOutputStream fOut = null;
         try {
-            f.createNewFile();
-            fOut = new FileOutputStream(f);
-            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-            fOut.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fOut.close();
-                Toast.makeText(this, "save success", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            FileOutputStream outStream=this.openFileOutput(fileName, Context.MODE_WORLD_READABLE);
+            outStream.write(mBitmap.getRowBytes());
+            outStream.close();
+            Toast.makeText(SignUpActivity.this,"Saved",Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            return;
+        }
+        catch (IOException e){
+            return ;
         }
 
     }
