@@ -97,7 +97,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     gender = gender_button.getText().toString();
                 }
 
-
                 if ("".equalsIgnoreCase(email) ||
                         "".equalsIgnoreCase(name) ||
                         "".equalsIgnoreCase(phone) ||

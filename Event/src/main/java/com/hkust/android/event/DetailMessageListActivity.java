@@ -177,6 +177,9 @@ public class DetailMessageListActivity extends AppCompatActivity implements View
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                         String messagesString = jsonObject.getString("comments");
                         messages = gson.fromJson(messagesString, new TypeToken<ArrayList<Message>>() {}.getType());
+
+                            Log.i("message",messagesString);
+
                         messageAdapter.setMessages(messages);
                         messageAdapter.notifyDataSetChanged();
                     } else {

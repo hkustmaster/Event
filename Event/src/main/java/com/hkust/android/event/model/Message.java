@@ -8,7 +8,7 @@ public class Message {
     private String activity;
     private String content;
     private String createAt;
-    private User from;
+    private UserForMessage from;
 
     public String getActivity() {
         return activity;
@@ -34,11 +34,11 @@ public class Message {
         this.createAt = createAt;
     }
 
-    public User getFrom() {
+    public UserForMessage getFrom() {
         return from;
     }
 
-    public void setFrom(User from) {
+    public void setFrom(UserForMessage from) {
         this.from = from;
     }
 

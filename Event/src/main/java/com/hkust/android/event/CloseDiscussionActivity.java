@@ -121,7 +121,6 @@ public class CloseDiscussionActivity extends AppCompatActivity {
                         ArrayList<Participant> participants = gson.fromJson(participantsStirng, new TypeToken<ArrayList<Participant>>() {
                         }.getType());
                         voteRecords = setVoteRecords(participants, event.getStartAt(), event.getEndAt());
-                        Log.i("pppp voteRecords.size", voteRecords.size() + "");
                         radioGroup = (RadioGroup) findViewById(R.id.close_radio_group);
                         radioButtonsText = new ArrayList<String>();
                         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
@@ -129,9 +128,9 @@ public class CloseDiscussionActivity extends AppCompatActivity {
                                 LinearLayout.LayoutParams.WRAP_CONTENT
                         );
                         for (int i = 0; i < voteRecords.size(); i++) {
-                            Log.i("pppp in loop", i + "");
+
                             RadioButton tempButton = new RadioButton(context);
-                            tempButton.setText(voteRecords.get(i).getVoteCount() + "  " + voteRecords.get(i).getDate());
+                            tempButton.setText("Vote Count: "+voteRecords.get(i).getVoteCount() + "  " + "Date: "+voteRecords.get(i).getDate());
                             tempButton.setId(i);
                             radioButtonsText.add(voteRecords.get(i).getDate());
                             radioGroup.addView(tempButton, p);
@@ -218,7 +217,6 @@ public class CloseDiscussionActivity extends AppCompatActivity {
                     String response = new String(responseBody);
                     Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT);
                 }
-
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 

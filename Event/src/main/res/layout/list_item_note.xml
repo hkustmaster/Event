@@ -21,15 +21,20 @@
             style="@style/TextAppearance.MaterialSheetFab.Note"
             android:layout_below="@id/event_title"
             android:paddingTop="@dimen/note_content_spacing" />
+        <TextView
+            android:id="@+id/quota"
+            style="@style/TextAppearance.MaterialSheetFab.Note"
+            android:layout_below="@id/event_title"
+            android:paddingTop="5dp" />
 
         <LinearLayout
             android:id="@+id/event_date_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/event_host"
+            android:layout_below="@id/quota"
             android:gravity="center_vertical"
-            android:paddingTop="10dp"
+            android:paddingTop="5dp"
             android:layout_alignTop="@+id/event_location_layout">
 
             <TextView
@@ -53,7 +58,7 @@
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/event_host"
             android:gravity="center_vertical"
-            android:paddingTop="10dp">
+            android:paddingTop="5dp">
 
             <TextView
                 android:id="@+id/event_location"

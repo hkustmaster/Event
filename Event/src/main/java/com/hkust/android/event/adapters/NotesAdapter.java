@@ -37,6 +37,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         String startDate = eventModel.getStartAt();
         String location = eventModel.getAddress();
         String endDate = eventModel.getEndAt();
+        String quota = String.valueOf(eventModel.getQuota());
+        String size = String.valueOf(eventModel.getSize());
         //String location = "location";
         // Set text
         holder.titleTextView.setText(title);
@@ -46,8 +48,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         }else{
             holder.eventStartDateTextView.setText(startDate +" - "+endDate);
         }
-        holder.hostTextView.setText(holderName);
-
+        holder.hostTextView.setText("Host: " + holderName);
+        holder.quotaTextView.setText("Quota: "+quota+"/"+size);
         int paddingTop = (holder.titleTextView.getVisibility() != View.VISIBLE) ? 0
                 : holder.itemView.getContext().getResources()
                 .getDimensionPixelSize(R.dimen.note_content_spacing);
@@ -69,6 +71,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
         private TextView titleTextView;
         private TextView hostTextView;
+        private TextView quotaTextView;
         private TextView eventStartDateTextView;
         private TextView eventLocationTextView;
 
@@ -76,6 +79,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             super(itemView);
             titleTextView = (TextView) itemView.findViewById(R.id.event_title);
             hostTextView = (TextView) itemView.findViewById(R.id.event_host);
+            quotaTextView = (TextView) itemView.findViewById(R.id.quota);
             eventStartDateTextView = (TextView) itemView.findViewById(R.id.event_start_date);
             eventLocationTextView = (TextView) itemView.findViewById(R.id.event_location);
 
@@ -103,63 +107,5 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     public void setEventsList(ArrayList<Event> events) {
         this.events = events;
     }
-//    private void getExploreEvents(final Context context) {
-//
-//        // send request to server
-//        AsyncHttpClient client = new AsyncHttpClient();
-//        sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-//        String token = sp.getString("token", "");
-//        Log.i("PPPP", token);
-//        RequestParams params = new RequestParams();
-//        params.put("token", token);
-//
-//        client.post(Constants.SERVER_URL + Constants.GET_ALL_EVENT, params, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-//                String response = new String(responseBody);
-//
-//                JSONObject jsonObject = null;
-//                try {
-//                    jsonObject = new JSONObject(response);
-//                    String message = jsonObject.getString("message");
-//
-//                    if (message.equalsIgnoreCase("succeed")) {
-//                        String eventString = jsonObject.getString("act");
-//                        Gson gson = new Gson();
-//                        Log.i("ppppp", eventString);
-//                        ArrayList<Event> arrayEventList = gson.fromJson(eventString, new TypeToken<ArrayList<Event>>() {
-//                        }.getType());
-//                        Log.i("ppppp", arrayEventList.get(0).getTitle());
-//                        events = arrayEventList;
-//                    } else {
-//                        Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-//
-//            }
-//        });
-//    }
 
-//    private Note[] getPendingEvents(Context context, int numNotes) {
-//        Note[] notes = new Note[numNotes];
-//        for (int i = 0; i < notes.length; i++) {
-//            notes[i] = Note.randomOwnNote(context);
-//        }
-//        return notes;
-//    }
-//
-//    private Note[] getMyEventEvents(Context context, int numNotes) {
-//        Note[] notes = new Note[numNotes];
-//        for (int i = 0; i < notes.length; i++) {
-//            notes[i] = Note.randomOwnNote(context);
-//        }
-//        return notes;
-//    }
 }

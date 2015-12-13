@@ -1,12 +1,9 @@
 package com.hkust.android.event.fragments;
 
-import android.Manifest;
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -21,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -90,6 +86,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(TAG,"onCreateView");
         View view = inflater.inflate(getLayoutResId(), container, false);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
         refreshLayout.setOnRefreshListener(this);
@@ -126,6 +123,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         String userString = sp.getString("userString", "");
         user = gson.fromJson(userString, User.class);
         if (getTagName().equalsIgnoreCase(Constants.MYEVENT_FRAGMENT)) {
+
             //from my event fragment
             Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
             intent.setAction(getTagName());
@@ -135,6 +133,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         } else if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
 
             if (user.get_id().equalsIgnoreCase(exploreEvents.get(position).getHost().get_id())) {
+
                 //from explore fragment if ishost go to my event fragment
                 Intent intent = new Intent(getActivity(), MyEventDetailActivity.class);
                 String eventJson = gson.toJson(exploreEvents.get(position));
@@ -143,6 +142,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                 startActivity(intent);
 
             } else {
+
                 //if is participant go to pending event detail
                 if (isParticipant(exploreEvents.get(position))) {
                     Intent intent = new Intent(getActivity(), PendingEventDetailActivity.class);
@@ -160,6 +160,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                 }
             }
         } else if (getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
+            getMyEventAndPendingEvent();
             //if from pending fragment, go to pending event detail
             Intent intent = new Intent(getActivity(), PendingEventDetailActivity.class);
             intent.setAction(getTagName());
@@ -189,6 +190,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     }
 
     private boolean isParticipant(Event event) {
+
         for (ParticipantsForAllEvent p : event.getParticipants()) {
             if (p.getId().equalsIgnoreCase(user.get_id())) {
                 return true;
@@ -292,6 +294,7 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
     }
 
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -372,4 +375,24 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
         return ja;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG,"onResume");
+        //if current fragment is explore fragment
+        if (getTagName().equalsIgnoreCase(Constants.EXPLORE_FRAGMENT)) {
+            if (mLastLocation == null) {
+                Log.i(TAG, "null lastLocation");
+                getExploreEvent();
+            } else {
+                Log.i(TAG, "have lastLocation");
+                getNearbyExploreEvent();
+            }
+
+        } else {
+            //if current fragment is myevent or pending event
+            Log.i(TAG,"on resume getMyEventAndPendingEvent");
+            getMyEventAndPendingEvent();
+        }
+    }
 }

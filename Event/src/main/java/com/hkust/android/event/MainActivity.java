@@ -99,11 +99,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewpager.setAdapter(new MainPagerAdapter(this, getSupportFragmentManager()));
         viewpager.setOffscreenPageLimit(MainPagerAdapter.NUM_ITEMS);
 
-
         // Setup tab layout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewpager);
-
 
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

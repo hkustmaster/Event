@@ -27,7 +27,6 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-
 import com.google.gson.Gson;
 import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
@@ -257,7 +256,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                     } else {
                         Event event = new Event();
                         event.setTitle(title);
-                        //event.setLocation(location);
                         event.setStartAt(startDate);
                         event.setEndAt(endDate);
                         event.setTime(time);
