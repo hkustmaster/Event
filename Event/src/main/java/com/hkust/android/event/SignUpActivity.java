@@ -158,22 +158,22 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.user_image_upload_btn:
 
-                new AlertDialog.Builder(SignUpActivity.this).setTitle("选择头像")
-                        .setPositiveButton("相册", new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(SignUpActivity.this).setTitle("Choose a Avatar")
+                        .setPositiveButton("From Photo Gallery", new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // 方式1，直接打开图库，只能选择图库的图片
+
                                 Intent i = new Intent(Intent.ACTION_PICK,
                                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                // 方式2，会先让用户选择接收到该请求的APP，可以从文件系统直接选取图片
+
                                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT,
                                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                 intent.setType("image/*");
                                 startActivityForResult(intent, PICK_FROM_FILE);
 
                             }
-                        }).setNegativeButton("拍照", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton("Take Photo", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
