@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.hkust.android.event.adapters.MainPagerAdapter;
 import com.hkust.android.event.model.User;
+import com.hkust.android.event.service.NotificationService;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,8 +48,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.notes_list);
 
         setProfile();
+        Intent intent = new Intent(this, NotificationService.class);
+        startService(intent);
 
     }
+
 
     private void setProfile(){
         //get user info
@@ -142,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.putString("userString","");
                 editor.putString("token", "");
                 editor.commit();
+                Intent serviceIntent = new Intent(this, NotificationService.class);
+                stopService(serviceIntent);
                 Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivityForResult(intent, 100);
                 break;
@@ -200,4 +206,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setProfile();
         }
     }
+
+
 }

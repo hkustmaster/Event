@@ -30,6 +30,7 @@ import com.hkust.android.event.model.Constants;
 import com.hkust.android.event.model.Event;
 import com.hkust.android.event.model.ParticipantsForAllEvent;
 import com.hkust.android.event.model.User;
+import com.hkust.android.event.service.NotificationService;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -274,6 +275,9 @@ public abstract class NotesListFragment extends Fragment implements NotesAdapter
                             notesAdapter.setEventsList(myEvents);
                             notesAdapter.notifyDataSetChanged();
                         } else if (getTagName().equalsIgnoreCase(Constants.PENDING_FRAGMENT)) {
+                            Intent intent = new Intent(getActivity(), NotificationService.class);
+                            intent.putExtra("eventList",gson.toJson(pendingEvents));
+                            getActivity().startService(intent);
                             notesAdapter.setEventsList(pendingEvents);
                             notesAdapter.notifyDataSetChanged();
                         }
