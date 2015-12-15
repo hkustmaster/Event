@@ -24,6 +24,9 @@ public class Constants {
     public final static String EDIT_EVENT = "/activity/postEdit";
     public final static String GET_NEAR_EVENT = "/activity/showaround";
 
+    public final static String UPLOAD_AVATAR = "/user/avatar";
+    public final static String GET_AVATAR = "/user/getavatar";
+
     public final static String STATUS_EVENT_PRE = "PRE";//to be determined
     public final static String STATUS_EVENT_ING = "ING";
     public final static String STATUS_EVENT_PAST = "PAST";

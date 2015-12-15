@@ -20,18 +20,18 @@ public class FileUtil {
     /**
      * 将Bitmap 图片保存到本地路径，并返回路径
      * @param c
-     * @param mType 资源类型，参照  MultimediaContentType 枚举，根据此类型，保存时可自动归类
+     * //@param mType 资源类型，参照  MultimediaContentType 枚举，根据此类型，保存时可自动归类
      * @param fileName 文件名称
      * @param bitmap 图片
      * @return
      */
-    public static String saveFile(Context c, String fileName, Bitmap bitmap) {
-        return saveFile(c, "", fileName, bitmap);
+    public static String saveFile(Context c, String fileName, Bitmap bitmap, String uEmail) {
+        return saveFile(c, "", fileName, bitmap, uEmail);
     }
 
-    public static String saveFile(Context c, String filePath, String fileName, Bitmap bitmap) {
+    public static String saveFile(Context c, String filePath, String fileName, Bitmap bitmap, String uEmail) {
         byte[] bytes = bitmapToBytes(bitmap);
-        return saveFile(c, filePath, fileName, bytes);
+        return saveFile(c, filePath, fileName, bytes, uEmail);
     }
 
     public static byte[] bitmapToBytes(Bitmap bm) {
@@ -40,17 +40,16 @@ public class FileUtil {
         return baos.toByteArray();
     }
 
-    public static String saveFile(Context c, String filePath, String fileName, byte[] bytes) {
+    public static String saveFile(Context c, String filePath, String fileName, byte[] bytes, String uEmail) {
         String fileFullName = "";
         FileOutputStream fos = null;
-        String dateFolder = new SimpleDateFormat("yyyyMMdd", Locale.CHINA)
-                .format(new Date());
+        //String dateFolder = new SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(new Date());
         try {
             String suffix = "";
             if (filePath == null || filePath.trim().length() == 0) {
-                filePath = Environment.getExternalStorageDirectory() + "/event/" + dateFolder + "/";
+                filePath = c.getFilesDir()+ "/event/" + uEmail + "/";
 
-                Log.i("ppppp",filePath);
+                //Log.i("ppppp",filePath);
             }
             File file = new File(filePath);
             if (!file.exists()) {
@@ -71,6 +70,21 @@ public class FileUtil {
                 }
             }
         }
+        Log.i("pppppp1", fileFullName);
         return fileFullName;
+    }
+
+    public static boolean fileIsExists(String urlFile){
+        try{
+            File f=new File(urlFile);
+            if(!f.exists()){
+                return false;
+            }
+
+        }catch (Exception e) {
+            // TODO: handle exception
+            return false;
+        }
+        return true;
     }
 }
