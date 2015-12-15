@@ -145,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.putString("autoLogin","false");
                 editor.putString("userString","");
                 editor.putString("token", "");
+                editor.putString("email", "");
+                editor.putString("password", "");
                 editor.commit();
                 Intent serviceIntent = new Intent(this, NotificationService.class);
                 stopService(serviceIntent);

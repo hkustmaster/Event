@@ -6,54 +6,63 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name: "
-            android:id="@+id/textView6" />
+            android:id="@+id/textView6"
+            android:textSize="@dimen/abc_text_size_display_1_material" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="textView"
-            android:id="@+id/dialog_name_textView" />
+            android:id="@+id/dialog_name_textView"
+            android:textSize="@dimen/abc_text_size_display_1_material" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Phone: "
-            android:id="@+id/phone_textView" />
+            android:id="@+id/phone_textView"
+            android:textSize="@dimen/abc_text_size_display_1_material" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/dialog_phone_textView" />
+            android:id="@+id/dialog_phone_textView"
+            android:textSize="@dimen/abc_text_size_display_1_material" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email:"
-            android:id="@+id/email_textView" />
+            android:text="Email: "
+            android:id="@+id/email_textView"
+            android:textSize="@dimen/abc_text_size_display_1_material" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/dialog_email_textView" />
+            android:id="@+id/dialog_email_textView"
+            android:textSize="@dimen/abc_text_size_display_1_material" />
     </LinearLayout>
 </LinearLayout>

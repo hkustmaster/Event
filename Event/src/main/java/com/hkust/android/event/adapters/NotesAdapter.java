@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.hkust.android.event.R;
 import com.hkust.android.event.model.Event;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
     private ArrayList<Event> events = new ArrayList<Event>();
@@ -105,7 +106,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     }
 
     public void setEventsList(ArrayList<Event> events) {
+        reverseOrder(events);
         this.events = events;
+    }
+
+
+    public void reverseOrder(ArrayList<Event> events){
+        Collections.reverse(events);
     }
 
 }
