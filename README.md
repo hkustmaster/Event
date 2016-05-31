@@ -1,19 +1,5 @@
 Android Course Project
 
-Gson 处理: 
-http://blog.csdn.net/lk_blog/article/details/7685169
-
-AsycnHttpClient: 
-http://blog.csdn.net/wyh09102010/article/details/38968121
-
-Login:
-https://github.com/sourcey/materiallogindemo
-
-
-
-http://stackoverflow.com/questions/5265913/how-to-use-putextra-and-getextra-for-string-data
-
-上传用户头像：
-http://www.2cto.com/kf/201501/371520.html
-
-http://blog.csdn.net/androidzhaoxiaogang/article/details/8646471
+Together
+活动发起人可以利用我们的App发起活动，统计参加人数，确认活动时间等。
+用户可浏览附近将要发起的活动，投票活动开始时间等。
